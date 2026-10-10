@@ -10,7 +10,7 @@ function ValueCard({ number, title, text, icon }: (typeof values)[number]) {
       <div className="relative flex h-[228px] w-full items-center justify-center overflow-hidden rounded-2xl bg-[linear-gradient(180deg,#3e3e3e_-143.93%,#000_100%)] lg:aspect-square lg:h-auto">
         <div
           aria-hidden
-          className="absolute top-1/2 left-1/2 z-0 size-[310px] -translate-x-1/2 -translate-y-1/2 bg-[url(/framer/dQHJxtlL2cxCdly2gNWSqY41I0.svg)] bg-center opacity-10"
+          className="absolute top-1/2 left-1/2 z-0 size-[310px] -translate-x-1/2 -translate-y-1/2 bg-[url(/images/patterns/dots.svg)] bg-center opacity-10"
         />
         {/* Icon in a blue-glowing double ring; the disc runs light blue → blue (brand gradient) */}
         <div className="relative rounded-full bg-[linear-gradient(180deg,rgba(86,161,247,0.05)_0%,rgba(86,161,247,0)_100%)] p-3">
@@ -34,7 +34,7 @@ function ValueCard({ number, title, text, icon }: (typeof values)[number]) {
 
 export function Values() {
   return (
-    <section id="value" className="flex justify-center bg-[#101010] px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
+    <section id="values" className="flex justify-center bg-[#101010] px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
       <div className="flex w-full max-w-[1040px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
         <SectionHeader
           tone="dark"

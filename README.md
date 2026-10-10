@@ -1,6 +1,6 @@
-# Conicorn
+# webdev.co.id
 
-A hand-built Next.js version of the Conicorn Framer template: same content, layout, breakpoints and animations, running locally without Framer.
+Marketing site for webdev.co.id, a website studio in Indonesia. Single page, built with Next.js 16 (App Router, Turbopack), React 19, Tailwind CSS v4 and Motion.
 
 ## Run it
 
@@ -11,29 +11,37 @@ npm run dev
 
 Open http://localhost:3000.
 
-For a production build: `npm run build && npm start`.
+Production: `npm run build && npm start`. Set `NEXT_PUBLIC_SITE_URL` if the site is not served from `https://webdev.co.id` (it is used for metadata, the sitemap and robots.txt).
 
 ## Structure
 
-The site is a single page: `src/app/(site)/page.tsx`, with the fixed navbar and the footer in `src/app/(site)/layout.tsx`. The only other route is the 404 page (`src/app/not-found.tsx`). The navbar and footer links scroll to sections on the page (`#about`, `#project`, `#pricing`, `#contact`).
-
-Some sections are hidden for now (commented out in `page.tsx`): Team, Integrations ("Semua kami urus") and Testimonials ("Untuk siapa").
+The site is one page: `src/app/(site)/page.tsx`, with the fixed navbar and the footer in `src/app/(site)/layout.tsx`. The only other route is the 404 page (`src/app/not-found.tsx`). Every section has an id (`#about`, `#values`, `#services`, `#process`, `#portfolio`, `#pricing`, `#faq`, `#contact`), and the navbar and footer links scroll to them.
 
 ## Where things live
 
-- `src/content/` – all text and data (home sections, case studies, contact details). Edit content here.
-- `src/components/home/` – one component per home page section.
-- `src/components/motion.tsx` – reveal-on-scroll and word-by-word text animations (uses [Motion](https://motion.dev)). `ANIMATIONS_ENABLED` there switches every site animation and the smooth scroll on or off.
-- `src/components/PlaygroundBg.tsx` – the hero's animated ASCII background (WebGL).
-- `src/components/ui/cursor-driven-particle-typography.tsx` – the hero headline drawn as particles that move away from the cursor (WebGL).
-- `src/components/LiquidMetal.tsx` – the liquid metal effect on the primary buttons (WebGL 2), used by `Button.tsx`.
-- `src/components/Ticker.tsx` – infinite marquees.
-- `src/components/icons.tsx` – SVG icons exported from the Framer project.
-- `src/app/globals.css` – color tokens, breakpoints and the text styles (`t-h2`, `t-body-m`, …).
-- `public/framer/` – images and videos downloaded from the Framer project.
+- `src/content/` – all text and data. Edit content here.
+  - `home.ts` – section copy, services, process steps, plans and FAQ
+  - `portfolio.ts` – projects shown in the portfolio slider
+  - `site.ts` – site URL, contact details and the WhatsApp link helper
+- `src/components/home/` – one component per section (Hero, About, Values, Services, Process, Portfolio, Pricing, Faq).
+- `src/components/` – shared pieces:
+  - `Button.tsx` – pill buttons (liquid metal primary, muted, inverted, outline)
+  - `LineIcon.tsx` – the line icons used in buttons
+  - `motion.tsx` – reveal-on-scroll and word-by-word text animations. `ANIMATIONS_ENABLED` switches every animation and the smooth scroll on or off.
+  - `AsciiBackground.tsx` – the hero's animated ASCII background (WebGL)
+  - `ParticleText.tsx` – the hero headline drawn as particles that move away from the cursor (WebGL)
+  - `LiquidMetal.tsx` – the liquid metal effect on primary buttons (WebGL 2)
+  - `DitherDots.tsx` – the dithered dots in the pricing ambient (WebGL)
+  - `preloader/` – the intro animation
+- `src/lib/` – brand colours (`brand.ts`), logo and cursor paths, intro state and text helpers.
+- `src/app/globals.css` – colour tokens, breakpoints and text styles (`t-h2`, `t-body-m`, …).
+- `src/app/` – favicon, app icons, Open Graph image, `robots.ts` and `sitemap.ts`.
+- `public/images/`, `public/videos/` – images and the footer video.
 
-Breakpoints match Framer: phone below 800px, tablet (`md`) from 800px, desktop (`lg`) from 1200px.
+Brand colours: `#000000`, `#012685`, `#0450F0`, `#56A1F7`, `#FFFFFF` (the `--color-holo-*` tokens in `globals.css`, and `src/lib/brand.ts` for canvas and WebGL code).
+
+Breakpoints: phone below 800px, tablet (`md`) from 800px, desktop (`lg`) from 1200px.
 
 ## Performance notes
 
-The WebGL effects only render while they are on screen. The headline particles stop once they have settled and wake on pointer movement; the button effect redraws only its outline, at 30fps, while nobody is hovering it. Keep that in mind when adding effects: anything that animates continuously should pause off screen.
+The WebGL effects only render while they are on screen. The headline particles stop once they have settled and wake on pointer movement; the button effect redraws at 30fps while nobody is hovering it; the pricing dots are created on first use and stop when switched off. The footer video downloads only near the viewport and pauses off screen. Anything new that animates continuously should pause off screen too.

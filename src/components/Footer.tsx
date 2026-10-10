@@ -13,7 +13,7 @@ function ContactPill() {
         href={contact.instagramUrl}
         target="_blank"
         rel="noreferrer"
-        className="t-body-m px-5 py-3 whitespace-nowrap text-white-02 transition-colors duration-300 hover:text-white sm:p-0"
+        className="t-body-m flex items-center px-5 py-3 whitespace-nowrap text-white-02 transition-colors duration-300 hover:text-white sm:h-12 sm:p-0"
       >
         Instagram @{contact.instagram}
       </a>
@@ -30,8 +30,8 @@ function ContactPill() {
 }
 
 const links = [
-  { label: "Beranda", href: "/" },
-  { label: "Portfolio", href: "/#project" },
+  { label: "Beranda", href: "/#top" },
+  { label: "Portfolio", href: "/#portfolio" },
   { label: "Harga", href: "/#pricing" },
   { label: "Kontak", href: "/#contact" },
 ];
@@ -48,7 +48,8 @@ export function Footer() {
         <div className="grid grid-cols-2 gap-x-4 gap-y-6 pt-6 md:flex md:justify-between">
           {links.map((l) => (
             <Reveal key={l.label} y={50}>
-              <Link href={l.href} className="t-body-m text-white transition-opacity hover:opacity-70">
+              {/* Taller than the text (pulled back with a negative margin) for an easier tap target */}
+              <Link href={l.href} className="t-body-m -my-2.5 inline-flex py-2.5 text-white transition-opacity hover:opacity-70">
                 {l.label}
               </Link>
             </Reveal>
@@ -97,7 +98,7 @@ export function FooterSection({
         {/* The greyscale video tinted in the same blues (multiply turns its whites blue and keeps its blacks),
             masked so it only eases in below the white fade */}
         <div className="footer-video absolute inset-0">
-          <LazyVideo className="absolute inset-0 size-full object-cover" src="/framer/S4N88TVzCfxigg9YZYcSIYNPk4.mp4" />
+          <LazyVideo className="absolute inset-0 size-full object-cover" src="/videos/footer.mp4" />
           <div className={`absolute inset-0 ${tint} mix-blend-multiply`} />
         </div>
         <div className="footer-fade absolute inset-x-0 top-0" />

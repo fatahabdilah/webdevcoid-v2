@@ -1,7 +1,7 @@
 import { SiteFooter } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 
-/** Framer's default layout template: fixed navbar on top, footer at the bottom. */
+/** Fixed navbar on top, footer at the bottom. */
 export default function SiteLayout({ children }: LayoutProps<"/">) {
   return (
     <>

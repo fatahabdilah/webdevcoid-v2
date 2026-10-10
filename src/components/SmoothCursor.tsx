@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useSpring, useTransform } from "motion/react";
 import { getIntroHandoff, useIntroEntered } from "@/lib/intro";
-import { CURSOR_SIZE as SIZE, CUSTOM_CURSOR_QUERY, VIEW_H, VIEW_W, cursorPath } from "./cursorShape";
+import { CURSOR_SIZE as SIZE, CUSTOM_CURSOR_QUERY, VIEW_H, VIEW_W, cursorPath } from "@/lib/cursorShape";
 
 /** Clickable things morph the arrow into a circle (links out of the site add a ↗); text fields hand over to the system I-beam. */
 const POINTER = 'a, button, [role="button"], label, select, summary, input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="button"], .cursor-pointer';

@@ -9,7 +9,7 @@ import { SectionHeader } from "../SectionHeader";
 import { noOrphan } from "@/lib/text";
 
 const tween = { duration: 0.4, ease: easeFramer };
-const fade = "transition-opacity duration-[400ms] ease-[cubic-bezier(0.44,0,0.56,1)]";
+const fade = "transition-opacity duration-[400ms] ease-framer";
 
 function FaqItem({ index, q, a, open, onToggle }: { index: number; q: string; a: string; open: boolean; onToggle: () => void }) {
   return (
@@ -19,13 +19,13 @@ function FaqItem({ index, q, a, open, onToggle }: { index: number; q: string; a:
         <div className="size-full rounded-[14px] bg-white" />
       </div>
 
-      <div className="relative z-[1] p-6">
-        <button type="button" onClick={onToggle} aria-expanded={open} className="flex w-full cursor-pointer items-center gap-4 text-left">
+      <div className="relative z-[1] p-5 md:p-6">
+        <button type="button" onClick={onToggle} aria-expanded={open} className="flex w-full cursor-pointer items-center gap-3 text-left md:gap-4">
           <span className="flex size-8 shrink-0 items-center justify-center rounded-xl border-[0.5px] border-grey-07 bg-grey-08 shadow-[inset_0_0_1px_2px_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)]">
             <span className="t-body-s text-grey-01">{index + 1}</span>
           </span>
-          <span className="t-title-s flex-1 text-grey-01">{noOrphan(q)}</span>
-          <span className="relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-grey-01 shadow-[inset_0_0_8px_0_#fff]">
+          <span className="t-title-s flex-1 text-grey-01 max-md:text-[17px]">{noOrphan(q)}</span>
+          <span className="relative flex size-10 shrink-0 md:size-12 items-center justify-center overflow-hidden rounded-full bg-grey-01 shadow-[inset_0_0_8px_0_#fff]">
             <span aria-hidden className={`absolute inset-0 rounded-full p-px ${fade} ${open ? "opacity-100" : "opacity-0"}`} style={{ backgroundImage: "var(--holo-gradient)" }}>
               <span className="block size-full rounded-full bg-white" />
             </span>
@@ -45,7 +45,8 @@ function FaqItem({ index, q, a, open, onToggle }: { index: number; q: string; a:
           animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
           transition={tween}
         >
-          <div className="max-w-[640px] pt-3 pl-12">
+          {/* Indented under the question from md; full width on phones */}
+          <div className="max-w-[640px] pt-3 md:pl-12">
             <p className="t-body-m text-grey-01">{noOrphan(a)}</p>
           </div>
         </motion.div>

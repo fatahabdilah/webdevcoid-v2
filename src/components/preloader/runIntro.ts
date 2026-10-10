@@ -1,9 +1,9 @@
 import gsap from "gsap";
-import { CUSTOM_CURSOR_QUERY, cursorPath } from "../cursorShape";
-import { LOGO_MARK_D, LOGO_WORDMARK_D } from "../logoPaths";
+import { CUSTOM_CURSOR_QUERY, cursorPath } from "@/lib/cursorShape";
+import { LOGO_MARK_D, LOGO_WORDMARK_D } from "@/lib/logoPaths";
 
 /**
- * The intro film, ported from webdev-preloader.html:
+ * The intro film:
  * the logo is written on straight away over a drifting dither field while a camera chases the pen →
  * a scripted cursor (styled like the site cursor) clicks the logo → the logo becomes a window cut into
  * the dark veil and the camera zooms through it onto the page.
@@ -440,7 +440,8 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
   const cursorState = { x: 0, y: 0, heading: 0 };
   function cursorPhase() {
     if (revealed) return;
-    const touch = matchMedia("(hover: none)").matches;
+    // The same film on every device: on touch screens the arrow still travels to the logo and clicks it,
+    // then fades away at the reveal (there is no site cursor to hand it to).
     const target = (): Pt => {
       const r = G.bar3.el.getBoundingClientRect();
       return [r.left + r.width / 2, r.top + r.height / 2];
@@ -448,9 +449,9 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
     const W = innerWidth, H = innerHeight;
     const [tx0, ty0] = target();
     const S: Pt = [Math.min(W - 40, tx0 + Math.max(170, W * 0.28)), Math.min(H - 48, ty0 + Math.max(140, H * 0.3))];
-    const C = { p: touch ? 1 : 0, appear: 0, morph: touch ? 1 : 0, press: 1 };
+    const C = { p: 0, appear: 0, morph: 0, press: 1 };
     let last: Pt | null = null, squish = 1, drawnMorph = -1;
-    cursorState.heading = touch ? 0 : (Math.atan2(ty0 - S[1], tx0 - S[0]) * 180) / Math.PI + 90;
+    cursorState.heading = (Math.atan2(ty0 - S[1], tx0 - S[0]) * 180) / Math.PI + 90;
 
     place = (dt: number) => {
       const T = target(), p = C.p, q = 1 - p;
@@ -484,11 +485,11 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
       }
     };
 
-    const arrive = touch ? 0.35 : 1.15;
+    const arrive = 1.15;
     cursorTl = gsap.timeline();
-    cursorTl.to(C, { appear: 1, duration: 0.5, ease: "power2.out" }, 0);
-    if (!touch) cursorTl.to(C, { p: 1, duration: 1.25, ease: "power3.inOut" }, 0.15);
     cursorTl
+      .to(C, { appear: 1, duration: 0.5, ease: "power2.out" }, 0)
+      .to(C, { p: 1, duration: 1.25, ease: "power3.inOut" }, 0.15)
       .to(C, { morph: 1, duration: 0.4, ease: "power2.out" }, arrive) // over something clickable: arrow → circle
       .to(CAM, { hv: 0.03, duration: 0.55, ease: "power2.out" }, arrive) // the logo leans in
       .to(C, { press: 0.7, duration: 0.1, ease: "power2.in" }, arrive + 0.6) // press, like the real cursor

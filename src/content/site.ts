@@ -1,3 +1,8 @@
+/** Public URL of the site, used for metadata, the sitemap and robots.txt. */
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://webdev.co.id";
+
+export const siteName = "webdev.co.id";
+
 /** Contact details as published on webdev.co.id. */
 export const contact = {
   whatsapp: "6282258096886",

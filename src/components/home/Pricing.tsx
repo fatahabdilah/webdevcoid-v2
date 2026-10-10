@@ -8,7 +8,7 @@ import { waLink } from "@/content/site";
 import { Button } from "../Button";
 import { CtaAvatar } from "../CtaAvatar";
 import { DitherDots } from "../DitherDots";
-import { Badge } from "../icons";
+import { Badge, Check } from "../icons";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
 import { noOrphan } from "@/lib/text";
@@ -22,7 +22,7 @@ function Price({ plan, light }: { plan: Plan; light: boolean }) {
   return (
     <div className="flex flex-col">
       <span className={`t-body-s h-[19px] ${fade} ${light ? "text-white" : "text-grey-03"}`}>{label}</span>
-      <span className={`t-title-xl lg:t-title-l ${fade} ${light ? "text-white" : "text-grey-01"}`}>
+      <span className={`t-title-xl max-lg:text-[min(48px,12vw)] lg:t-title-l ${fade} ${light ? "text-white" : "text-grey-01"}`}>
         {plan.quote ? (
           plan.quote.value
         ) : (
@@ -48,10 +48,21 @@ const premiumBg = [
   "linear-gradient(-21.55deg, var(--color-holo-0) 25%, var(--color-holo-25) 65%, var(--color-holo-50) 100%)",
 ].join(", ");
 
-function PlanCard({ plan, highlighted, onActivate }: { plan: Plan; highlighted: boolean; onActivate: () => void }) {
+type PlanCardProps = {
+  plan: Plan;
+  highlighted: boolean;
+  /** Whether the highlight arrives from the premium card (it starts dark and clears on the way). */
+  fromPremium: boolean;
+  onActivate: () => void;
+};
+
+function PlanCard({ plan, highlighted, fromPremium, onActivate }: PlanCardProps) {
   return (
     <div
-      onPointerEnter={onActivate}
+      // Mouse/pen: follow the pointer. Touch: a tap selects the card (a touch's enter/leave would
+      // also fire on every swipe that starts on a card, flashing the highlight while scrolling).
+      onPointerEnter={(e) => e.pointerType !== "touch" && onActivate()}
+      onClick={onActivate}
       onFocusCapture={onActivate}
       data-premium={plan.premium ? "" : undefined}
       className="relative isolate flex flex-col gap-8 rounded-2xl p-6 lg:flex-1 lg:p-8"
@@ -61,17 +72,22 @@ function PlanCard({ plan, highlighted, onActivate }: { plan: Plan; highlighted: 
         <motion.div
           layoutId="plan-highlight"
           transition={highlightSpring}
-          className="absolute inset-0 -z-10 rounded-2xl border border-white shadow-[inset_0_0_19px_0_rgba(0,0,0,0.25)]"
-          style={{ backgroundImage: highlightBg }}
-        />
-      )}
-      {/* The premium plan darkens the sliding highlight: this layer fades in over it, inside its white border */}
-      {plan.premium && (
-        <div
-          aria-hidden
-          className={`absolute inset-px -z-10 rounded-[15px] shadow-[inset_0_0_19px_0_rgba(0,0,0,0.25)] transition-opacity duration-300 ease-out ${highlighted ? "opacity-100" : "opacity-0"}`}
-          style={{ backgroundImage: premiumBg }}
-        />
+          className="absolute inset-0 -z-10 overflow-hidden border border-white shadow-[inset_0_0_19px_0_rgba(0,0,0,0.25)]"
+          // In style (not a class) so Motion keeps the corners round while the box stretches between cards
+          style={{ backgroundImage: highlightBg, borderRadius: 16 }}
+        >
+          {/* The premium tint travels with the highlight: it darkens while sliding onto the premium card and
+              clears while sliding off, instead of sitting on that card waiting for the highlight to arrive */}
+          <motion.div
+            aria-hidden
+            className="absolute inset-0 shadow-[inset_0_0_19px_0_rgba(0,0,0,0.25)]"
+            style={{ backgroundImage: premiumBg }}
+            initial={{ opacity: fromPremium ? 1 : 0 }}
+            animate={{ opacity: plan.premium ? 1 : 0 }}
+            // Same spring as the slide, so the tint's progress matches the highlight's position frame by frame
+            transition={highlightSpring}
+          />
+        </motion.div>
       )}
       <div className="relative flex flex-col gap-6 border-b border-grey-07 pb-6 lg:pb-8">
         {plan.featured ? (
@@ -96,7 +112,7 @@ function PlanCard({ plan, highlighted, onActivate }: { plan: Plan; highlighted: 
         {plan.featured && (
           <div className="absolute top-0 right-0 h-8 overflow-hidden rounded-[10px] p-px" style={{ backgroundImage: "var(--holo-gradient)" }}>
             <div className="relative flex h-[30px] items-center justify-center gap-1 overflow-hidden rounded-[9px] bg-black px-2 py-1">
-              <Image src="/framer/p0CAYCtXFDiMzrUmGyKb7CeTPw.png" alt="" width={116} height={170} className="pointer-events-none absolute top-1/2 left-0 w-full opacity-20" />
+              <Image src="/images/patterns/dots-badge.png" alt="" width={116} height={170} className="pointer-events-none absolute top-1/2 left-0 w-full opacity-20" />
               <Badge width={16} height={16} className="relative text-white" />
               <span className="t-body-s relative whitespace-nowrap text-white">Rekomendasi</span>
             </div>
@@ -109,14 +125,7 @@ function PlanCard({ plan, highlighted, onActivate }: { plan: Plan; highlighted: 
           {plan.features.map((f) => (
             <li key={f.label} className={`flex items-start gap-2 ${f.included ? "" : "opacity-40"}`}>
               {f.included ? (
-                <Image
-                  src="/framer/USENOVof69OIqZ1giTqg7n9IZGM.png"
-                  alt=""
-                  width={16}
-                  height={16}
-                  // The check is dark; on a highlighted (blue) card it turns white, like the text
-                  className={`mt-[2.4px] size-4 transition-[filter] duration-300 ease-out ${highlighted ? "brightness-0 invert" : ""}`}
-                />
+                <Check width={16} height={16} className={`mt-[2.4px] size-4 shrink-0 ${fade} ${highlighted ? "text-white" : "text-grey-01"}`} />
               ) : (
                 <span aria-hidden className={`mt-[2.4px] flex size-4 items-center justify-center ${fade} ${highlighted ? "text-white" : "text-grey-03"}`}>
                   –
@@ -173,7 +182,11 @@ function Aurora({ on, ref }: { on: boolean; ref: RefObject<HTMLDivElement | null
 
 export function Pricing() {
   const featured = Math.max(0, plans.findIndex((p) => p.featured));
-  const [active, setActive] = useState(featured);
+  // The highlighted card, and the one the highlight came from (so the premium tint can travel with it)
+  const [selection, setSelection] = useState({ active: featured, from: featured });
+  const { active } = selection;
+  const setActive = (i: number) => setSelection((s) => (s.active === i ? s : { active: i, from: s.active }));
+  const fromPremium = !!plans[selection.from]?.premium;
   // The aurora ambient shows while the premium (most expensive) plan is the active one
   const ambient = !!plans[active]?.premium;
   const sectionRef = useRef<HTMLElement>(null);
@@ -181,7 +194,7 @@ export function Pricing() {
   // The header switches tone a beat after the ambient, once the reveal has reached (or left) it
   const [headerDark, setHeaderDark] = useState(false);
   useEffect(() => {
-    const t = window.setTimeout(() => setHeaderDark(ambient), 300);
+    const t = window.setTimeout(() => setHeaderDark(ambient), ambient ? 450 : 300);
     return () => window.clearTimeout(t);
   }, [ambient]);
 
@@ -223,11 +236,11 @@ export function Pricing() {
           <Reveal
             y={50}
             amount={0.1}
-            onPointerLeave={() => setActive(featured)}
+            onPointerLeave={(e) => e.pointerType !== "touch" && setActive(featured)}
             className={`flex w-full flex-col gap-2 rounded-3xl p-2 transition-colors duration-700 ease-out md:p-2 lg:flex-row lg:gap-2 ${ambient ? "bg-white/88" : "bg-grey-08"}`}
           >
             {plans.map((p, i) => (
-              <PlanCard key={p.name} plan={p} highlighted={active === i} onActivate={() => setActive(i)} />
+              <PlanCard key={p.name} plan={p} highlighted={active === i} fromPremium={fromPremium} onActivate={() => setActive(i)} />
             ))}
           </Reveal>
 
@@ -239,7 +252,7 @@ export function Pricing() {
             style={{ backgroundImage: "var(--holo-radial)" }}
           >
             <div className="flex w-full flex-col items-center gap-6">
-              <CtaAvatar image="/framer/nksBogTRxkMRik85FxTEGIcclg.png" />
+              <CtaAvatar image="/images/avatars/cta-pricing.png" />
               <div className="flex w-full flex-col items-center gap-2 text-center">
                 <h3 className="t-title-m text-balance text-white">Belum yakin mana yang&nbsp;pas?</h3>
                 <p className="t-body-m text-white-02">Konsultasi gratis dulu, tanpa&nbsp;komitmen.</p>

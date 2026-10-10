@@ -145,10 +145,11 @@ export function Words({
           <Fragment key={li}>
             {li > 0 && <br />}
             {(() => {
-              // The last two words share a no-wrap span so the line never ends on a lone word.
+              // The last two words share a no-wrap span so the line never ends on a lone word
+              // (not on two-word lines, which must still be able to wrap on narrow phones).
               const ws = line.split(" ");
-              const head = ws.slice(0, -2);
-              const tail = ws.slice(-2);
+              const tail = ws.slice(ws.length > 2 ? -2 : -1);
+              const head = ws.slice(0, ws.length - tail.length);
               const renderWord = (w: string) => (
                 <motion.span className="inline-block" variants={word} data-word={gradient ? "" : undefined} style={gradient ? gradientWord(gradient) : undefined}>
                   {w}

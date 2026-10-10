@@ -32,7 +32,7 @@ function ScrollTextReveal({ text }: { text: string }) {
     <p
       ref={ref}
       style={{ ["--p" as string]: ANIMATIONS_ENABLED ? 0 : total }}
-      className="w-full max-w-[1000px] text-center text-[32px] leading-[36px] font-normal tracking-[-1.5px] text-grey-01 md:text-[48px] md:leading-[52px]"
+      className="w-full max-w-[1000px] text-center text-[26px] leading-[31px] font-normal tracking-[-1px] text-grey-01 sm:text-[36px] sm:leading-[41px] sm:tracking-[-1.5px] md:text-[48px] md:leading-[52px]"
     >
       {(() => {
         const words = text.split(" ");
@@ -88,7 +88,7 @@ function IntroVideo() {
     <div className="relative z-[2] [perspective:2000px] max-md:w-[70%] md:w-[500px] lg:w-[600px]">
       <motion.a
         ref={ref}
-        href="/#project"
+        href="/#portfolio"
         aria-label="Lihat karya kami"
         style={ANIMATIONS_ENABLED ? { scale, rotateX } : undefined}
         onPointerMove={onMove}
@@ -96,9 +96,9 @@ function IntroVideo() {
           mx.set(0);
           my.set(0);
         }}
-        className="group relative block aspect-[1.5] w-full overflow-hidden rounded-3xl transition-shadow duration-500 ease-[cubic-bezier(0.44,0,0.56,1)] hover:shadow-[0_0_40px_0_#fff]"
+        className="group relative block aspect-[1.5] w-full overflow-hidden rounded-3xl transition-shadow duration-500 ease-framer hover:shadow-[0_0_40px_0_#fff]"
       >
-        <Image src="/framer/yIkRlzOeYgbByvg5aLPH3jwplw.png" alt="Tim sedang berdiskusi di depan layar presentasi" fill sizes="600px" className="object-cover" />
+        <Image src="/images/about.png" alt="Tim sedang berdiskusi di depan layar presentasi" fill sizes="600px" className="object-cover" />
         <span className="absolute inset-0 flex items-center justify-center rounded-[inherit] bg-black/20 shadow-[inset_0_0_40px_0_#fff] transition-shadow duration-500 group-hover:shadow-[inset_0_0_80px_0_#fff]">
           <motion.span
             style={{ x, y }}

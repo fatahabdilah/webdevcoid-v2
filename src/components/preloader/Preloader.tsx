@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { markIntroEntered } from "@/lib/intro";
-import { cursorPath } from "../cursorShape";
+import { cursorPath } from "@/lib/cursorShape";
 import { ANIMATIONS_ENABLED } from "../motion";
 import { runIntro } from "./runIntro";
 import "./preloader.css";

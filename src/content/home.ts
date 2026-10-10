@@ -1,9 +1,8 @@
 /**
  * Home page copy for webdev.co.id (Brand Guidelines v1.8): "kamu/kami", no "paket",
  * no technology names, no testimonials or fictional numbers. Prices and inclusions
- * come from webdev.co.id. Images are still the template's and get replaced later.
+ * come from webdev.co.id.
  */
-const img = (id: string) => `/framer/${id}`;
 
 /** "Kenapa kami", value proposition (2.3, 2.4). */
 export const values = [
@@ -11,19 +10,19 @@ export const values = [
     number: "01",
     title: "Desain custom, harga masuk akal",
     text: "Desain dibuat khusus untuk bisnismu, bukan template. Harganya tetap masuk akal.",
-    icon: img("LNLGq4ZhhjYcWwLsunsuXQRG3Is.svg"),
+    icon: "/images/values/custom.svg",
   },
   {
     number: "02",
     title: "Kualitas premium, proses tidak ribet",
     text: "Dari desain sampai online, kami urus semuanya. Kamu fokus ke bisnis.",
-    icon: img("ykvnFaXAawiyfPKFWFuC3QiKw.svg"),
+    icon: "/images/values/premium.svg",
   },
   {
     number: "03",
     title: "Cepat dan mendukung tujuan bisnis",
     text: "Bukan cuma bagus dilihat, tapi cepat dibuka dan membantu bisnismu berkembang.",
-    icon: img("B3xPzQo8UIwVCTcNg947sHqGE.svg"),
+    icon: "/images/values/fast.svg",
   },
 ];
 
@@ -106,88 +105,6 @@ export const stats = [
   { value: "Satu pintu", label: "kami urus semua" },
 ];
 
-/** "Satu pintu" marquee: what we take care of. */
-export const integrations = [
-  { title: "Desain", logo: img("2xquyjyFTB2qMqOwhpLzMdYE.png") },
-  { title: "Konten", logo: img("5uPQw4lqjfuPQVY56gQ2VAps.png") },
-  { title: "Domain", logo: img("ZlucgVlz0X3yiswDce5ZZWPzxnU.png") },
-  { title: "Hosting", logo: img("ZQy4IZjczFBHr315feUz6FY9Jc.png") },
-  { title: "Sertifikat SSL", logo: img("qn0FSop5Ezs3MCS3AzMwD3o2NR4.png") },
-  { title: "SEO dasar", logo: img("NJei4VUurepCT7nFvab7lNWfGuE.png") },
-  { title: "Form WhatsApp", logo: img("AhQIGlem4StUQWPLgPR6MUs5ioY.png") },
-  { title: "Responsif", logo: img("oin8QcjYXzUlmHfyHtNW6VeuO4.png") },
-  { title: "Backup", logo: img("cDjkCDrLWvNdD8oA4b1Pjx9RaM.png") },
-  { title: "Perawatan", logo: img("VK3pQ5OWeJjNxkJwuh2e4tWvU.png") },
-];
-
-export type Testimonial =
-  | { kind: "quote"; name: string; role: string; avatar: string; quote: string }
-  | { kind: "video"; title: string; image: string; logo: string; href: string };
-
-/** "Untuk siapa": one card per segment with its key message (2.2, 10.4). */
-const segment = (name: string, role: string, avatar: string, quote: string): Testimonial => ({
-  kind: "quote",
-  name,
-  role,
-  avatar: img(avatar),
-  quote,
-});
-const work = (title: string, image: string, href: string): Testimonial => ({
-  kind: "video",
-  title,
-  image: img(image),
-  logo: img("tQe8KYZERtfj6dEWPfoEV61M2Q.png"),
-  href,
-});
-
-/** Three masonry columns, in the order they appear on desktop. */
-export const testimonialColumns: Testimonial[][] = [
-  [
-    work("Website portofolio untuk videografer pernikahan", "aSmMadORFrjf0SEWGxtfp2qXEmA.png", "https://arifsyauqi.com"),
-    segment(
-      "Brand baru",
-      "Butuh website pertama",
-      "z6cPmsnJML2flePXMqm2kdZG6EI.png",
-      "Mulai dengan website yang langsung bikin brand kamu kelihatan meyakinkan.",
-    ),
-    segment(
-      "Startup",
-      "Landing page atau produk web",
-      "BnPovhu3UVva8wf8pdIhGnyeu0.png",
-      "Website cepat dan modern, dieksekusi tanpa drama, siap mendukung pertumbuhan.",
-    ),
-  ],
-  [
-    segment(
-      "Perusahaan",
-      "Company profile atau redesign",
-      "io1ebA6nKd3sIhRozjyWCmW7Pk.png",
-      "Company profile profesional yang mencerminkan kredibilitas bisnis kamu.",
-    ),
-    segment(
-      "Institusi & organisasi",
-      "Profil, informasi, dan pendaftaran online",
-      "Nc7T0UP7TMYghubatYlzblQr3vc.png",
-      "Website institusi yang rapi dan informatif, memudahkan publik mengakses informasi dan layanan secara online.",
-    ),
-    segment(
-      "UMKM",
-      "Ingin naik kelas secara online",
-      "Jd4Actw3iicp7lVmQL6Tty7Ezw.png",
-      "Tampil lebih meyakinkan secara online, supaya pelanggan baru lebih mudah menemukan dan percaya.",
-    ),
-  ],
-  [
-    segment(
-      "Personal brand",
-      "Profesional dan kreator",
-      "ZWhfkzGB6c8iJeDzvp6nt6xFt4.png",
-      "Website pribadi yang merangkum karya dan cara menghubungimu di satu tempat.",
-    ),
-    work("Company profile untuk distributor uPVC", "mKS6dvxPlvfsWt7d3VskQg0q8.png", "https://sekartama-upvc.com"),
-  ],
-];
-
 export type Plan = {
   name: string;
   tagline: string;
@@ -264,20 +181,6 @@ export const plans: Plan[] = [
     premium: true,
   },
 ];
-
-/** "Yang selalu kamu dapat": shown in the slider that used to hold the team. */
-export const team = [
-  { name: "Dirancang khusus", role: "Bukan template", image: img("V58sx7NhvVNAahpHlBmHCwyRE20.png") },
-  { name: "Satu pintu", role: "Domain, hosting, dan maintenance kami urus", image: img("kDCbKE8EXCPmfNs0LiD0FOFgGQ.png") },
-  { name: "Harga jelas di awal", role: "Tanpa biaya tersembunyi", image: img("8D58J0L0stwsgjpU28TcU3dZD4.png") },
-  { name: "Klien langsung terhubung", role: "Masuk ke WhatsApp dan email", image: img("EBzCzs24ynmp6mfap9BtX0EPGE.png") },
-  { name: "Preview tiap tahap", role: "Kamu lihat hasilnya sebelum tayang", image: img("3ydsPax1LnJDd6x2DAPVs72nc.png") },
-  { name: "Responsif", role: "Rapi dibuka dari HP maupun laptop", image: img("JxwQVocV64XDacrtefjU7j939g.png") },
-  { name: "Domain & hosting", role: "Tahun pertama sudah termasuk", image: img("0UWfIIl9o3uf2tUEwLcyINjvIgU.png") },
-];
-
-/** The team cards had personal social links; commitments don't. */
-export const teamSocials: { label: string; href: string; icon: string }[] = [];
 
 export const faqs = [
   {

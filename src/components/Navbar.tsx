@@ -5,11 +5,11 @@ import { motion } from "motion/react";
 import { waLink } from "@/content/site";
 import { useIntroEntered } from "@/lib/intro";
 import { ANIMATIONS_ENABLED, easeFramer } from "./motion";
-import { LogoMark, LogoWordmark } from "./icons";
+import { LogoMark, LogoWordmark, PhoneCalling } from "./icons";
 
 const links = [
   { title: "Tentang", href: "/#about" },
-  { title: "Portfolio", href: "/#project" },
+  { title: "Portfolio", href: "/#portfolio" },
   { title: "Harga", href: "/#pricing" },
 ];
 
@@ -28,11 +28,11 @@ export function Navbar() {
         <Link
           href="/#top"
           aria-label="webdev.co.id beranda"
-          className="group relative z-[2] flex h-14 shrink-0 items-center rounded-full bg-black/40 px-4 text-white backdrop-blur-[40px]"
+          className="group relative z-[2] flex h-14 shrink-0 items-center rounded-full bg-black/40 px-4 text-white backdrop-blur-[40px] max-[359px]:px-3"
         >
           <LogoMark width={24} height={28} className="shrink-0" />
           {/* Wordmark slides open on hover/focus: the grid column eases from 0fr to 1fr, so the width animates smoothly */}
-          <span className="grid grid-cols-[0fr] transition-[grid-template-columns] duration-500 ease-[cubic-bezier(0.44,0,0.56,1)] group-hover:grid-cols-[1fr] group-focus-visible:grid-cols-[1fr]">
+          <span className="grid grid-cols-[0fr] transition-[grid-template-columns] duration-500 ease-framer group-hover:grid-cols-[1fr] group-focus-visible:grid-cols-[1fr]">
             <span className="min-w-0 overflow-hidden">
               <LogoWordmark
                 width={100.4}
@@ -43,26 +43,32 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="relative z-[2] flex h-14 items-center gap-6 rounded-full bg-black/40 py-1 pr-5 pl-5 backdrop-blur-[20px] sm:pr-1 sm:pl-6">
-          <ul className="flex items-center gap-4 sm:gap-6">
+        <div className="relative z-[2] flex h-14 items-center gap-3 rounded-full bg-black/40 py-1 pr-1 pl-4 backdrop-blur-[20px] max-[359px]:pl-3 sm:gap-6 sm:pl-6">
+          <ul className="flex items-center gap-3.5 max-[359px]:gap-2.5 sm:gap-6">
             {links.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="t-body-s sm:t-body-m text-white-02 transition-colors duration-300 hover:text-white"
+                  className="t-body-s sm:t-body-m flex h-12 items-center text-white-02 transition-colors duration-300 hover:text-white"
                 >
                   {l.title}
                 </Link>
               </li>
             ))}
           </ul>
+          {/* "Konsultasi Gratis" from 640px, "Konsultasi" on most phones, and a phone icon below 390px
+              (logo, three links and a text button don't fit in narrower screens) */}
           <a
             href={waLink()}
             target="_blank"
             rel="noreferrer"
-            className="t-body-m-medium hidden h-12 items-center rounded-full border border-white bg-white-02 px-5 whitespace-nowrap text-grey-01 transition-colors duration-300 hover:bg-white sm:flex"
+            aria-label="Konsultasi gratis via WhatsApp"
+            className="flex h-12 shrink-0 items-center justify-center rounded-full border border-white bg-white-02 whitespace-nowrap text-grey-01 transition-colors duration-300 hover:bg-white max-[389px]:w-12 min-[390px]:px-4 sm:px-5"
           >
-            Konsultasi Gratis
+            <PhoneCalling width={22} height={22} className="min-[390px]:hidden" />
+            <span className="t-body-s font-medium max-[389px]:hidden sm:t-body-m-medium">
+              Konsultasi<span className="hidden sm:inline"> Gratis</span>
+            </span>
           </a>
         </div>
       </motion.nav>

@@ -16,7 +16,7 @@ const icons = {
   rocket: ProcessRocket,
 };
 
-const ease = "duration-500 ease-[cubic-bezier(0.44,0,0.56,1)]";
+const ease = "duration-500 ease-framer";
 /** Section background; inactive steps sit flush on it. */
 const sectionBg = "bg-[#101010]";
 /** Highlight behind an active step. */
@@ -64,12 +64,12 @@ function Dot({ active }: { active: boolean }) {
   );
 }
 
-function IconBlock({ step, active, showNumber }: { step: (typeof steps)[number]; active: boolean; showNumber: boolean }) {
+function IconBlock({ step, active, showNumber, small }: { step: (typeof steps)[number]; active: boolean; showNumber: boolean; small?: boolean }) {
   const Icon = icons[step.icon];
   return (
     <div className="flex items-center gap-4">
       <div
-        className={`relative flex size-20 shrink-0 items-center justify-center rounded-xl border bg-grey-01 bg-clip-padding transition-colors ${ease} ${
+        className={`relative flex ${small ? "size-14" : "size-20"} shrink-0 items-center justify-center rounded-xl border bg-grey-01 bg-clip-padding transition-colors ${ease} ${
           active ? "border-transparent text-white" : "border-grey-02 text-white-03"
         }`}
       >
@@ -77,7 +77,7 @@ function IconBlock({ step, active, showNumber }: { step: (typeof steps)[number];
           aria-hidden
           className={`absolute inset-0 rounded-[11px] bg-[linear-gradient(180deg,var(--color-holo-50)_0%,var(--color-holo-0)_100%)] transition-opacity ${ease} ${active ? "opacity-100" : "opacity-0"}`}
         />
-        <Icon className="relative h-[34px] w-auto" />
+        <Icon className={`relative ${small ? "h-6" : "h-[34px]"} w-auto`} />
         {/* Inner glow sits on top of the fill, as in the design */}
         <span
           aria-hidden
@@ -111,21 +111,25 @@ function Step({ step, index, active, first, last }: { step: (typeof steps)[numbe
         </span>
       </div>
 
-      {/* Icon side */}
-      <div className={`flex shrink-0 items-center md:flex-1 md:py-10 ${dimmed(active)} ${mirrored ? "md:order-3 md:justify-start" : "md:order-1 md:justify-end"}`}>
-        <div className="md:hidden">
-          <IconBlock step={step} active={active} showNumber={false} />
+      {/* Phones: icon above the text, so the text gets the card's full width. From md the wrapper
+          dissolves (display: contents) and both sides sit either side of the line. */}
+      <div className="flex min-w-0 flex-1 flex-col items-start gap-4 py-7 md:contents">
+        {/* Icon side */}
+        <div className={`flex shrink-0 items-center md:flex-1 md:py-10 ${dimmed(active)} ${mirrored ? "md:order-3 md:justify-start" : "md:order-1 md:justify-end"}`}>
+          <div className="md:hidden">
+            <IconBlock step={step} active={active} showNumber={false} small />
+          </div>
+          <div className="hidden md:block">
+            <IconBlock step={step} active={active} showNumber />
+          </div>
         </div>
-        <div className="hidden md:block">
-          <IconBlock step={step} active={active} showNumber />
-        </div>
-      </div>
 
-      {/* Text side */}
-      <div className={`flex flex-1 py-10 ${dimmed(active)} ${mirrored ? "md:order-1 md:justify-end" : "md:order-3 md:justify-start"}`}>
-        <div className={`flex w-full flex-col gap-1 ${mirrored ? "md:max-w-[320px] md:text-right" : "md:max-w-[300px]"}`}>
-          <h3 className="t-title-s text-white">{noOrphan(step.title)}</h3>
-          <p className="t-body-m text-white-03">{noOrphan(step.text)}</p>
+        {/* Text side */}
+        <div className={`flex w-full md:w-auto md:flex-1 md:py-10 ${dimmed(active)} ${mirrored ? "md:order-1 md:justify-end" : "md:order-3 md:justify-start"}`}>
+          <div className={`flex w-full flex-col gap-1 ${mirrored ? "md:max-w-[320px] md:text-right" : "md:max-w-[300px]"}`}>
+            <h3 className="t-title-s text-white">{noOrphan(step.title)}</h3>
+            <p className="t-body-m text-white-03">{noOrphan(step.text)}</p>
+          </div>
         </div>
       </div>
     </div>

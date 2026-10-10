@@ -40,15 +40,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local contact form submissions
-/.data
-
-# local references and tooling (not part of the site)
+# local design references (screen recordings, prototypes)
 /*.mov
 /*.mp4
-/liquid button
-/creative-playground-bg.html
-/webdev-preloader.html
+/*.html
+
+# AI agent skills (local tooling, not part of the site)
 /.agents/
 /.claude/
 /skills-lock.json

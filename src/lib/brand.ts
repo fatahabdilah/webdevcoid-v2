@@ -12,8 +12,6 @@ export const brand = {
   white: "#FFFFFF", // 100%
 } as const;
 
-const stops = [brand.black, brand.navy, brand.blue, brand.light, brand.white];
-
 const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
 const toHex = (c: number[]) => `#${c.map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")}`;
 
@@ -21,11 +19,4 @@ const toHex = (c: number[]) => `#${c.map((v) => Math.round(v).toString(16).padSt
 export function mix(a: string, b: string, t: number) {
   const [x, y] = [rgb(a), rgb(b)];
   return toHex(x.map((v, i) => v + (y[i] - v) * t));
-}
-
-/** The colour at t (0 = black … 1 = white) along the brand gradient. */
-export function brandAt(t: number) {
-  const p = Math.min(Math.max(t, 0), 1) * (stops.length - 1);
-  const i = Math.min(Math.floor(p), stops.length - 2);
-  return mix(stops[i], stops[i + 1], p - i);
 }

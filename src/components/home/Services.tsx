@@ -44,7 +44,7 @@ function SecurityIcon({ name }: { name: keyof typeof securityIcons }) {
       {securityIcons[name].map(([box, bleed, file]) => (
         <div key={file} className="absolute" style={{ inset: box }}>
           <div className="absolute" style={{ inset: bleed }}>
-            <Image src={`/figma/services/${file}.svg`} alt="" fill className="max-w-none" />
+            <Image src={`/images/included/${file}.svg`} alt="" fill className="max-w-none" />
           </div>
         </div>
       ))}
@@ -96,12 +96,12 @@ function ServiceCard({ title, text, art }: (typeof services)[number]) {
 function CtaCard() {
   return (
     <div
-      className="flex h-full w-full flex-col justify-center gap-10 rounded-2xl border border-grey-07 p-10 shadow-[inset_0_0_1px_0_rgba(255,255,255,0.3),inset_0_-2px_1px_0_rgba(0,0,0,0.12),inset_0_0_40px_0_rgba(255,255,255,0.15)] lg:justify-between lg:gap-12"
+      className="flex h-full w-full flex-col justify-center gap-10 rounded-2xl border border-grey-07 p-8 md:p-10 shadow-[inset_0_0_1px_0_rgba(255,255,255,0.3),inset_0_-2px_1px_0_rgba(0,0,0,0.12),inset_0_0_40px_0_rgba(255,255,255,0.15)] lg:justify-between lg:gap-12"
       style={{ backgroundImage: "var(--holo-radial)" }}
     >
       <Reveal y={50} className="flex flex-col gap-6">
-        <CtaAvatar image="/framer/0OZnIstjScoZPAUkdNLUST2H6I.png" />
-        <div className="flex max-w-[80%] flex-col gap-2 lg:max-w-none">
+        <CtaAvatar image="/images/avatars/cta-services.png" />
+        <div className="flex flex-col gap-2 md:max-w-[80%] lg:max-w-none">
           <h3 className="t-title-m text-balance text-white">Bingung mulai dari&nbsp;mana?</h3>
           <p className="t-body-m text-white-02">
             Konsultasi gratis dulu.
@@ -121,18 +121,18 @@ function CtaCard() {
 
 function SecurityCard() {
   return (
-    <div className="flex h-full w-full flex-col items-center gap-6 rounded-2xl border border-grey-07 bg-grey-09 px-6 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between">
+    <div className="flex h-full w-full flex-col items-center gap-6 rounded-2xl border border-grey-07 bg-grey-09 px-4 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between">
       <h3 className="t-title-s w-full text-center text-grey-01 md:w-auto md:text-left">Sudah termasuk di setiap&nbsp;harga.</h3>
       <div className="grid w-full grid-cols-2 gap-2 md:flex">
         {security.map((s) => (
           <div
             key={s.label}
-            className="flex h-[220px] flex-1 flex-col items-center justify-center gap-6 rounded-xl bg-[linear-gradient(180deg,rgba(86,161,247,0)_0%,var(--color-holo-75)_100%)] p-4 shadow-[inset_0_0_24px_0_#fff] md:h-60 md:p-6 lg:justify-between"
+            className="flex h-[220px] flex-1 flex-col items-center justify-center gap-6 rounded-xl bg-[linear-gradient(180deg,rgba(86,161,247,0)_0%,var(--color-holo-75)_100%)] p-4 shadow-[inset_0_0_24px_0_#fff] max-md:px-3 md:h-60 md:p-6 lg:justify-between"
           >
             <div className="flex flex-1 items-center justify-center">
               <SecurityIcon name={s.icon} />
             </div>
-            <p className="t-body-m text-center text-balance text-white">{noOrphan(s.label)}</p>
+            <p className="t-body-s md:t-body-m text-center text-balance text-white">{noOrphan(s.label)}</p>
           </div>
         ))}
       </div>
@@ -142,7 +142,7 @@ function SecurityCard() {
 
 export function Services() {
   return (
-    <section id="service" className="flex justify-center px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
+    <section id="services" className="flex justify-center px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
       <div className="flex w-full max-w-[1280px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
         <SectionHeader
           number="003"

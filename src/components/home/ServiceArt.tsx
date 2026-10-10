@@ -236,7 +236,7 @@ export function LandingPageArt() {
       <text x="321" y="153" fontSize="25" fill="#fff" textAnchor="middle">
         Can you tell me more about pricing?
       </text>
-      <image href={photo("/framer/Nc7T0UP7TMYghubatYlzblQr3vc.png", 80)} x="565" y="104" width="80" height="80" clipPath={`url(#${id("face")})`} preserveAspectRatio="xMidYMid slice" />
+      <image href={photo("/images/avatars/chat-customer.png", 80)} x="565" y="104" width="80" height="80" clipPath={`url(#${id("face")})`} preserveAspectRatio="xMidYMid slice" />
 
       <BotAvatar cx={40} cy={248} glow={id("glow")} />
       <rect x="89" y="208" width="422" height="80" rx="24" fill="#fff" stroke={tint(0.85)} strokeWidth="1.5" filter={`url(#${id("bubble")})`} />
@@ -285,14 +285,14 @@ export function OnlineStoreArt() {
         </filter>
       </defs>
 
-      <SideCard x={2} y={95} w={170} h={177} face="/framer/Jd4Actw3iicp7lVmQL6Tty7Ezw.png" name="Ethan" faceId={id("f1")} opacity={0.5} />
-      <SideCard x={408} y={95} w={170} h={177} face="/framer/z6cPmsnJML2flePXMqm2kdZG6EI.png" name="Carter" faceId={id("f4")} opacity={0.5} />
-      <SideCard x={75} y={72} w={176} h={222} face="/framer/WOYTcCaxggRNt47bSlnpBZZRtp8.png" name="Samara" faceId={id("f2")} opacity={0.8} />
-      <SideCard x={329} y={72} w={176} h={222} face="/framer/ZWhfkzGB6c8iJeDzvp6nt6xFt4.png" name="Bennett" faceId={id("f3")} opacity={0.8} />
+      <SideCard x={2} y={95} w={170} h={177} face="/images/avatars/ethan.png" name="Ethan" faceId={id("f1")} opacity={0.5} />
+      <SideCard x={408} y={95} w={170} h={177} face="/images/avatars/carter.png" name="Carter" faceId={id("f4")} opacity={0.5} />
+      <SideCard x={75} y={72} w={176} h={222} face="/images/avatars/samara.png" name="Samara" faceId={id("f2")} opacity={0.8} />
+      <SideCard x={329} y={72} w={176} h={222} face="/images/avatars/bennett.png" name="Bennett" faceId={id("f3")} opacity={0.8} />
 
       <rect x="160" y="20" width="262" height="325" rx="40" fill="#fff" filter={`url(#${id("lift")})`} />
       <rect x="162" y="22" width="258" height="321" rx="38" fill="none" stroke={`url(#${id("edge")})`} strokeWidth="4" />
-      <image href={photo("/figma/services/avatar-liam.png", 106)} x="240" y="49" width="102" height="102" clipPath={`url(#${id("face")})`} preserveAspectRatio="xMidYMid slice" />
+      <image href={photo("/images/avatars/liam.png", 106)} x="240" y="49" width="102" height="102" clipPath={`url(#${id("face")})`} preserveAspectRatio="xMidYMid slice" />
       <text x="291" y="212" fontSize="32" fontWeight={500} fill={INK} textAnchor="middle">
         Liam Foster
       </text>

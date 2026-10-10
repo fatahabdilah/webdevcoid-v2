@@ -1,4 +1,4 @@
-/* Intro preloader (ported from webdev-preloader.html). Everything is prefixed `intro-`. */
+/* Intro preloader. Everything is prefixed `intro-`. */
 
 /* Lock scrolling for as long as the overlay is mounted */
 html:has(.intro-root),
