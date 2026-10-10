@@ -1,0 +1,56 @@
+import Image from "next/image";
+import { values } from "@/content/home";
+import { Reveal } from "../motion";
+import { SectionHeader } from "../SectionHeader";
+import { noOrphan } from "@/lib/text";
+
+function ValueCard({ number, title, text, icon }: (typeof values)[number]) {
+  return (
+    <div className="flex h-full w-full flex-col items-center gap-2 overflow-hidden rounded-3xl border border-white/5 bg-[#171717] p-2 lg:items-start lg:justify-between lg:p-2">
+      <div className="relative flex h-[228px] w-full items-center justify-center overflow-hidden rounded-2xl bg-[linear-gradient(180deg,#3e3e3e_-143.93%,#000_100%)] lg:aspect-square lg:h-auto">
+        <div
+          aria-hidden
+          className="absolute top-1/2 left-1/2 z-0 size-[310px] -translate-x-1/2 -translate-y-1/2 bg-[url(/framer/dQHJxtlL2cxCdly2gNWSqY41I0.svg)] bg-center opacity-10"
+        />
+        {/* Icon in a blue-glowing double ring; the disc runs light blue → blue (brand gradient) */}
+        <div className="relative rounded-full bg-[linear-gradient(180deg,rgba(86,161,247,0.05)_0%,rgba(86,161,247,0)_100%)] p-3">
+          <div className="rounded-full bg-[rgba(86,161,247,0.3)] p-2 shadow-[0_0_80px_0_rgba(86,161,247,0.6)] backdrop-blur-md">
+            <div className="flex size-20 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(180deg,var(--color-holo-75)_0%,var(--color-holo-50)_100%)] shadow-[0_2px_4px_0_rgba(1,38,133,0.5),inset_0_0_24px_0_rgba(255,255,255,0.4),inset_0_1px_1px_0_rgba(255,255,255,0.6)] lg:size-30">
+              <Image src={icon} alt="" width={64} height={64} className="size-10 lg:size-16" />
+            </div>
+          </div>
+        </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-t-lg bg-[linear-gradient(180deg,rgba(255,255,255,0.3)_0%,rgba(255,255,255,0)_100%)] p-2 backdrop-blur-[5px]">
+          <span className="t-body-s block text-white md:t-caption lg:t-body-m">{number}</span>
+        </div>
+      </div>
+      <div className="flex w-[88%] flex-col gap-2 p-4 text-center md:w-full lg:px-5 lg:py-6">
+        <h3 className="t-body-l-medium text-balance text-white lg:t-title-s">{noOrphan(title)}</h3>
+        <p className="t-body-m text-white-03">{noOrphan(text)}</p>
+      </div>
+    </div>
+  );
+}
+
+export function Values() {
+  return (
+    <section id="value" className="flex justify-center bg-[#101010] px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
+      <div className="flex w-full max-w-[1040px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
+        <SectionHeader
+          tone="dark"
+          number="002"
+          name="kenapa kami"
+          title="Kenapa webdev.co.id?"
+          body="Website yang bukan cuma bagus dilihat, tapi cepat dan mendukung tujuan bisnismu."
+        />
+        <div className="flex w-full max-w-[400px] flex-col items-stretch gap-2 md:max-w-none md:flex-row">
+          {values.map((v, i) => (
+            <Reveal key={v.number} y={50} delay={i * 0.2} amount={0.3} className="flex-1">
+              <ValueCard {...v} />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

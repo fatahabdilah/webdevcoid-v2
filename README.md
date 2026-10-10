@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Conicorn
 
-## Getting Started
+A hand-built Next.js version of the Conicorn Framer template: same content, layout, breakpoints and animations, running locally without Framer.
 
-First, run the development server:
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+For a production build: `npm run build && npm start`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Structure
 
-## Learn More
+The site is a single page: `src/app/(site)/page.tsx`, with the fixed navbar and the footer in `src/app/(site)/layout.tsx`. The only other route is the 404 page (`src/app/not-found.tsx`). The navbar and footer links scroll to sections on the page (`#about`, `#project`, `#pricing`, `#contact`).
 
-To learn more about Next.js, take a look at the following resources:
+Some sections are hidden for now (commented out in `page.tsx`): Team, Integrations ("Semua kami urus") and Testimonials ("Untuk siapa").
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Where things live
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `src/content/` – all text and data (home sections, case studies, contact details). Edit content here.
+- `src/components/home/` – one component per home page section.
+- `src/components/motion.tsx` – reveal-on-scroll and word-by-word text animations (uses [Motion](https://motion.dev)). `ANIMATIONS_ENABLED` there switches every site animation and the smooth scroll on or off.
+- `src/components/PlaygroundBg.tsx` – the hero's animated ASCII background (WebGL).
+- `src/components/ui/cursor-driven-particle-typography.tsx` – the hero headline drawn as particles that move away from the cursor (WebGL).
+- `src/components/LiquidMetal.tsx` – the liquid metal effect on the primary buttons (WebGL 2), used by `Button.tsx`.
+- `src/components/Ticker.tsx` – infinite marquees.
+- `src/components/icons.tsx` – SVG icons exported from the Framer project.
+- `src/app/globals.css` – color tokens, breakpoints and the text styles (`t-h2`, `t-body-m`, …).
+- `public/framer/` – images and videos downloaded from the Framer project.
 
-## Deploy on Vercel
+Breakpoints match Framer: phone below 800px, tablet (`md`) from 800px, desktop (`lg`) from 1200px.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Performance notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The WebGL effects only render while they are on screen. The headline particles stop once they have settled and wake on pointer movement; the button effect redraws only its outline, at 30fps, while nobody is hovering it. Keep that in mind when adding effects: anything that animates continuously should pause off screen.

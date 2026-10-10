@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local contact form submissions
+/.data
+
+# local references and tooling (not part of the site)
+/*.mov
+/*.mp4
+/liquid button
+/creative-playground-bg.html
+/webdev-preloader.html
+/.agents/
+/.claude/
+/skills-lock.json
