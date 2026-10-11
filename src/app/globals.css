@@ -28,9 +28,9 @@
 
   /* Brand gradient (black → navy → blue → light blue → white); same values as lib/brand.ts */
   --color-holo-0: #000000;
-  --color-holo-25: #012685;
-  --color-holo-50: #0450f0;
-  --color-holo-75: #56a1f7;
+  --color-holo-25: #011f6c;
+  --color-holo-50: #0346d6;
+  --color-holo-75: #236ef3;
   --color-holo-100: #ffffff;
 
   --font-sans: var(--font-geist), "Geist", ui-sans-serif, system-ui, sans-serif;
@@ -56,7 +56,7 @@
     var(--color-holo-75) 100%
   );
   --ease-framer: cubic-bezier(0.44, 0, 0.56, 1);
-  /* Inset "glass" bevel used on the light cards */
+  /* Inset "glass" bevel on the light cards */
   --shadow-card: inset 0 0 1px 3px #fff, inset 0 -2px 1px 1px rgb(0 0 0 / 0.12);
 }
 

@@ -87,7 +87,7 @@ function IncludedCard() {
         {included.map((s) => (
           <div
             key={s.label}
-            className="flex h-[220px] min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-xl bg-[linear-gradient(180deg,rgba(86,161,247,0)_0%,var(--color-holo-75)_100%)] p-4 shadow-[inset_0_0_24px_0_#fff] max-md:px-3 md:h-60 md:px-3 md:py-6 lg:justify-between"
+            className="flex h-[220px] min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-xl bg-[linear-gradient(180deg,transparent_0%,var(--color-holo-75)_100%)] p-4 shadow-[inset_0_0_24px_0_#fff] max-md:px-3 md:h-60 md:px-3 md:py-6 lg:justify-between"
           >
             <div className="flex flex-1 items-center justify-center">
               <IncludedIcon name={s.icon} />

@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from "react";
-import { brand } from "@/lib/brand";
+import { brand, mix } from "@/lib/brand";
 
 /*
  * Icons for "Sudah termasuk di setiap harga" (Services.tsx), after the Figma "included" icons: a frosted
@@ -99,10 +99,10 @@ export function IncludedIcon({ name }: { name: IncludedIconName }) {
       <defs>
         <linearGradient id={id("outer")} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#fff" />
-          <stop offset="1" stopColor="#8ec0fa" />
+          <stop offset="1" stopColor={mix(brand.light, brand.white, 0.4)} />
         </linearGradient>
         <linearGradient id={id("inner")} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#cce3fd" />
+          <stop offset="0" stopColor={mix(brand.light, brand.white, 0.75)} />
           <stop offset="1" stopColor={brand.blue} />
         </linearGradient>
         {/* Frosted rim: a navy shade along the top inside edge and a white one along the bottom */}

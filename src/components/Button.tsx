@@ -46,7 +46,7 @@ export function Button({ href, children, variant = "primary", className = "", bl
     <span
       className={`flex items-center justify-center rounded-full px-6 py-3.5 ${arrow ? "gap-1.75" : "gap-2"} ${transition} ${
         inverted
-          ? "bg-white shadow-[inset_0_0_16px_0_rgba(4,80,240,0.5)] group-hover:shadow-[inset_0_0_20px_0_rgba(4,80,240,0.65)]"
+          ? "bg-white shadow-[inset_0_0_16px_0_color-mix(in_srgb,var(--color-holo-50)_50%,transparent)] group-hover:shadow-[inset_0_0_20px_0_color-mix(in_srgb,var(--color-holo-50)_65%,transparent)]"
           : "bg-grey-06 shadow-[inset_0_0_16px_0_rgba(255,255,255,0.5)] group-hover:shadow-[inset_0_0_20px_0_rgba(255,255,255,0.6)]"
       } ${width}`}
     >

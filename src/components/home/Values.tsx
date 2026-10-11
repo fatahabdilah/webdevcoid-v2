@@ -14,9 +14,9 @@ function ValueCard({ number, title, text, icon }: (typeof values)[number]) {
           className="absolute top-1/2 left-1/2 z-0 size-[310px] -translate-x-1/2 -translate-y-1/2 bg-[url(/images/patterns/dots.svg)] bg-center opacity-10"
         />
         {/* Icon in a blue-glowing double ring; the disc runs light blue → blue (brand gradient) */}
-        <div className="relative rounded-full bg-[linear-gradient(180deg,rgba(86,161,247,0.05)_0%,rgba(86,161,247,0)_100%)] p-3">
-          <div className="rounded-full bg-[rgba(86,161,247,0.3)] p-2 shadow-[0_0_80px_0_rgba(86,161,247,0.6)] backdrop-blur-md">
-            <div className="flex size-20 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(180deg,var(--color-holo-75)_0%,var(--color-holo-50)_100%)] shadow-[0_2px_4px_0_rgba(1,38,133,0.5),inset_0_0_24px_0_rgba(255,255,255,0.4),inset_0_1px_1px_0_rgba(255,255,255,0.6)] lg:size-30">
+        <div className="relative rounded-full bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-holo-75)_5%,transparent)_0%,transparent_100%)] p-3">
+          <div className="rounded-full bg-holo-75/30 p-2 shadow-[0_0_80px_0_color-mix(in_srgb,var(--color-holo-75)_60%,transparent)] backdrop-blur-md">
+            <div className="flex size-20 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(180deg,var(--color-holo-75)_0%,var(--color-holo-50)_100%)] shadow-[0_2px_4px_0_color-mix(in_srgb,var(--color-holo-25)_50%,transparent),inset_0_0_24px_0_rgba(255,255,255,0.4),inset_0_1px_1px_0_rgba(255,255,255,0.6)] lg:size-30">
               <Image src={icon} alt="" width={64} height={64} className="size-10 lg:size-16" />
             </div>
           </div>

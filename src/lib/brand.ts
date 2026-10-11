@@ -1,14 +1,13 @@
 /**
- * webdev.co.id brand colours, in gradient order. Based on the Figma "Linear" colour style
- * (#000000 / #011085 / #0428F0 / #568EF7 / #FFFFFF), with the three blues turned ~7–10° toward blue
- * because the originals read too purple on screen. The same values are the --color-holo-* tokens
- * in globals.css; this copy is for canvas, WebGL and SVG code.
+ * webdev.co.id brand colours, in gradient order: black, then the brand "Linear" gradient
+ * (#011F6C → #0346D6 → #236EF3, the 2026-10 update), then white. The same values are the
+ * --color-holo-* tokens in globals.css; this copy is for canvas, WebGL and SVG code.
  */
 export const brand = {
   black: "#000000", // 0%
-  navy: "#012685", // 25%
-  blue: "#0450F0", // 50%
-  light: "#56A1F7", // 75%
+  navy: "#011F6C", // 25%
+  blue: "#0346D6", // 50%
+  light: "#236EF3", // 75%
   white: "#FFFFFF", // 100%
 } as const;
 
