@@ -542,7 +542,8 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
     el.hole.setAttribute("visibility", "visible");
     el.stage.style.visibility = "hidden";
 
-    if (main) gsap.set(main, { scale: 1.22, transformOrigin: "50% 50vh" });
+    // Zoom around the middle of what is on screen (innerHeight, not 50vh, which includes the area behind mobile toolbars)
+    if (main) gsap.set(main, { scale: 1.22, transformOrigin: `50% ${innerHeight / 2}px` });
     revealTl = gsap.timeline({ onComplete: done });
     revealTl
       .to(Dither.st, { fade: 0, duration: 0.6, ease: "power1.out" }, 0)

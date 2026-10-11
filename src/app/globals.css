@@ -60,16 +60,31 @@
   --shadow-card: inset 0 0 1px 3px #fff, inset 0 -2px 1px 1px rgb(0 0 0 / 0.12);
 }
 
+/* The canvas is black, like the hero above and the footer below: it's what phones show when the page
+   bounces past either end and behind Safari's toolbars. The page itself is white. */
 html {
-  background: #fff;
+  background: #000;
   color: var(--color-grey-01);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
+  background: #fff;
   font-family: var(--font-sans);
   overflow-x: clip;
+}
+
+/* Full-screen heights in svh: the screen with the browser's toolbars shown, so nothing is hidden behind
+   them and nothing jumps when they slide away (dvh resizes while scrolling). vh first for browsers
+   without svh. */
+@utility h-screen-safe {
+  height: 100vh;
+  height: 100svh;
+}
+@utility min-h-screen-safe {
+  min-height: 100vh;
+  min-height: 100svh;
 }
 
 /* No orphans: never leave a single word alone on the last line (text-wrap-style is inherited) */

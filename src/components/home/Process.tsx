@@ -103,11 +103,12 @@ function Step({ step, index, active, first, last }: { step: (typeof steps)[numbe
   return (
     <div className={`relative flex w-full items-center rounded-2xl px-4 max-md:gap-4 md:h-40 ${mirrored ? "md:px-0" : "md:px-10"}`}>
       <StepSurface active={active} className="inset-0 -z-10 rounded-2xl" />
-      {/* Center column with the dot; it also masks the line above the first and below the last step */}
-      <div className="relative z-[2] flex w-10 shrink-0 self-stretch items-center justify-center md:order-2 md:w-40">
-        {first && <StepSurface active={active} half="top" className="inset-x-0 top-0 h-1/2" />}
-        {last && <StepSurface active={active} half="bottom" className="inset-x-0 bottom-0 h-1/2" />}
-        <span className="relative">
+      {/* Center column with the dot; it also masks the line above the first and below the last step.
+          Phones: the dot lines up with the icon (28px padding + half the 56px icon = 56px; the 36px dot starts at 38px). */}
+      <div className="relative z-[2] flex w-10 shrink-0 self-stretch items-center justify-center max-md:items-start max-md:pt-[38px] md:order-2 md:w-40">
+        {first && <StepSurface active={active} half="top" className="inset-x-0 top-0 h-1/2 max-md:h-[56px]" />}
+        {last && <StepSurface active={active} half="bottom" className="inset-x-0 bottom-0 h-1/2 max-md:top-[56px] max-md:h-auto" />}
+        <span className="relative" data-dot="">
           <Dot active={active} />
         </span>
       </div>
@@ -149,7 +150,12 @@ export function Process() {
     const measure = () => {
       const main = mainRef.current;
       if (!main) return;
-      centers.current = itemRefs.current.map((el) => (el ? (el.offsetTop + el.offsetHeight / 2) / main.offsetHeight : 1));
+      // Where each step's dot sits along the rail (0–1): a step lights up when the fill reaches its dot
+      const top = main.getBoundingClientRect().top;
+      centers.current = itemRefs.current.map((el) => {
+        const dot = el?.querySelector("[data-dot]")?.getBoundingClientRect();
+        return dot ? (dot.top + dot.height / 2 - top) / main.offsetHeight : 1;
+      });
     };
     measure();
     const ro = new ResizeObserver(measure);

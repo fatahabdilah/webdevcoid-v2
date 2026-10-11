@@ -12,7 +12,7 @@ export function Hero() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(48%_34%_at_50%_50%,rgba(0,0,0,0.62),rgba(0,0,0,0.3)_55%,rgba(0,0,0,0)_100%)]" />
       </div>
 
-      <div className="relative z-[1] flex h-svh min-h-[640px] w-full flex-col items-center px-5 md:h-[1080px] md:px-10 lg:h-screen lg:px-20">
+      <div className="h-screen-safe relative z-[1] flex min-h-[640px] w-full flex-col items-center px-5 md:px-10 lg:px-20">
         <div className="flex h-full w-full max-w-[1280px] flex-col items-center justify-center pt-20">
           <div className="flex w-full flex-col items-center gap-6 lg:gap-8">
             <div className="flex w-full flex-col items-center gap-6">

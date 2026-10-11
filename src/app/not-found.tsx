@@ -17,7 +17,7 @@ export default function NotFound() {
       <main>
         <FooterSection>
           <div className="flex flex-col gap-20 pt-[100px]">
-            <div className="relative flex min-h-screen flex-col items-center justify-center">
+            <div className="min-h-screen-safe relative flex flex-col items-center justify-center">
               <div className="relative flex w-full items-center justify-center gap-8 md:w-1/2 md:gap-32">
                 <span className={`${digit} text-white-05`}>4</span>
                 <span
