@@ -78,7 +78,15 @@ type Glyph = {
 };
 
 export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
-  const main = document.querySelector("main");
+  // What the reveal zooms out of: just the first screen (the hero), so only one screen is scaled
+  const zoomEl = document.querySelector<HTMLElement>("[data-intro-zoom]") ?? document.querySelector("main");
+  // Its layer and starting scale come from preloader.css while the overlay is up (never inline styles:
+  // the hero may hydrate after the intro starts, and React would flag attributes it didn't render)
+  let zoomAnim: Animation | null = null;
+  const clearZoom = () => {
+    zoomAnim?.cancel();
+    zoomAnim = null;
+  };
   const cleanups: (() => void)[] = [];
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -542,20 +550,31 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
     el.hole.setAttribute("visibility", "visible");
     el.stage.style.visibility = "hidden";
 
-    // Zoom around the middle of what is on screen (innerHeight, not 50vh, which includes the area behind mobile toolbars)
-    if (main) gsap.set(main, { scale: 1.22, transformOrigin: `50% ${innerHeight / 2}px` });
+    // The page behind the window eases from 1.22× to 1×: Web Animations on the compositor, on the layer
+    // preloader.css painted while the intro covered it (scaling the page from script made it repaint
+    // every frame and stutter). data-revealing drops the CSS starting scale; the animation holds it
+    // through its delay.
+    el.root.dataset.revealing = "";
+    zoomAnim =
+      zoomEl?.animate([{ transform: "scale(1.22)" }, { transform: "none" }], {
+        duration: 2300,
+        delay: 300,
+        easing: "cubic-bezier(0.215, 0.61, 0.355, 1)", // power3.out
+        fill: "backwards",
+      }) ?? null;
     revealTl = gsap.timeline({ onComplete: done });
     revealTl
-      .to(Dither.st, { fade: 0, duration: 0.6, ease: "power1.out" }, 0)
+      // Once faded out, stop drawing the dots and drop the canvas (it was still redrawn, invisibly, for the whole zoom)
+      .to(Dither.st, { fade: 0, duration: 0.6, ease: "power1.out", onComplete: () => void ((ditherOn = false), (el.dither.style.display = "none")) }, 0)
       .to(el.vignette, { opacity: 0, duration: 0.9 }, 0)
       .to(Z, { u: 1, duration: 1.9, ease: "power3.inOut", onUpdate: apply }, 0)
       .to(Z, { c: 1, duration: 1.6, ease: "power2.inOut" }, 0)
-      .to(el.cover, { opacity: 0, duration: 0.8, ease: "power1.inOut" }, 0.55);
-    if (main) revealTl.to(main, { scale: 1, duration: 2.3, ease: "power3.out" }, 0.3);
+      .to(el.cover, { opacity: 0, duration: 0.8, ease: "power1.inOut" }, 0.55)
+      .to({}, { duration: 2.6 }, 0); // the timeline lasts as long as the zoom (0.3s delay + 2.3s)
   }
   function done() {
     ditherOn = false;
-    if (main) gsap.set(main, { clearProps: "transform,transformOrigin" });
+    clearZoom();
     cleanups.forEach((fn) => fn()); // stop the ticker and listeners; the overlay is about to unmount
     cleanups.length = 0;
     cb.onDone();
@@ -593,7 +612,7 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
     cursorTl?.kill();
     revealTl?.kill();
     gsap.killTweensOf([Dither.st, CAM, el.cursor, el.cover, el.vignette, el.solid, el.stage, ...el.rings]);
-    if (main) gsap.set(main, { clearProps: "transform,transformOrigin" });
+    clearZoom();
     place = null;
     el.defs.innerHTML = "";
     el.ink.innerHTML = "";

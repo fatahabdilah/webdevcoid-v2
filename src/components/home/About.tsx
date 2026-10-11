@@ -121,7 +121,7 @@ function StatsTicker() {
           className="flex shrink-0 items-center gap-4 text-[64px] leading-none font-semibold tracking-[-0.08em] whitespace-nowrap uppercase md:text-[114px]"
         >
           <span className="text-grey-00">{s.value}</span>
-          <span className="text-holo-75">{s.label}</span>
+          <span className="text-grey-04">{s.label}</span>
         </span>
       ))}
     </Ticker>

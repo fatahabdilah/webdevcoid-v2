@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { markIntroEntered } from "@/lib/intro";
+import { markIntroDone, markIntroEntered } from "@/lib/intro";
 import { cursorPath } from "@/lib/cursorShape";
 import { ANIMATIONS_ENABLED } from "../motion";
 import { runIntro } from "./runIntro";
@@ -19,7 +19,7 @@ export function Preloader() {
 
   useEffect(() => {
     if (!ANIMATIONS_ENABLED) {
-      markIntroEntered();
+      markIntroDone();
       return;
     }
     const root = rootRef.current;
@@ -42,7 +42,13 @@ export function Preloader() {
         cursorShape: q<SVGPathElement>("cursor-shape"),
         rings: [...root.querySelectorAll<HTMLElement>('[data-intro="ring"]')],
       },
-      { onEnter: markIntroEntered, onDone: () => setMounted(false) },
+      {
+        onEnter: markIntroEntered,
+        onDone: () => {
+          markIntroDone();
+          setMounted(false);
+        },
+      },
     );
   }, []);
 

@@ -6,6 +6,19 @@ html:has(.intro-root) body {
   overflow: hidden;
 }
 
+/* The first screen under the overlay sits on its own layer at the zoom's starting scale from the first
+   paint, so it is painted long before the window opens (doing that on the zoom's first frame hitched).
+   Origin: the middle of what is on screen (svh: the screen with mobile toolbars shown). At the reveal
+   the overlay gets data-revealing and a Web Animation takes over the scale (runIntro.ts). */
+html:has(.intro-root) [data-intro-zoom] {
+  will-change: transform;
+  transform-origin: 50% 50vh;
+  transform-origin: 50% 50svh;
+}
+html:has(.intro-root:not([data-revealing])) [data-intro-zoom] {
+  transform: scale(1.22);
+}
+
 .intro-root {
   position: fixed;
   inset: 0;

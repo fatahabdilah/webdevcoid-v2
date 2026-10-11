@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { brand } from "@/lib/brand";
+import { introPhase, subscribeIntro } from "@/lib/intro";
 
 /*
  * Liquid metal button effect, ported from the "Liquid Metal Button — Sign up Pill" source
@@ -894,10 +895,10 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
     { signal },
   );
 
-  // Render only while the button is on screen and the tab is visible.
+  // Render only while the button is on screen and the tab is visible, and the intro isn't covering it.
   let onScreen = false;
   const syncLoop = () => {
-    const run = onScreen && !document.hidden;
+    const run = onScreen && !document.hidden && introPhase() !== "off";
     if (run && !raf) {
       last = performance.now();
       raf = requestAnimationFrame(frame);
@@ -912,6 +913,8 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
   });
   io.observe(cv);
   document.addEventListener("visibilitychange", syncLoop, { signal });
+  const unsubscribe = subscribeIntro(syncLoop);
+  signal.addEventListener("abort", () => void unsubscribe());
 
   resize();
   // Draw one frame while the page is idle, so the GPU compiles the shaders now instead of on the

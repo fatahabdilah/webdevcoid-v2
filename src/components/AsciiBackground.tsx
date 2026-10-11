@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type CSSProperties } from "react";
 import { brand } from "@/lib/brand";
+import { introPhase, subscribeIntro } from "@/lib/intro";
 
 /*
  * "Creative Playground" hero background.
@@ -213,8 +214,7 @@ function createAsciiBackground(
   let raf = 0;
   const t0 = performance.now();
 
-  const frame = (now: number) => {
-    raf = requestAnimationFrame(frame);
+  const render = (now: number) => {
     const calm = reduce.matches;
     const dt = Math.min(0.05, (now - (last || now)) / 1000);
     last = now;
@@ -264,10 +264,19 @@ function createAsciiBackground(
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   };
 
-  // Render only while the canvas is on screen and the tab is visible.
+  let lastDraw = 0;
+  const frame = (now: number) => {
+    raf = requestAnimationFrame(frame);
+    // While the intro's window zooms open the field keeps moving at half rate, so the zoom keeps its frames
+    if (introPhase() === "zoom" && now - lastDraw < 1000 / 30 - 2) return;
+    lastDraw = now;
+    render(now);
+  };
+
+  // Render only while the canvas is on screen and the tab is visible, and the intro isn't covering it.
   let onScreen = false;
   const sync = () => {
-    const run = onScreen && !document.hidden;
+    const run = onScreen && !document.hidden && introPhase() !== "off";
     if (run && !raf) {
       last = 0;
       raf = requestAnimationFrame(frame);
@@ -286,8 +295,18 @@ function createAsciiBackground(
   });
   io.observe(canvas);
   document.addEventListener("visibilitychange", sync);
+  const unsubscribe = subscribeIntro(sync);
+  // Draw one frame while the page is idle (under the intro), so the GPU compiles the shaders now and the
+  // first visible frame, as the intro's window opens, doesn't hitch
+  const whenIdle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 300));
+  const cancelIdle = window.cancelIdleCallback ?? window.clearTimeout;
+  const warmup = whenIdle(() => {
+    if (!raf) render(performance.now());
+  });
 
   return function destroy() {
+    cancelIdle(warmup);
+    unsubscribe();
     cancelAnimationFrame(raf);
     raf = 0;
     ro.disconnect();
