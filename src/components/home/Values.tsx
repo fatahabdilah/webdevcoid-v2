@@ -2,6 +2,7 @@ import Image from "next/image";
 import { values } from "@/content/home";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
+import { Lines } from "../Lines";
 import { noOrphan } from "@/lib/text";
 
 function ValueCard({ number, title, text, icon }: (typeof values)[number]) {
@@ -25,7 +26,9 @@ function ValueCard({ number, title, text, icon }: (typeof values)[number]) {
         </div>
       </div>
       <div className="flex w-[88%] flex-col gap-2 p-4 text-center md:w-full lg:px-5 lg:py-6">
-        <h3 className="t-body-l-medium text-balance text-white lg:t-title-s">{noOrphan(title)}</h3>
+        <h3 className="t-body-l-medium text-white lg:t-title-s">
+          <Lines text={title} />
+        </h3>
         <p className="t-body-m text-white-03">{noOrphan(text)}</p>
       </div>
     </div>

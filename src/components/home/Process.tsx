@@ -3,16 +3,17 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "motion/react";
 import { steps } from "@/content/home";
-import { ProcessGraph, ProcessMagnify, ProcessRocket, ProcessSettings, ProcessStructure } from "../icons";
+import { ProcessChat, ProcessEye, ProcessPen, ProcessRocket, ProcessStructure } from "../icons";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
 import { noOrphan } from "@/lib/text";
 
+/** One per step: chat (consultation on WhatsApp), sitemap (structure), pen (design), eye (preview), rocket (launch). */
 const icons = {
-  magnify: ProcessMagnify,
+  chat: ProcessChat,
   structure: ProcessStructure,
-  settings: ProcessSettings,
-  graph: ProcessGraph,
+  pen: ProcessPen,
+  eye: ProcessEye,
   rocket: ProcessRocket,
 };
 

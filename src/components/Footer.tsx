@@ -1,29 +1,35 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { contact, waLink } from "@/content/site";
-import { LogoMark, LogoWordmark } from "./icons";
+import { Instagram, LogoMark, LogoWordmark, Mail, WhatsApp } from "./icons";
 import { LazyVideo } from "./LazyVideo";
 import { Reveal } from "./motion";
 
-/** Glass pill matching the navbar: Instagram as a text link, WhatsApp as the light pill button. */
+const textLink = "t-body-m flex h-12 items-center justify-center gap-2.5 px-5 whitespace-nowrap text-white-02 transition-colors duration-300 hover:text-white md:px-0";
+
+/**
+ * Glass pill matching the navbar: Instagram and email as text links, WhatsApp (where consultations
+ * happen) as the light pill button. Below md the pill becomes a stacked card.
+ */
 function ContactPill() {
   return (
-    <div className="flex flex-col items-center gap-1 rounded-[28px] bg-black/40 p-1 backdrop-blur-[20px] sm:h-14 sm:flex-row sm:gap-6 sm:rounded-full sm:py-1 sm:pr-1 sm:pl-6">
-      <a
-        href={contact.instagramUrl}
-        target="_blank"
-        rel="noreferrer"
-        className="t-body-m flex items-center px-5 py-3 whitespace-nowrap text-white-02 transition-colors duration-300 hover:text-white sm:h-12 sm:p-0"
-      >
-        Instagram @{contact.instagram}
+    <div className="flex w-full flex-col gap-1 rounded-[28px] bg-black/40 p-1 backdrop-blur-[20px] md:h-14 md:w-auto md:flex-row md:items-center md:gap-7 md:rounded-full md:pl-6">
+      <a href={contact.instagramUrl} target="_blank" rel="noreferrer" aria-label={`Instagram @${contact.instagram}`} className={textLink}>
+        <Instagram width={18} height={18} />@{contact.instagram}
+      </a>
+      <a href={`mailto:${contact.email}`} aria-label={`Email ${contact.email}`} className={textLink}>
+        <Mail width={18} height={18} />
+        {contact.email}
       </a>
       <a
         href={waLink()}
         target="_blank"
         rel="noreferrer"
-        className="t-body-m-medium flex h-12 items-center rounded-full border border-white bg-white-02 px-5 whitespace-nowrap text-grey-01 transition-colors duration-300 hover:bg-white"
+        aria-label={`WhatsApp ${contact.whatsappDisplay}`}
+        className="t-body-m-medium flex h-12 items-center justify-center gap-2 rounded-full border border-white bg-white-02 px-5 whitespace-nowrap text-grey-01 transition-colors duration-300 hover:bg-white"
       >
-        WhatsApp {contact.whatsappDisplay}
+        <WhatsApp width={18} height={18} />
+        {contact.whatsappDisplay}
       </a>
     </div>
   );
@@ -41,7 +47,7 @@ export function Footer() {
     <div className="flex w-full flex-col gap-[112px] pb-6 md:pb-12 lg:pb-6">
       <div className="flex w-full flex-col">
         <div className="flex flex-col items-center gap-4 border-b border-white-06 pb-6 md:flex-row md:justify-center md:gap-16">
-          <Reveal y={50}>
+          <Reveal y={50} className="w-full max-w-[400px] md:w-auto md:max-w-none">
             <ContactPill />
           </Reveal>
         </div>

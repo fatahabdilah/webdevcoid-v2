@@ -51,6 +51,7 @@ const jsonLd = {
   contactPoint: {
     "@type": "ContactPoint",
     telephone: `+${contact.whatsapp}`,
+    email: contact.email,
     contactType: "customer service",
     availableLanguage: ["Indonesian"],
   },

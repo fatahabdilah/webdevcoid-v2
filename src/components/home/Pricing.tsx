@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { motion } from "motion/react";
 import { plans, type Plan } from "@/content/home";
+import { STACKED_QUERY, useMedia } from "@/lib/useMedia";
 import { waLink } from "@/content/site";
 import { Button } from "../Button";
 import { CtaAvatar } from "../CtaAvatar";
@@ -20,7 +21,8 @@ const fade = "transition-colors duration-300 ease-out";
 function Price({ plan, light }: { plan: Plan; light: boolean }) {
   const label = plan.quote?.label ?? (plan.from ? "mulai dari" : "");
   return (
-    <div className="flex flex-col">
+    // Pulled up toward the tagline; the label line stays (empty or not) so prices line up across cards
+    <div className="-mt-2 flex flex-col">
       <span className={`t-body-s h-[19px] ${fade} ${light ? "text-white" : "text-grey-03"}`}>{label}</span>
       <span className={`t-title-xl max-lg:text-[min(48px,12vw)] lg:t-title-l ${fade} ${light ? "text-white" : "text-grey-01"}`}>
         {plan.quote ? (
@@ -32,6 +34,51 @@ function Price({ plan, light }: { plan: Plan; light: boolean }) {
           </>
         )}
       </span>
+    </div>
+  );
+}
+
+/** What each plan is, as a 24-unit line glyph: one page with its button, a company building, a dashboard. */
+const planGlyphs: Record<Plan["icon"], ReactNode> = {
+  page: (
+    <>
+      <rect x="4" y="2.5" width="16" height="19" rx="2.5" />
+      <path d="M8 7.5h8M8 11h5" />
+      <rect x="8" y="14.5" width="6" height="3" rx="1.5" fill="currentColor" stroke="none" />
+    </>
+  ),
+  building: (
+    <>
+      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4" />
+    </>
+  ),
+  dashboard: (
+    <>
+      <rect x="3" y="3" width="7" height="9" rx="1.5" />
+      <rect x="14" y="3" width="7" height="5" rx="1.5" />
+      <rect x="14" y="12" width="7" height="9" rx="1.5" />
+      <rect x="3" y="16" width="7" height="5" rx="1.5" />
+    </>
+  ),
+};
+
+/** Plan tile: grey glass, or the brand gradient on the recommended plan, with the plan's glyph in white. */
+function PlanIcon({ plan }: { plan: Plan }) {
+  return (
+    <div
+      className={`flex size-12 items-center justify-center rounded-xl text-white ${
+        plan.featured ? "shadow-[inset_0_-1.5px_1.2px_0_#d7d7d7]" : "bg-grey-03 shadow-[inset_0_0_7px_0_#fff,inset_0_-1.5px_1.2px_0_#000]"
+      }`}
+      style={
+        plan.featured
+          ? { background: "radial-gradient(70.7% 70.7% at 50% 50%, var(--color-holo-75) 0%, var(--color-holo-50) 55%, var(--color-holo-25) 100%)" }
+          : undefined
+      }
+    >
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        {planGlyphs[plan.icon]}
+      </svg>
     </div>
   );
 }
@@ -53,17 +100,20 @@ type PlanCardProps = {
   highlighted: boolean;
   /** Whether the highlight arrives from the premium card (it starts dark and clears on the way). */
   fromPremium: boolean;
+  /** Desktop: the pointer picks the card. Off on stacked layouts, where scrolling does. */
+  pointer: boolean;
   onActivate: () => void;
 };
 
-function PlanCard({ plan, highlighted, fromPremium, onActivate }: PlanCardProps) {
+function PlanCard({ plan, highlighted, fromPremium, pointer, onActivate }: PlanCardProps) {
   return (
     <div
-      // Mouse/pen: follow the pointer. Touch: a tap selects the card (a touch's enter/leave would
-      // also fire on every swipe that starts on a card, flashing the highlight while scrolling).
-      onPointerEnter={(e) => e.pointerType !== "touch" && onActivate()}
-      onClick={onActivate}
+      // Mouse/pen: follow the pointer; a tap also selects (a touch's enter/leave would fire on every
+      // swipe that starts on a card, flashing the highlight while scrolling)
+      onPointerEnter={pointer ? (e) => e.pointerType !== "touch" && onActivate() : undefined}
+      onClick={pointer ? onActivate : undefined}
       onFocusCapture={onActivate}
+      data-plan=""
       data-premium={plan.premium ? "" : undefined}
       className="relative isolate flex flex-col gap-8 rounded-2xl p-6 lg:flex-1 lg:p-8"
     >
@@ -90,20 +140,8 @@ function PlanCard({ plan, highlighted, fromPremium, onActivate }: PlanCardProps)
         </motion.div>
       )}
       <div className="relative flex flex-col gap-6 border-b border-grey-07 pb-6 lg:pb-8">
-        {plan.featured ? (
-          <div
-            className="size-12 rounded-xl shadow-[inset_0_-1.5px_1.2px_0_#d7d7d7]"
-            style={{
-              background:
-                "radial-gradient(70.7% 70.7% at 50% 50%, var(--color-holo-100) 0%, var(--color-holo-75) 29%, var(--color-holo-50) 64%, var(--color-holo-25) 100%)",
-            }}
-          />
-        ) : (
-          <div className="flex w-12 justify-center rounded-xl bg-grey-03 py-4 shadow-[inset_0_0_7px_0_#fff,inset_0_-1.5px_1.2px_0_#000]">
-            <span className="size-4 rounded-full bg-white" />
-          </div>
-        )}
-        <div className="flex flex-col gap-2 lg:min-h-[100px]">
+        <PlanIcon plan={plan} />
+        <div className="flex flex-col gap-2">
           <h3 className={`t-title-m ${fade} ${highlighted ? "text-white" : "text-grey-01"}`}>{noOrphan(plan.name)}</h3>
           <p className={`t-body-m text-balance ${fade} ${highlighted ? "text-white" : "text-grey-03"}`}>{noOrphan(plan.tagline)}</p>
         </div>
@@ -187,6 +225,8 @@ export function Pricing() {
   const { active } = selection;
   const setActive = (i: number) => setSelection((s) => (s.active === i ? s : { active: i, from: s.active }));
   const fromPremium = !!plans[selection.from]?.premium;
+  // Stacked layouts (phones, tablets): the highlight follows the scroll instead of the pointer
+  const stacked = useMedia(STACKED_QUERY);
   // The aurora ambient shows while the premium (most expensive) plan is the active one
   const ambient = !!plans[active]?.premium;
   const sectionRef = useRef<HTMLElement>(null);
@@ -197,6 +237,40 @@ export function Pricing() {
     const t = window.setTimeout(() => setHeaderDark(ambient), ambient ? 450 : 300);
     return () => window.clearTimeout(t);
   }, [ambient]);
+
+  // Stacked: the card nearest the middle of the screen is the active one (the premium card turns the
+  // ambient on as it scrolls into the middle). Off screen, it rests on the featured card again.
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!stacked || !section) return;
+    const cards = [...section.querySelectorAll<HTMLElement>("[data-plan]")];
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const s = section.getBoundingClientRect();
+      if (s.bottom < 0 || s.top > innerHeight) return setActive(featured);
+      const mid = innerHeight / 2;
+      let best = featured;
+      let nearest = Infinity;
+      cards.forEach((card, i) => {
+        const r = card.getBoundingClientRect();
+        const d = Math.abs(r.top + r.height / 2 - mid);
+        if (d < nearest) [nearest, best] = [d, i];
+      });
+      setActive(best);
+    };
+    const schedule = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    addEventListener("scroll", schedule, { passive: true });
+    addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(raf);
+      removeEventListener("scroll", schedule);
+      removeEventListener("resize", schedule);
+    };
+  }, [stacked, featured]);
 
   // The ambient opens from the premium card's centre: measure it (and how far the circle must
   // reach to cover the section) just before it turns on.
@@ -236,11 +310,11 @@ export function Pricing() {
           <Reveal
             y={50}
             amount={0.1}
-            onPointerLeave={(e) => e.pointerType !== "touch" && setActive(featured)}
+            onPointerLeave={(e) => !stacked && e.pointerType !== "touch" && setActive(featured)}
             className={`flex w-full flex-col gap-2 rounded-3xl p-2 transition-colors duration-700 ease-out md:p-2 lg:flex-row lg:gap-2 ${ambient ? "bg-white/88" : "bg-grey-08"}`}
           >
             {plans.map((p, i) => (
-              <PlanCard key={p.name} plan={p} highlighted={active === i} fromPremium={fromPremium} onActivate={() => setActive(i)} />
+              <PlanCard key={p.name} plan={p} highlighted={active === i} fromPremium={fromPremium} pointer={!stacked} onActivate={() => setActive(i)} />
             ))}
           </Reveal>
 

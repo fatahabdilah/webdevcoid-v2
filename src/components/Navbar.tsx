@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { waLink } from "@/content/site";
 import { useIntroEntered } from "@/lib/intro";
 import { ANIMATIONS_ENABLED, easeFramer } from "./motion";
-import { LogoMark, LogoWordmark, PhoneCalling } from "./icons";
+import { LogoMark, LogoWordmark, WhatsApp } from "./icons";
 
 const links = [
   { title: "Tentang", href: "/#about" },
@@ -56,7 +56,7 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          {/* "Konsultasi Gratis" from 640px, "Konsultasi" on most phones, and a phone icon below 390px
+          {/* "Konsultasi Gratis" from 640px, "Konsultasi" on most phones, and the WhatsApp icon below 390px
               (logo, three links and a text button don't fit in narrower screens) */}
           <a
             href={waLink()}
@@ -65,7 +65,7 @@ export function Navbar() {
             aria-label="Konsultasi gratis via WhatsApp"
             className="flex h-12 shrink-0 items-center justify-center rounded-full border border-white bg-white-02 whitespace-nowrap text-grey-01 transition-colors duration-300 hover:bg-white max-[389px]:w-12 min-[390px]:px-4 sm:px-5"
           >
-            <PhoneCalling width={22} height={22} className="min-[390px]:hidden" />
+            <WhatsApp width={20} height={20} className="min-[390px]:hidden" />
             <span className="t-body-s font-medium max-[389px]:hidden sm:t-body-m-medium">
               Konsultasi<span className="hidden sm:inline"> Gratis</span>
             </span>

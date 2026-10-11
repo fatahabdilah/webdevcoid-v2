@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   cacheComponents: true,
+  // Hide the dev-only "N" / "Cache disabled" badge; compile and runtime errors still show
+  devIndicators: false,
   partialPrefetching: true,
   turbopack: {
     rules: {

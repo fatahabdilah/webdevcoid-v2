@@ -4,24 +4,29 @@
  * come from webdev.co.id.
  */
 
+/*
+ * Copy that sits side by side (cards in a row) is kept to matching lengths, so siblings wrap to the same
+ * number of lines; "\n" marks a fixed line break where the break itself must match (see components/Lines).
+ */
+
 /** "Kenapa kami", value proposition (2.3, 2.4). */
 export const values = [
   {
     number: "01",
-    title: "Desain custom, harga masuk akal",
-    text: "Desain dibuat khusus untuk bisnismu, bukan template. Harganya tetap masuk akal.",
+    title: "Desain custom,\nharga masuk akal",
+    text: "Dibuat dari nol untuk bisnismu, bukan dari template jadi.",
     icon: "/images/values/custom.svg",
   },
   {
     number: "02",
-    title: "Kualitas premium, proses tidak ribet",
-    text: "Dari desain sampai online, kami urus semuanya. Kamu fokus ke bisnis.",
+    title: "Kualitas premium,\nproses tanpa ribet",
+    text: "Dari desain sampai online, kami urus. Kamu fokus ke bisnis.",
     icon: "/images/values/premium.svg",
   },
   {
     number: "03",
-    title: "Cepat dan mendukung tujuan bisnis",
-    text: "Bukan cuma bagus dilihat, tapi cepat dibuka dan membantu bisnismu berkembang.",
+    title: "Cepat dibuka,\nbantu bisnis tumbuh",
+    text: "Bukan cuma bagus dilihat, tapi bantu bisnismu berkembang.",
     icon: "/images/values/fast.svg",
   },
 ];
@@ -37,63 +42,63 @@ export const featuredService = {
 export const services = [
   {
     title: "Landing Page.",
-    text: "Satu halaman fokus untuk promosi, produk, atau profil singkat.",
+    text: "Satu halaman untuk promosi, produk, atau profil.",
     art: "landing",
   },
   {
     title: "Toko Online.",
-    text: "Katalog produk yang rapi dan mudah dipesan langsung dari HP.",
+    text: "Katalog rapi yang mudah dipesan langsung dari HP.",
     art: "store",
   },
   {
     title: "Web App.",
-    text: "Untuk kebutuhan khusus: sistem, dashboard, atau fitur custom.",
+    text: "Sistem, dashboard, atau fitur custom sesuai kebutuhan.",
     art: "webapp",
   },
   {
-    title: "Perbarui & rawat website.",
-    text: "Sudah punya website? Kami bantu perbarui tampilan, perbaiki yang bermasalah, dan rawat tiap bulan.",
+    title: "Perawatan Website.",
+    text: "Kami perbarui, perbaiki, dan jaga tiap bulan.",
     art: "maintenance",
   },
 ] as const;
 
 /** "Sudah termasuk di setiap harga" tiles. */
-export const security = [
-  { label: "Domain & hosting tahun pertama", icon: "domain" },
-  { label: "Sertifikat SSL", icon: "ssl" },
-  { label: "Responsif semua perangkat", icon: "responsive" },
-  { label: "SEO dasar", icon: "seo" },
+export const included = [
+  { label: "Domain & hosting\ntahun pertama", icon: "domain" },
+  { label: "Sertifikat SSL\nuntuk keamanan", icon: "ssl" },
+  { label: "Responsif di\nsemua perangkat", icon: "responsive" },
+  { label: "SEO dasar,\nmudah dicari", icon: "seo" },
 ] as const;
 
 export const steps = [
   {
     number: "01",
     title: "Konsultasi gratis",
-    text: "Ceritakan bisnismu lewat WhatsApp. Kami bantu tentukan jenis website yang paling pas.",
-    icon: "magnify",
+    text: "Ceritakan bisnismu di WhatsApp, kami bantu pilih yang pas.",
+    icon: "chat",
   },
   {
     number: "02",
     title: "Struktur & konten",
-    text: "Halaman dan isinya kami susun. Kamu cukup mengarahkan.",
+    text: "Halaman dan isinya kami susun, kamu cukup mengarahkan.",
     icon: "structure",
   },
   {
     number: "03",
     title: "Desain custom",
-    text: "Tampilan dibuat dari nol, mengikuti brand dan warna bisnismu.",
-    icon: "settings",
+    text: "Tampilan dibuat dari nol, sesuai brand dan warna bisnismu.",
+    icon: "pen",
   },
   {
     number: "04",
     title: "Preview tiap tahap",
-    text: "Kamu melihat hasilnya di setiap tahap dan memberi masukan sebelum tayang.",
-    icon: "graph",
+    text: "Lihat hasil tiap tahap dan beri masukan sebelum tayang.",
+    icon: "eye",
   },
   {
     number: "05",
     title: "Website tayang",
-    text: "Domain, hosting, dan SSL kami pasang. Bisnismu siap ditemukan online.",
+    text: "Domain, hosting, dan SSL kami pasang. Bisnismu siap online.",
     icon: "rocket",
   },
 ] as const;
@@ -107,6 +112,8 @@ export const stats = [
 
 export type Plan = {
   name: string;
+  /** Tile glyph at the top of the card: one page, a company building, or a dashboard. */
+  icon: "page" | "building" | "dashboard";
   tagline: string;
   from: boolean;
   /** In thousands of rupiah, e.g. "1.490" → Rp1.490.000. Omit for plans quoted per project (see `quote`). */
@@ -124,6 +131,7 @@ export type Plan = {
 export const plans: Plan[] = [
   {
     name: "Landing Page",
+    icon: "page",
     tagline: "Satu halaman fokus untuk promosi, produk, atau profil singkat.",
     from: false,
     price: "1.490",
@@ -143,6 +151,7 @@ export const plans: Plan[] = [
   },
   {
     name: "Company Profile",
+    icon: "building",
     tagline: "Website lengkap untuk bisnis yang mau tampil profesional dan kredibel.",
     from: false,
     price: "2.990",
@@ -162,6 +171,7 @@ export const plans: Plan[] = [
   },
   {
     name: "Web App / Custom",
+    icon: "dashboard",
     tagline: "Sistem, dashboard, atau toko online yang dibuat sesuai kebutuhan.",
     from: false,
     quote: { label: "dihitung setelah", value: "Konsultasi" },
@@ -192,7 +202,7 @@ export const faqs = [
     a: "Semua harga sudah termasuk desain custom, tampilan responsif, SEO dasar, sertifikat SSL, serta domain dan hosting tahun pertama. Biaya perpanjangan domain dan hosting mulai tahun kedua tertulis di setiap kartu harga.",
   },
   {
-    q: "Apa yang perlu disiapkan?",
+    q: "Apa saja yang perlu disiapkan?",
     a: "Cukup ceritakan bisnismu lewat WhatsApp. Struktur, desain, dan kontennya kami yang susun bersama kamu.",
   },
   {

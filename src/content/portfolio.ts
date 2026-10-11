@@ -3,6 +3,7 @@ export type Project = {
   slug: string;
   title: string;
   type: string;
+  /** Shown after the type on the card: the site's domain, or just the name when the address isn't the client's own. */
   domain: string;
   url: string;
   description: string;
@@ -17,7 +18,7 @@ export const projects: Project[] = [
     type: "Personal brand",
     domain: "arifsyauqi.com",
     url: "https://arifsyauqi.com",
-    description: "Website portofolio untuk videografer pernikahan, menampilkan film dan karya dengan tampilan yang tenang dan sinematik.",
+    description: "Website portofolio untuk videografer pernikahan, menampilkan film dengan tampilan yang tenang dan sinematik.",
     image: "/images/portfolio/arifsyauqi.jpg",
     stats: [
       { value: "Custom", label: "Desain dari nol" },
@@ -28,9 +29,9 @@ export const projects: Project[] = [
     slug: "michaelutomo",
     title: "Michael Utomo, Branding & Graphic Designer",
     type: "Personal brand",
-    domain: "michaelutomo.framer.ai",
+    domain: "michaelutomo",
     url: "https://michaelutomo.framer.ai",
-    description: "Website portofolio untuk desainer grafis, menampilkan karya branding dan identitas visual dengan tampilan yang bersih dan berkarakter.",
+    description: "Website portofolio untuk desainer grafis, menampilkan karya branding dengan tampilan yang bersih dan berkarakter.",
     image: "/images/portfolio/michaelutomo.jpg",
     stats: [
       { value: "Custom", label: "Desain dari nol" },
