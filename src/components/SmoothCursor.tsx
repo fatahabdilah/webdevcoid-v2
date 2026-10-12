@@ -5,14 +5,9 @@ import { motion, useSpring, useTransform } from "motion/react";
 import { getIntroHandoff, useIntroEntered } from "@/lib/intro";
 import { CURSOR_SIZE as SIZE, CUSTOM_CURSOR_QUERY, VIEW_H, VIEW_W, cursorPath } from "@/lib/cursorShape";
 
-/** Clickable things morph the arrow into a circle (links out of the site add a ↗); text fields hand over to the system I-beam. */
+/** Clickable things morph the arrow into a circle; text fields hand over to the system I-beam. */
 const POINTER = 'a, button, [role="button"], label, select, summary, input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="button"], .cursor-pointer';
 const TEXT = 'input:not([type="checkbox"], [type="radio"], [type="submit"], [type="button"]), textarea, [contenteditable="true"]';
-/** A link that leaves the site: opens a new tab or points at another origin (WhatsApp, Instagram, client sites). */
-function isExternal(target: Element | null) {
-  const a = target?.closest<HTMLAnchorElement>("a[href]");
-  return !!a && (a.target === "_blank" || a.origin !== location.origin);
-}
 const cursorCss = `*, *::before, *::after { cursor: none !important; }
 :is(${TEXT}) { cursor: text !important; }`;
 
@@ -30,10 +25,6 @@ export function SmoothCursor() {
   const scale = useSpring(1, { stiffness: 500, damping: 35 });
   /** 0 = arrow, 1 = circle; the outline is re-drawn from it every frame */
   const morph = useSpring(0, { stiffness: 260, damping: 32 }); // critically damped: no overshoot past either shape
-  /** 1 over external links: the circle grows a little and shows ↗ */
-  const ext = useSpring(0, { stiffness: 260, damping: 32 });
-  const boxScale = useTransform(() => scale.get() * (1 + 0.6 * ext.get()));
-  const arrowScale = useTransform(ext, [0, 1], [0.4, 1]);
   const d = useTransform(morph, cursorPath);
   /** 0 over text fields, where the system I-beam shows instead */
   const visible = useSpring(1, { stiffness: 500, damping: 40 });
@@ -99,11 +90,10 @@ export function SmoothCursor() {
     const onOver = (e: PointerEvent) => {
       if (e.pointerType !== "mouse") return;
       const target = e.target instanceof Element ? e.target : null;
-      const text = !!target?.closest(TEXT);
-      const link = !text && !!target?.closest(POINTER);
-      visible.set(text ? 0 : 1);
+      const field = !!target?.closest(TEXT);
+      const link = !field && !!target?.closest(POINTER);
+      visible.set(field ? 0 : 1);
       morph.set(link ? 1 : 0);
-      ext.set(link && isExternal(target) ? 1 : 0);
     };
     const onDown = () => {
       pressed.current = true;
@@ -128,7 +118,7 @@ export function SmoothCursor() {
       cancelAnimationFrame(frame);
       clearTimeout(settle);
     };
-  }, [enabled, x, y, rotate, scale, morph, ext, visible]);
+  }, [enabled, x, y, rotate, scale, morph, visible]);
 
   // Take over from the intro's scripted cursor: same spot, still the circle, then morph back to the arrow.
   // If the mouse has already moved, the real position wins.
@@ -156,10 +146,10 @@ export function SmoothCursor() {
       <motion.div
         aria-hidden
         className="pointer-events-none fixed top-0 left-0 z-999999 will-change-transform"
-        style={{ x, y, scale: boxScale, opacity, width: SIZE, height: SIZE, marginLeft: -SIZE / 2, marginTop: -SIZE / 2 }}
+        style={{ x, y, scale, opacity, width: SIZE, height: SIZE, marginLeft: -SIZE / 2, marginTop: -SIZE / 2 }}
       >
         {/* Black body, white outline (stroke painted under the fill, so only its outer half shows), soft drop shadow.
-            Only the shape turns with the direction of travel; the ↗ below stays upright. */}
+            The shape turns with the direction of travel. */}
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           className="absolute inset-0 size-full"
@@ -180,16 +170,6 @@ export function SmoothCursor() {
               <feBlend mode="normal" in="SourceGraphic" in2="shadow" result="shape" />
             </filter>
           </defs>
-        </motion.svg>
-        {/* External link: ↗ inside the circle */}
-        <motion.svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="absolute inset-0 size-full"
-          style={{ opacity: ext, scale: arrowScale }}
-          viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-          fill="none"
-        >
-          <path d="M19.5 32.5L30.5 21.5M22.5 21.5H30.5V29.5" stroke="white" strokeWidth={3.2} strokeLinecap="round" strokeLinejoin="round" />
         </motion.svg>
       </motion.div>
     </>

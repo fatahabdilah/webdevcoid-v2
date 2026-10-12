@@ -20,13 +20,13 @@ export const values = [
   {
     number: "02",
     title: "Kualitas premium,\nproses tanpa ribet",
-    text: "Dari desain sampai online, kami urus. Kamu fokus ke bisnis.",
+    text: "Satu tim mengurus desain, konten, sampai website tayang.",
     icon: "/images/values/premium.svg",
   },
   {
     number: "03",
     title: "Cepat dibuka,\nbantu bisnis tumbuh",
-    text: "Bukan cuma bagus dilihat, tapi bantu bisnismu berkembang.",
+    text: "Ringan di HP, mudah dicari, dan menarik calon pelanggan.",
     icon: "/images/values/fast.svg",
   },
 ];
@@ -62,12 +62,31 @@ export const services = [
   },
 ] as const;
 
+/** "Butuhnya bukan website baru?": for businesses that already have a site. Each card opens WhatsApp. */
+export const existingSite = {
+  title: "Butuhnya bukan website baru?",
+  items: [
+    {
+      icon: "pencil",
+      title: "Sudah punya website?",
+      text: "Kami bantu perbarui tampilan atau perbaiki yang bermasalah.",
+      message: "Halo webdev.co.id, saya sudah punya website dan mau perbarui tampilan atau perbaiki yang bermasalah.",
+    },
+    {
+      icon: "shield",
+      title: "Perlu dirawat rutin?",
+      text: "Pembaruan konten, backup, dan pemantauan tiap bulan.",
+      message: "Halo webdev.co.id, saya mau tanya soal perawatan website tiap bulan.",
+    },
+  ],
+} as const;
+
 /** "Sudah termasuk di setiap harga" tiles. */
 export const included = [
   { label: "Domain & hosting\ntahun pertama", icon: "domain" },
   { label: "Sertifikat SSL\nuntuk keamanan", icon: "ssl" },
   { label: "Responsif di\nsemua perangkat", icon: "responsive" },
-  { label: "SEO dasar,\nmudah dicari", icon: "seo" },
+  { label: "Dioptimasi SEO,\nmudah dicari", icon: "seo" },
 ] as const;
 
 export const steps = [
@@ -139,7 +158,7 @@ export const plans: Plan[] = [
       { label: "1 halaman desain custom", included: true },
       { label: "Responsif semua perangkat", included: true },
       { label: "Form terhubung WhatsApp", included: true },
-      { label: "SEO dasar", included: true },
+      { label: "SEO", included: true },
       { label: "Domain & hosting 1 tahun", included: true },
       { label: "Sertifikat SSL", included: true },
       { label: "Halaman tambahan", included: false },
@@ -170,7 +189,7 @@ export const plans: Plan[] = [
     featured: true,
   },
   {
-    name: "Web App / Custom",
+    name: "Custom",
     icon: "dashboard",
     tagline: "Sistem, dashboard, atau toko online yang dibuat sesuai kebutuhan.",
     from: false,
@@ -199,11 +218,11 @@ export const faqs = [
   },
   {
     q: "Harganya sudah termasuk apa saja?",
-    a: "Semua harga sudah termasuk desain custom, tampilan responsif, SEO dasar, sertifikat SSL, serta domain dan hosting tahun pertama. Biaya perpanjangan domain dan hosting mulai tahun kedua tertulis di setiap kartu harga.",
+    a: "Semua harga sudah termasuk desain custom, tampilan responsif, SEO, sertifikat SSL, serta domain dan hosting tahun pertama. Biaya perpanjangan domain dan hosting mulai tahun kedua tertulis di setiap kartu harga.",
   },
   {
     q: "Apa saja yang perlu disiapkan?",
-    a: "Cukup ceritakan bisnismu lewat WhatsApp. Struktur, desain, dan kontennya kami yang susun bersama kamu.",
+    a: "Cukup info bisnismu, plus logo dan foto kalau sudah ada. Teks dan struktur halamannya kami bantu susun.",
   },
   {
     q: "Bisa lihat hasilnya sebelum tayang?",

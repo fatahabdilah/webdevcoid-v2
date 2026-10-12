@@ -303,8 +303,8 @@ export function Pricing() {
           titleGradient={false}
           number="006"
           name="harga"
-          title="Website untuk segala bisnis"
-          body="Semua didesain custom dari nol, bukan template. Harga sudah termasuk domain dan hosting tahun pertama."
+          title="Pilih yang pas untuk bisnismu"
+          body="Sudah termasuk domain, hosting, dan SSL tahun pertama. Tanpa biaya tersembunyi."
         />
         <div className="flex w-full flex-col gap-2">
           <Reveal
@@ -329,10 +329,12 @@ export function Pricing() {
               <CtaAvatar image="/images/avatars/cta-pricing.png" />
               <div className="flex w-full flex-col items-center gap-2 text-center">
                 <h3 className="t-title-m text-balance text-white">Belum yakin mana yang&nbsp;pas?</h3>
-                <p className="t-body-m text-white-02">Konsultasi gratis dulu, tanpa&nbsp;komitmen.</p>
+                <p className="t-body-m text-white-02">Ceritakan kebutuhanmu, kami sarankan pilihan yang sesuai&nbsp;anggaran.</p>
               </div>
             </div>
-            <Button href={waLink()}>Konsultasi Gratis</Button>
+            <Button href={waLink()} whatsapp>
+              Konsultasi Gratis
+            </Button>
           </Reveal>
         </div>
       </div>

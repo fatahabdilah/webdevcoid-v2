@@ -21,8 +21,8 @@ export const projects: Project[] = [
     description: "Website portofolio untuk videografer pernikahan, menampilkan film dengan tampilan yang tenang dan sinematik.",
     image: "/images/portfolio/arifsyauqi.jpg",
     stats: [
-      { value: "Custom", label: "Desain dari nol" },
-      { value: "Online", label: "Sudah tayang" },
+      { value: "Video", label: "Film diputar di halaman" },
+      { value: "3 kategori", label: "Wedding, commercial, personal" },
     ],
   },
   {
@@ -34,8 +34,8 @@ export const projects: Project[] = [
     description: "Website portofolio untuk desainer grafis, menampilkan karya branding dengan tampilan yang bersih dan berkarakter.",
     image: "/images/portfolio/michaelutomo.jpg",
     stats: [
-      { value: "Custom", label: "Desain dari nol" },
-      { value: "Online", label: "Sudah tayang" },
+      { value: "Studi kasus", label: "Halaman khusus tiap proyek" },
+      { value: "Galeri", label: "Karya branding & visual" },
     ],
   },
 ];

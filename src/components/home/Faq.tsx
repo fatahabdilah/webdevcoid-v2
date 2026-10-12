@@ -13,7 +13,7 @@ const fade = "transition-opacity duration-[400ms] ease-framer";
 
 function FaqItem({ index, q, a, open, onToggle }: { index: number; q: string; a: string; open: boolean; onToggle: () => void }) {
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl bg-grey-08/90">
+    <div className="relative w-full overflow-hidden rounded-2xl border border-grey-07 bg-grey-09/90 shadow-[var(--shadow-card)]">
       {/* Holographic outline that appears while open */}
       <div aria-hidden className={`absolute inset-0 rounded-2xl p-0.5 ${fade} ${open ? "opacity-100" : "opacity-0"}`} style={{ backgroundImage: "var(--holo-gradient)" }}>
         <div className="size-full rounded-[14px] bg-white" />

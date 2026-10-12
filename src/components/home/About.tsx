@@ -10,7 +10,7 @@ import { SubTitle } from "../SectionHeader";
 import { Ticker } from "../Ticker";
 
 const intro =
-  "Kami membantu berbagai jenis bisnis dan institusi, mulai dari brand baru, startup, sampai perusahaan, tampil profesional secara online lewat website modern yang cepat dan berkualitas.";
+  "Kami membantu brand baru, usaha yang sedang tumbuh, sampai perusahaan tampil profesional secara online, lewat website yang dirancang khusus untuk bisnisnya.";
 
 /**
  * Characters fade from 20% to full opacity as the paragraph scrolls through the viewport.
@@ -100,6 +100,7 @@ function IntroVideo() {
       >
         <Image src="/images/about.png" alt="Tim sedang berdiskusi di depan layar presentasi" fill sizes="600px" className="object-cover" />
         <span className="absolute inset-0 flex items-center justify-center rounded-[inherit] bg-black/20 shadow-[inset_0_0_40px_0_#fff] transition-shadow duration-500 group-hover:shadow-[inset_0_0_80px_0_#fff]">
+          {/* Play button (the studio video goes here), drifting toward the pointer */}
           <motion.span
             style={{ x, y }}
             className="flex size-20 items-center justify-center rounded-full bg-white-05 text-white transition-colors duration-300 group-hover:bg-white-03"
@@ -132,7 +133,7 @@ export function About() {
   return (
     <section
       id="about"
-      className="flex flex-col items-center gap-16 overflow-clip bg-white py-16 md:gap-24 md:py-24 lg:gap-[120px] lg:py-[120px]"
+      className="flex flex-col items-center gap-12 overflow-clip bg-white py-16 md:gap-16 md:py-20 lg:gap-20 lg:py-[100px]"
     >
       <div className="flex w-full max-w-[1280px] flex-col items-center px-5 md:px-10 lg:px-20">
         <div className="flex w-full max-w-[850px] flex-col items-center gap-6">

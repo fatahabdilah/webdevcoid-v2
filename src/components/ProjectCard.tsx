@@ -5,7 +5,7 @@ import { noOrphan } from "@/lib/text";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="flex w-full flex-col rounded-3xl bg-grey-08 p-2 md:gap-2 lg:min-h-[500px] lg:flex-row">
+    <article className="flex w-full flex-col rounded-3xl border border-grey-07 bg-grey-09 p-2 shadow-[var(--shadow-card)] md:gap-2 lg:min-h-[500px] lg:flex-row">
       {/* The image tilts toward the cursor (.hover-3d in globals.css) */}
       <div className="hover-3d h-80 w-full shrink-0 md:h-[400px] lg:h-[484px] lg:flex-1">
         <div className="rounded-2xl shadow-[inset_0_1px_13px_0_#fff]">
@@ -25,7 +25,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <h3 className="t-title-m text-grey-01 sm:t-title-l lg:t-h6">{noOrphan(project.title)}</h3>
-              <p className="t-body-m text-balance text-grey-02 md:text-pretty lg:text-balance">{noOrphan(project.description)}</p>
+              <p className="t-body-m text-balance text-grey-03 md:text-pretty lg:text-balance">{noOrphan(project.description)}</p>
             </div>
             <div>
               <Button href={project.url} variant="tertiary">

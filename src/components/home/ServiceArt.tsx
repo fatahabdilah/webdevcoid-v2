@@ -598,3 +598,128 @@ export function MaintenanceArt() {
     </Art>
   );
 }
+
+/* ------------------------------------------------------------------ Previews for "Butuhnya bukan website baru?" */
+
+/** A browser screen filling a 360 × 240 canvas (the card rounds and tilts it). */
+function Screen({ address, children }: { address: string; children: ReactNode }) {
+  return (
+    <svg viewBox="0 0 360 240" aria-hidden className="block h-auto w-full">
+      <rect width="360" height="240" fill="#fff" />
+      {[0, 1, 2].map((i) => (
+        <circle key={i} cx={20 + i * 12} cy="18" r="3.5" fill={tint(0.7)} />
+      ))}
+      <rect x="120" y="9" width="120" height="18" rx="9" fill={SOFT} />
+      <text x="180" y="22" fontSize="10" fill={MUTED} textAnchor="middle">
+        {address}
+      </text>
+      <path d="M0 36H360" stroke={EDGE} strokeWidth="1.2" />
+      {children}
+    </svg>
+  );
+}
+
+/** One site, its old layout (grey) left of the divider and its new one (brand) right of it. */
+export function RedesignPreview() {
+  const id = useIds();
+  const split = 172;
+  return (
+    <Screen address="bisnismu.id">
+      <Defs id={id} />
+      <clipPath id={id("old")}>
+        <rect x="0" y="36" width={split} height="204" />
+      </clipPath>
+      <clipPath id={id("new")}>
+        <rect x={split} y="36" width={360 - split} height="204" />
+      </clipPath>
+      {/* Before: a dated grey layout */}
+      <g clipPath={url(id("old"))}>
+        <rect x="16" y="50" width="328" height="96" rx="6" fill="#e3e5e8" />
+        <Bar x={32} y={72} w={120} h={10} fill="#c4c8ce" />
+        <Bar x={32} y={90} w={88} h={10} fill="#c4c8ce" />
+        <rect x="32" y="110" width="58" height="18" rx="3" fill="#b4b9c0" />
+        {[16, 128, 240].map((x) => (
+          <g key={x}>
+            <rect x={x} y="156" width="104" height="70" rx="4" fill="#eceef1" />
+            <Bar x={x + 12} y={172} w={62} h={6} fill="#d3d6db" />
+            <Bar x={x + 12} y={184} w={44} h={6} fill="#d3d6db" />
+          </g>
+        ))}
+      </g>
+      {/* After: the brand refresh */}
+      <g clipPath={url(id("new"))}>
+        <rect x="16" y="50" width="328" height="96" rx="12" fill={url(id("blue"))} />
+        <Bar x={32} y={70} w={130} h={11} fill="#fff" />
+        <Bar x={32} y={88} w={96} h={11} fill="#fff" />
+        <rect x="32" y="108" width="76" height="20" rx="10" fill="#fff" />
+        <circle cx="290" cy="98" r="30" fill="#fff" fillOpacity=".22" />
+        <circle cx="290" cy="98" r="16" fill="#fff" fillOpacity=".5" />
+        {[16, 128, 240].map((x) => (
+          <g key={x}>
+            <rect x={x} y="156" width="104" height="70" rx="12" fill={SOFT} stroke={EDGE} strokeWidth="1.2" />
+            <circle cx={x + 20} cy="176" r="8" fill={tint(0.55)} />
+            <Bar x={x + 12} y={194} w={66} h={6} />
+          </g>
+        ))}
+      </g>
+      {/* Divider with its handle, and the two labels */}
+      <path d={`M${split} 36V240`} stroke="#fff" strokeWidth="3" />
+      <circle cx={split} cy="152" r="17" fill={NAVY} fillOpacity=".12" />
+      <circle cx={split} cy="150" r="15" fill="#fff" />
+      <path d={`M${split - 4} 145l-5 5 5 5M${split + 4} 145l5 5-5 5`} {...stroke(BLUE, 2.2)} />
+      <rect x="24" y="200" width="46" height="20" rx="10" fill="#fff" />
+      <text x="47" y="214" fontSize="11" fontWeight={600} fill={MUTED} textAnchor="middle">
+        Lama
+      </text>
+      <rect x="290" y="200" width="46" height="20" rx="10" fill={BLUE} />
+      <text x="313" y="214" fontSize="11" fontWeight={600} fill="#fff" textAnchor="middle">
+        Baru
+      </text>
+    </Screen>
+  );
+}
+
+/** This month's care, ticked off: content, backup, monitoring. */
+export function CarePreview() {
+  const id = useIds();
+  const tasks: [string, string][] = [
+    ["Konten diperbarui", "Selesai"],
+    ["Backup bulanan", "Selesai"],
+    ["Pemantauan website", "Aktif"],
+  ];
+  return (
+    <Screen address="bisnismu.id/admin">
+      <Defs id={id} />
+      <text x="18" y="64" fontSize="15" fontWeight={600} fill={INK}>
+        Perawatan bulanan
+      </text>
+      <rect x="276" y="48" width="66" height="22" rx="11" fill={SOFT} />
+      <Icon cx={290} cy={59} size={11}>
+        <g {...stroke(BLUE, 2.6)}>{glyph.calendar}</g>
+      </Icon>
+      <text x="318" y="63" fontSize="10.5" fontWeight={600} fill={BLUE} textAnchor="middle">
+        Oktober
+      </text>
+      {tasks.map(([task, status], i) => {
+        const y = 82 + i * 50;
+        const live = status === "Aktif";
+        return (
+          <g key={task}>
+            <rect x="16" y={y} width="328" height="40" rx="11" fill={SOFT} stroke={EDGE} strokeWidth="1.2" />
+            <circle cx="38" cy={y + 20} r="10" fill={url(id("blue"))} />
+            <Icon cx={38} cy={y + 20} size={11}>
+              <g {...stroke("#fff", 3.2)}>{live ? glyph.shield : glyph.check}</g>
+            </Icon>
+            <text x="56" y={y + 24.5} fontSize="12.5" fill={INK}>
+              {task}
+            </text>
+            <rect x="268" y={y + 10} width="62" height="20" rx="10" fill={live ? BLUE : "#fff"} />
+            <text x="299" y={y + 24} fontSize="10.5" fontWeight={600} fill={live ? "#fff" : BLUE} textAnchor="middle">
+              {status}
+            </text>
+          </g>
+        );
+      })}
+    </Screen>
+  );
+}

@@ -8,6 +8,7 @@ const paths = {
   plus: ["M57.5 8.5V106.5", "M8.5 57.5H106.5"],
   "arrow-right": ["M8.5 57.5H106.5", "M64 15L106.5 57.5L64 100"],
   "arrow-left": ["M106.5 57.5H8.5", "M51 15L8.5 57.5L51 100"],
+  "arrow-up-right": ["M15 100L100 15", "M40 15H100V75"],
 };
 
 type LineIconName = keyof typeof paths;

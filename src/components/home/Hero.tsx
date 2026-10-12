@@ -38,13 +38,13 @@ export function Hero() {
                 />
               </div>
             </div>
-            <div className="flex w-full flex-col items-center justify-center gap-4 md:w-auto md:flex-row md:gap-2">
-              <Reveal onMount y={20} delay={0.6}>
-                <Button href="/#pricing" arrow>
-                  Lihat Harga
-                </Button>
-              </Reveal>
-            </div>
+            {/* One button: consultation already sits in the navbar on this screen. The arrow says it moves
+                down the page (the navbar's WhatsApp icon says that one opens a chat). */}
+            <Reveal onMount y={20} delay={0.6}>
+              <Button href="/#pricing" arrow>
+                Lihat Harga
+              </Button>
+            </Reveal>
           </div>
         </div>
       </div>

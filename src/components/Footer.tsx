@@ -5,40 +5,39 @@ import { Instagram, LogoMark, LogoWordmark, Mail, WhatsApp } from "./icons";
 import { LazyVideo } from "./LazyVideo";
 import { Reveal } from "./motion";
 
-const textLink = "t-body-m flex h-12 items-center justify-center gap-2.5 px-5 whitespace-nowrap text-white-02 transition-colors duration-300 hover:text-white md:px-0";
+const contacts = [
+  { label: "Instagram", value: `@${contact.instagram}`, href: contact.instagramUrl, Icon: Instagram, external: true },
+  { label: "Email", value: contact.email, href: `mailto:${contact.email}`, Icon: Mail, external: false },
+  { label: "WhatsApp", value: contact.whatsappDisplay, href: waLink(), Icon: WhatsApp, external: true },
+];
 
-/**
- * Glass pill matching the navbar: Instagram and email as text links, WhatsApp (where consultations
- * happen) as the light pill button. Below md the pill becomes a stacked card.
- */
-function ContactPill() {
+/** The three contacts as plain icon + address links in one row (stacked below md), right under the closing line. */
+function Contacts() {
   return (
-    <div className="flex w-full flex-col gap-1 rounded-[28px] bg-black/40 p-1 backdrop-blur-[20px] md:h-14 md:w-auto md:flex-row md:items-center md:gap-7 md:rounded-full md:pl-6">
-      <a href={contact.instagramUrl} target="_blank" rel="noreferrer" aria-label={`Instagram @${contact.instagram}`} className={textLink}>
-        <Instagram width={18} height={18} />@{contact.instagram}
-      </a>
-      <a href={`mailto:${contact.email}`} aria-label={`Email ${contact.email}`} className={textLink}>
-        <Mail width={18} height={18} />
-        {contact.email}
-      </a>
-      <a
-        href={waLink()}
-        target="_blank"
-        rel="noreferrer"
-        aria-label={`WhatsApp ${contact.whatsappDisplay}`}
-        className="t-body-m-medium flex h-12 items-center justify-center gap-2 rounded-full border border-white bg-white-02 px-5 whitespace-nowrap text-grey-01 transition-colors duration-300 hover:bg-white"
-      >
-        <WhatsApp width={18} height={18} />
-        {contact.whatsappDisplay}
-      </a>
+    <div className="flex flex-col items-center gap-1 md:flex-row md:justify-center md:gap-10">
+      {contacts.map(({ label, value, href, Icon, external }) => (
+        <a
+          key={label}
+          href={href}
+          target={external ? "_blank" : undefined}
+          rel={external ? "noreferrer" : undefined}
+          aria-label={`${label} ${value}`}
+          className="t-body-l flex h-11 items-center gap-2.5 whitespace-nowrap text-white-02 transition-colors duration-300 hover:text-white"
+        >
+          <Icon width={18} height={18} className="shrink-0" />
+          {value}
+        </a>
+      ))}
     </div>
   );
 }
 
 const links = [
   { label: "Beranda", href: "/#top" },
+  { label: "Layanan", href: "/#services" },
   { label: "Portfolio", href: "/#portfolio" },
   { label: "Harga", href: "/#pricing" },
+  { label: "FAQ", href: "/#faq" },
   { label: "Kontak", href: "/#contact" },
 ];
 
@@ -46,9 +45,9 @@ export function Footer() {
   return (
     <div className="flex w-full flex-col gap-[112px] pb-6 md:pb-12 lg:pb-6">
       <div className="flex w-full flex-col">
-        <div className="flex flex-col items-center gap-4 border-b border-white-06 pb-6 md:flex-row md:justify-center md:gap-16">
-          <Reveal y={50} className="w-full max-w-[400px] md:w-auto md:max-w-none">
-            <ContactPill />
+        <div className="flex flex-col items-center border-b border-white-06 pb-16 md:pb-24">
+          <Reveal y={50}>
+            <Contacts />
           </Reveal>
         </div>
         <div className="grid grid-cols-2 gap-x-4 gap-y-6 pt-6 md:flex md:justify-between">
@@ -124,6 +123,10 @@ export function SiteFooter() {
     <FooterSection className="-mt-110 md:-mt-130 lg:-mt-170" fadeClassName="[--fade:300px] md:[--fade:380px] lg:[--fade:520px]">
       <div className="pt-140 md:pt-160 lg:pt-200">
         <div id="contact" className="scroll-mt-24">
+          {/* Closing call to action, right above the contacts */}
+          <Reveal y={40} className="mb-4 flex justify-center text-center md:mb-5">
+            <h2 className="t-h2 max-w-[12em] text-balance text-white">Siap bawa bisnismu online?</h2>
+          </Reveal>
           <Footer />
         </div>
       </div>

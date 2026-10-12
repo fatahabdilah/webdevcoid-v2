@@ -1,4 +1,4 @@
-import { featuredService, included, services } from "@/content/home";
+import { existingSite, featuredService, included, services } from "@/content/home";
 import { waLink } from "@/content/site";
 import { Button } from "../Button";
 import { CtaAvatar } from "../CtaAvatar";
@@ -7,10 +7,11 @@ import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
 import { Lines } from "../Lines";
 import { IncludedIcon } from "./IncludedIcon";
-import { CompanyProfileArt, LandingPageArt, MaintenanceArt, OnlineStoreArt, WebAppArt } from "./ServiceArt";
+import { ExistingSite } from "./ExistingSite";
+import { CompanyProfileArt, CarePreview, LandingPageArt, MaintenanceArt, OnlineStoreArt, RedesignPreview, WebAppArt } from "./ServiceArt";
+import { bentoCard as card } from "./surfaces";
 import { noOrphan } from "@/lib/text";
 
-const card = "rounded-2xl border border-grey-07 bg-grey-09 shadow-[var(--shadow-card)]";
 
 function ServiceText({ title, text }: { title: string; text: string }) {
   return (
@@ -53,6 +54,9 @@ function ServiceCard({ title, text, art }: (typeof services)[number]) {
   );
 }
 
+/** Titles of the groups below the bento (left from md, like the cards under them). */
+const groupTitle = "t-title-m md:t-title-l text-center text-grey-01 md:text-left";
+
 function CtaCard() {
   return (
     <div
@@ -66,12 +70,12 @@ function CtaCard() {
           <p className="t-body-m text-white-02">
             Konsultasi gratis dulu.
             <br />
-            Kami bantu tentukan jenis website yang paling pas untuk bisnis kamu, tanpa&nbsp;komitmen.
+            Kami bantu tentukan jenis website yang paling pas untuk bisnismu, tanpa&nbsp;komitmen.
           </p>
         </div>
       </Reveal>
       <div>
-        <Button href={waLink()} arrow>
+        <Button href={waLink()} whatsapp>
           Konsultasi Gratis
         </Button>
       </div>
@@ -81,8 +85,11 @@ function CtaCard() {
 
 function IncludedCard() {
   return (
-    <div className="flex h-full w-full flex-col items-center gap-6 rounded-2xl border border-grey-07 bg-grey-09 px-4 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between lg:px-8">
-      <h3 className="t-title-s w-full text-center text-grey-01 md:w-auto md:text-left">Sudah termasuk di setiap&nbsp;harga.</h3>
+    <div data-included="" className="flex h-full w-full flex-col items-center gap-6 rounded-2xl border border-grey-07 bg-grey-09 px-4 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between lg:px-8">
+      <div className="flex w-full flex-col gap-1 text-center md:w-auto md:text-left">
+        <h3 className="t-title-m text-grey-01">Sudah termasuk di setiap&nbsp;harga</h3>
+        <p className="t-body-m text-grey-03">Tanpa biaya tambahan, apa pun pilihan&nbsp;websitemu.</p>
+      </div>
       <div className="grid w-full grid-cols-2 gap-2 md:flex">
         {included.map((s) => (
           <div
@@ -111,7 +118,7 @@ export function Services() {
           number="003"
           name="layanan"
           title="Website untuk setiap kebutuhan bisnis"
-          body="Kamu yang tahu bisnismu. Kami yang mengurus desain, teknis, dan isinya."
+          body="Dari satu halaman promosi sampai sistem custom, pilih yang sesuai tujuan bisnismu."
         />
 
         <div className="flex w-full max-w-[400px] flex-col gap-2 md:max-w-none">
@@ -132,7 +139,14 @@ export function Services() {
             </div>
           </div>
 
+          {/* For businesses that already have a website */}
+          <Reveal y={50} amount={0.2} className="flex flex-col gap-5 pt-14 md:pt-20 lg:pt-24">
+            <h3 className={groupTitle}>{existingSite.title}</h3>
+            <ExistingSite previews={[<RedesignPreview key="redesign" />, <CarePreview key="care" />]} />
+          </Reveal>
+
           {/* Row 2: CTA + what every plan includes (that comes first below desktop) */}
+          <h3 className={`${groupTitle} mb-3 pt-14 md:pt-20 lg:pt-24`}>Yang selalu kamu dapat</h3>
           <div className="flex flex-col-reverse gap-2 lg:h-[420px] lg:flex-row">
             <Reveal y={50} delay={0.4} amount={0.2} className="lg:w-[40%] lg:shrink-0">
               <CtaCard />
