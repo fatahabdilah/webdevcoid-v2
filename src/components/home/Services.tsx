@@ -1,58 +1,15 @@
-import { existingSite, featuredService, included, services } from "@/content/home";
+import { existingSite, included } from "@/content/home";
 import { waLink } from "@/content/site";
 import { Button } from "../Button";
 import { CtaAvatar } from "../CtaAvatar";
-import { Check } from "../icons";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
 import { Lines } from "../Lines";
 import { IncludedIcon } from "./IncludedIcon";
 import { ExistingSite } from "./ExistingSite";
-import { CompanyProfileArt, CarePreview, LandingPageArt, MaintenanceArt, OnlineStoreArt, RedesignPreview, WebAppArt } from "./ServiceArt";
-import { bentoCard as card } from "./surfaces";
-import { noOrphan } from "@/lib/text";
+import { CarePreview, RedesignPreview } from "./ServiceArt";
+import { ServiceBento } from "./ServiceBento";
 
-
-function ServiceText({ title, text }: { title: string; text: string }) {
-  return (
-    <p className="t-body-m text-grey-01">
-      <strong className="font-semibold">{title}</strong> {text}
-    </p>
-  );
-}
-
-function FeaturedCard() {
-  return (
-    <div className={`${card} flex h-full w-full flex-col justify-between overflow-hidden p-10`}>
-      <div className="flex flex-col gap-3 pb-6">
-        <ServiceText title={featuredService.title} text={featuredService.text} />
-        <ul className="flex flex-col gap-1.5">
-          {featuredService.checks.map((c) => (
-            <li key={c} className="flex items-center gap-1 text-grey-03">
-              <Check width={16} height={16} />
-              <span className="t-body-s">{noOrphan(c)}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <CompanyProfileArt />
-    </div>
-  );
-}
-
-const arts = { landing: LandingPageArt, store: OnlineStoreArt, webapp: WebAppArt, maintenance: MaintenanceArt };
-
-function ServiceCard({ title, text, art }: (typeof services)[number]) {
-  const Art = arts[art];
-  return (
-    <div className={`${card} flex h-full w-full flex-col justify-between gap-10 overflow-hidden p-10`}>
-      <div className="pb-6">
-        <ServiceText title={title} text={text} />
-      </div>
-      <Art />
-    </div>
-  );
-}
 
 /** Titles of the groups below the bento (left from md, like the cards under them). */
 const groupTitle = "t-title-m md:t-title-l text-center text-grey-01 md:text-left";
@@ -122,22 +79,7 @@ export function Services() {
         />
 
         <div className="flex w-full max-w-[400px] flex-col gap-2 md:max-w-none">
-          {/* Row 1: featured card + 2×2 grid */}
-          <div className="flex flex-col gap-2 lg:h-[648px] lg:flex-row lg:gap-2.5">
-            <Reveal y={50} delay={0.2} amount={0.2} className="md:hidden lg:block lg:w-[40%] lg:shrink-0">
-              <FeaturedCard />
-            </Reveal>
-            <div className="flex flex-col gap-2 md:grid md:grid-cols-2 lg:flex-1 lg:grid-rows-2">
-              <Reveal y={50} amount={0.2} className="hidden md:row-span-2 md:block lg:hidden">
-                <FeaturedCard />
-              </Reveal>
-              {services.map((s, i) => (
-                <Reveal key={i} y={50} delay={[0.2, 0.3, 0.25, 0.35][i]} amount={0.2} className="lg:min-h-0">
-                  <ServiceCard {...s} />
-                </Reveal>
-              ))}
-            </div>
-          </div>
+          <ServiceBento />
 
           {/* For businesses that already have a website */}
           <Reveal y={50} amount={0.2} className="flex flex-col gap-5 pt-14 md:pt-20 lg:pt-24">

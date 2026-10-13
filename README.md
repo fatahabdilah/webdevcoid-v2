@@ -45,3 +45,13 @@ Breakpoints: phone below 800px, tablet (`md`) from 800px, desktop (`lg`) from 12
 ## Performance notes
 
 The WebGL effects only render while they are on screen. The headline particles stop once they have settled and wake on pointer movement; the button effect redraws at 30fps while nobody is hovering it; the pricing dots are created on first use and stop when switched off. The footer video downloads only near the viewport and pauses off screen. Anything new that animates continuously should pause off screen too.
+
+## Photo credits
+
+Photos in `public/images/stock/` are from Unsplash, free under the [Unsplash License](https://unsplash.com/license) (no attribution required; listed here for the record). None shows a brand.
+
+- `kaos.jpg` – [white t-shirt on a wooden hanger](https://unsplash.com/photos/a-plain-white-t-shirt-hangs-on-a-wooden-hanger-8ACmRoleM24), Avtar Singh
+- `klinik.jpg` – [dental room with a purple chair](https://unsplash.com/photos/a-dental-room-with-a-purple-chair-and-a-white-desk-0gI0IXURDgo)
+- `lilin.jpg` – [candle in a glass jar](https://unsplash.com/photos/a-candle-in-a-glass-jar-7JxP1pYYIUo)
+- `cangkir.jpg` – [white ceramic mug on a white surface](https://unsplash.com/photos/white-ceramic-mug-on-white-surface-oJ9CgpidOco)
+- `tanaman.jpg` – [plant in a white ceramic pot](https://unsplash.com/photos/green-plant-on-white-ceramic-pot-SVRKkENpalg)

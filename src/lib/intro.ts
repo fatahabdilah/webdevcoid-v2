@@ -44,3 +44,8 @@ export function subscribeIntro(fn: () => void) {
 export function useIntroEntered() {
   return useSyncExternalStore(subscribeIntro, isIntroEntered, () => false);
 }
+
+/** True once the intro has finished and its overlay is gone (always false during server rendering). */
+export function useIntroDone() {
+  return useSyncExternalStore(subscribeIntro, isIntroDone, () => false);
+}

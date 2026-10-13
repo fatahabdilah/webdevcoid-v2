@@ -523,12 +523,11 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
     revealed = true;
     cursorTl?.kill();
 
-    // Hand the cursor to the site cursor at the same spot (it continues as the circle and morphs back);
-    // without a custom cursor (touch, small screens) the scripted one just fades away.
+    // The scripted cursor fades away as the window opens; the site cursor appears once the intro is done,
+    // at this same spot (unless the mouse has moved by then).
     const handedOff = place !== null && matchMedia(CUSTOM_CURSOR_QUERY).matches;
     place = null;
-    if (handedOff) gsap.set(el.cursor, { autoAlpha: 0 });
-    else gsap.to(el.cursor, { autoAlpha: 0, duration: 0.35, delay: 0.15 });
+    gsap.to(el.cursor, { autoAlpha: 0, duration: 0.35, delay: 0.15 });
     cb.onEnter(handedOff ? { x: cursorState.x, y: cursorState.y } : null);
 
     // Freeze the logo exactly where it is and swap it for an identical window cut into the veil

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { contact, waLink } from "@/content/site";
 import { Instagram, LogoMark, LogoWordmark, Mail, WhatsApp } from "./icons";
@@ -32,47 +31,28 @@ function Contacts() {
   );
 }
 
-const links = [
-  { label: "Beranda", href: "/#top" },
-  { label: "Layanan", href: "/#services" },
-  { label: "Portfolio", href: "/#portfolio" },
-  { label: "Harga", href: "/#pricing" },
-  { label: "FAQ", href: "/#faq" },
-  { label: "Kontak", href: "/#contact" },
-];
-
 export function Footer() {
   return (
-    <div className="flex w-full flex-col gap-[112px] pb-6 md:pb-12 lg:pb-6">
-      <div className="flex w-full flex-col">
-        <div className="flex flex-col items-center border-b border-white-06 pb-16 md:pb-24">
-          <Reveal y={50}>
-            <Contacts />
-          </Reveal>
-        </div>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-6 pt-6 md:flex md:justify-between">
-          {links.map((l) => (
-            <Reveal key={l.label} y={50}>
-              {/* Taller than the text (pulled back with a negative margin) for an easier tap target */}
-              <Link href={l.href} className="t-body-m -my-2.5 inline-flex py-2.5 text-white transition-opacity hover:opacity-70">
-                {l.label}
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </div>
+    // The gap under the contacts matches the space above the closing line (from the last FAQ card)
+    <div className="flex w-full flex-col gap-42 pb-6 md:gap-46 md:pb-12 lg:gap-50 lg:pb-6">
+      <Reveal y={50}>
+        <Contacts />
+      </Reveal>
 
-      <div className="relative flex w-full flex-col gap-6 md:h-20 md:flex-row md:items-center md:justify-between md:gap-0">
+      {/* Sign-off: a hairline, then © · logo · tagline (stacked and centred on phones) */}
+      <div className="border-t border-white-06 pt-8 md:pt-10">
+        <div className="relative flex w-full flex-col items-center gap-3 text-center md:h-20 md:flex-row md:justify-between md:gap-0 md:text-left">
         {/* Official lockup proportions: wordmark is ~44% of the icon height, with a ~30% gap */}
-        <div className="flex h-20 items-center text-white md:absolute md:bottom-0 md:left-1/2 md:-translate-x-1/2">
-          {/* The fade spans icon and wordmark together, so the lockup reads as one mark */}
-          <div className="flex items-center gap-[17.16px] mask-[linear-gradient(180deg,#000_0%,rgba(0,0,0,0.4)_100%)]">
-            <LogoMark width={48} height={56} className="shrink-0" />
-            <LogoWordmark width={200.81} height={24.57} className="shrink-0" />
+          <div className="mb-2 flex h-20 items-center text-white md:absolute md:bottom-0 md:left-1/2 md:mb-0 md:-translate-x-1/2">
+            {/* The fade spans icon and wordmark together, so the lockup reads as one mark */}
+            <div className="flex items-center gap-[17.16px] mask-[linear-gradient(180deg,#000_0%,rgba(0,0,0,0.4)_100%)]">
+              <LogoMark width={48} height={56} className="shrink-0" />
+              <LogoWordmark width={200.81} height={24.57} className="shrink-0" />
+            </div>
           </div>
+          <p className="t-body-s text-white-03">© 2026 webdev.co.id</p>
+          <p className="t-body-s text-white-03">Studio web lokal, standar&nbsp;global.</p>
         </div>
-        <p className="t-body-s text-white-03">© 2026 webdev.co.id</p>
-        <p className="t-body-s text-white-03">Studio web lokal, standar&nbsp;global.</p>
       </div>
     </div>
   );
@@ -97,7 +77,9 @@ export function FooterSection({
 }) {
   return (
     <footer className={`relative isolate overflow-hidden bg-holo-25 px-5 md:px-10 lg:px-20 ${fadeClassName} ${className}`}>
-      <div aria-hidden className="absolute inset-0">
+      {/* Its own GPU layer: when the content above changes height (FAQ answers opening), the footer just
+          moves instead of re-rasterising the video, blend and masks every frame */}
+      <div aria-hidden className="absolute inset-0 will-change-transform">
         {/* Plain blue, the colour the tinted video would be if it were all white */}
         <div className={`absolute inset-0 ${tint}`} />
         {/* The greyscale video tinted in the same blues (multiply turns its whites blue and keeps its blacks),
@@ -115,8 +97,8 @@ export function FooterSection({
 
 /**
  * Footer at the bottom of the page. Its background is pulled up behind the FAQ section (negative
- * margin, matched by extra padding), so the blue rises into the FAQ. "Kontak" links to the
- * WhatsApp / Instagram row.
+ * margin, matched by extra padding), so the blue rises into the FAQ. #contact anchors the closing
+ * line and the contacts.
  */
 export function SiteFooter() {
   return (

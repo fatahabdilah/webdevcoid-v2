@@ -39,17 +39,18 @@ function FaqItem({ index, q, a, open, onToggle }: { index: number; q: string; a:
             </motion.span>
           </span>
         </button>
-        <motion.div
-          className="overflow-hidden"
-          initial={false}
-          animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
-          transition={tween}
+        {/* Answer: the grid row eases between 0fr and 1fr in CSS, so the browser animates the height
+            itself instead of JavaScript measuring and writing it every frame */}
+        <div
+          className={`grid transition-[grid-template-rows,opacity] duration-[400ms] ease-framer ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
         >
-          {/* Indented under the question from md; full width on phones */}
-          <div className="max-w-[640px] pt-3 md:pl-12">
-            <p className="t-body-m text-grey-01">{noOrphan(a)}</p>
+          <div className="min-h-0 overflow-hidden">
+            {/* Indented under the question from md; full width on phones */}
+            <div className="max-w-[640px] pt-3 md:pl-12">
+              <p className="t-body-m text-grey-01">{noOrphan(a)}</p>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

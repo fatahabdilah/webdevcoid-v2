@@ -31,36 +31,42 @@ export const values = [
   },
 ];
 
-export const featuredService = {
-  title: "Company Profile.",
-  text: "Website lengkap untuk bisnis yang mau tampil profesional dan kredibel.",
-  checks: ["Sampai 6 halaman custom", "Form WhatsApp + email", "SEO"],
+/**
+ * The service bentos, in grid order: 1 1 2 / 3 4 4 on desktop (row 1 the fixed-price plans, row 2 the
+ * custom work). Wide cards sit text-left, art-right.
+ */
+export type Service = {
+  title: string;
+  text: string;
+  /** Which live illustration (components/home/ServiceArt.tsx). */
+  art: "company" | "landing" | "store" | "webapp";
+  wide?: boolean;
 };
 
-/** `art` picks the vector illustration in components/home/ServiceArt.tsx. */
-
-export const services = [
+export const services: Service[] = [
   {
-    title: "Landing Page.",
-    text: "Satu halaman untuk promosi, produk, atau profil.",
+    title: "Company Profile",
+    text: "Tampil kredibel dan mudah ditemukan saat calon pelanggan mencari di Google.",
+    art: "company",
+    wide: true,
+  },
+  {
+    title: "Landing Page",
+    text: "Satu halaman promo yang fokus mengubah pengunjung jadi pembeli.",
     art: "landing",
   },
   {
-    title: "Toko Online.",
-    text: "Katalog rapi yang mudah dipesan langsung dari HP.",
-    art: "store",
-  },
-  {
-    title: "Web App.",
-    text: "Sistem, dashboard, atau fitur custom sesuai kebutuhan.",
+    title: "Web App",
+    text: "Dashboard dan sistem yang mengurus data serta pekerjaan rutin otomatis.",
     art: "webapp",
   },
   {
-    title: "Perawatan Website.",
-    text: "Kami perbarui, perbaiki, dan jaga tiap bulan.",
-    art: "maintenance",
+    title: "Toko Online",
+    text: "Pelanggan pilih produk, isi keranjang, lalu pesan langsung lewat WhatsApp.",
+    art: "store",
+    wide: true,
   },
-] as const;
+];
 
 /** "Butuhnya bukan website baru?": for businesses that already have a site. Each card opens WhatsApp. */
 export const existingSite = {

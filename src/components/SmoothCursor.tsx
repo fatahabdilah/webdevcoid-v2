@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useSpring, useTransform } from "motion/react";
-import { getIntroHandoff, useIntroEntered } from "@/lib/intro";
+import { getIntroHandoff, useIntroDone } from "@/lib/intro";
 import { CURSOR_SIZE as SIZE, CUSTOM_CURSOR_QUERY, VIEW_H, VIEW_W, cursorPath } from "@/lib/cursorShape";
 
 /** Clickable things morph the arrow into a circle; text fields hand over to the system I-beam. */
@@ -15,7 +15,7 @@ const cursorCss = `*, *::before, *::after { cursor: none !important; }
  * Spring-following arrow cursor that turns to face the direction of travel (Framer "Smooth Cursor").
  * Over links and buttons it morphs into a circle; over text fields the system I-beam takes over.
  * Only on devices with a precise hovering pointer and at least 768px wide; reduced motion keeps the system cursor.
- * Hidden while the intro runs; when it opens, it takes over from the intro's scripted cursor at the same spot.
+ * Hidden until the intro has finished; then it appears where the intro's scripted cursor stopped.
  */
 export function SmoothCursor() {
   const [enabled, setEnabled] = useState(false);
@@ -28,12 +28,15 @@ export function SmoothCursor() {
   const d = useTransform(morph, cursorPath);
   /** 0 over text fields, where the system I-beam shows instead */
   const visible = useSpring(1, { stiffness: 500, damping: 40 });
-  /** 0 until the intro has opened onto the page */
-  const entered = useIntroEntered();
+  /** 0 until the intro has finished */
+  const introDone = useIntroDone();
   const shown = useSpring(0, { stiffness: 500, damping: 40 });
-  const opacity = useTransform(() => visible.get() * shown.get());
+  /** 0 while the mouse is outside the browser window */
+  const inside = useSpring(1, { stiffness: 500, damping: 40 });
+  const opacity = useTransform(() => visible.get() * shown.get() * inside.get());
 
   const last = useRef({ x: 0, y: 0, t: 0 });
+  const away = useRef(false);
   const angle = useRef({ previous: 0, accumulated: 0 });
   const pressed = useRef(false);
 
@@ -52,6 +55,15 @@ export function SmoothCursor() {
     let settle: ReturnType<typeof setTimeout> | undefined;
 
     const move = (px: number, py: number) => {
+      if (away.current) {
+        // Back in the window: appear right here instead of gliding over from where the mouse left
+        away.current = false;
+        x.jump(px);
+        y.jump(py);
+        last.current = { x: px, y: py, t: performance.now() };
+        inside.set(1);
+        return;
+      }
       const now = performance.now();
       const dt = now - last.current.t;
       const vx = dt > 0 ? (px - last.current.x) / dt : 0;
@@ -103,39 +115,41 @@ export function SmoothCursor() {
       pressed.current = false;
       scale.set(1);
     };
+    // Mouse left the browser window: fade the cursor out (and drop any press)
+    const onLeave = () => {
+      onUp();
+      away.current = true;
+      inside.set(0);
+    };
 
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerover", onOver, { passive: true });
     window.addEventListener("pointerdown", onDown);
     window.addEventListener("pointerup", onUp);
-    document.documentElement.addEventListener("mouseleave", onUp);
+    document.documentElement.addEventListener("mouseleave", onLeave);
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerover", onOver);
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
-      document.documentElement.removeEventListener("mouseleave", onUp);
+      document.documentElement.removeEventListener("mouseleave", onLeave);
       cancelAnimationFrame(frame);
       clearTimeout(settle);
     };
-  }, [enabled, x, y, rotate, scale, morph, visible]);
+  }, [enabled, x, y, rotate, scale, morph, visible, inside]);
 
-  // Take over from the intro's scripted cursor: same spot, still the circle, then morph back to the arrow.
-  // If the mouse has already moved, the real position wins.
+  // Appear once the intro (loading) has finished: where the intro's scripted cursor stopped if the mouse
+  // hasn't moved, otherwise at the mouse.
   useEffect(() => {
-    if (!enabled || !entered) return;
+    if (!enabled || !introDone) return;
     const handoff = getIntroHandoff();
     if (handoff && last.current.t === 0) {
       x.jump(handoff.x);
       y.jump(handoff.y);
       rotate.jump(0);
-      morph.jump(1);
-      morph.set(0);
-      shown.jump(1);
-    } else {
-      shown.set(1);
     }
-  }, [enabled, entered, x, y, rotate, morph, shown]);
+    shown.set(1);
+  }, [enabled, introDone, x, y, rotate, shown]);
 
   if (!enabled) return null;
 
