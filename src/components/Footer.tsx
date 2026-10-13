@@ -33,8 +33,7 @@ function Contacts() {
 
 export function Footer() {
   return (
-    // The gap under the contacts matches the space above the closing line (from the last FAQ card)
-    <div className="flex w-full flex-col gap-42 pb-6 md:gap-46 md:pb-12 lg:gap-50 lg:pb-6">
+    <div className="flex w-full flex-col gap-28 pb-6 md:gap-32 md:pb-12 lg:gap-36 lg:pb-6">
       <Reveal y={50}>
         <Contacts />
       </Reveal>
@@ -103,7 +102,7 @@ export function FooterSection({
 export function SiteFooter() {
   return (
     <FooterSection className="-mt-110 md:-mt-130 lg:-mt-170" fadeClassName="[--fade:300px] md:[--fade:380px] lg:[--fade:520px]">
-      <div className="pt-140 md:pt-160 lg:pt-200">
+      <div className="pt-156 md:pt-176 lg:pt-216">
         <div id="contact" className="scroll-mt-24">
           {/* Closing call to action, right above the contacts */}
           <Reveal y={40} className="mb-4 flex justify-center text-center md:mb-5">

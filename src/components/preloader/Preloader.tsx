@@ -40,7 +40,6 @@ export function Preloader() {
         vignette: q<HTMLElement>("vignette"),
         cursor: q<HTMLElement>("cursor"),
         cursorShape: q<SVGPathElement>("cursor-shape"),
-        rings: [...root.querySelectorAll<HTMLElement>('[data-intro="ring"]')],
       },
       {
         onEnter: markIntroEntered,
@@ -79,8 +78,6 @@ export function Preloader() {
             </g>
           </svg>
         </div>
-        <div className="intro-ring" data-intro="ring" />
-        <div className="intro-ring" data-intro="ring" />
         {/* Scripted cursor, drawn like the site cursor (arrow ↔ circle morph) */}
         <div className="intro-cursor" data-intro="cursor">
           <svg viewBox="0 0 50 54" fill="none" xmlns="http://www.w3.org/2000/svg">

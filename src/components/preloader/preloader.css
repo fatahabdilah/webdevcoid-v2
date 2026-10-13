@@ -80,18 +80,6 @@ html:has(.intro-root:not([data-revealing])) [data-intro-zoom] {
   height: 100%;
   overflow: visible;
 }
-.intro-ring {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 56px;
-  height: 56px;
-  margin: -28px 0 0 -28px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
-  pointer-events: none;
-  opacity: 0;
-}
 
 /* Film grain over everything while the intro runs */
 .intro-grain {

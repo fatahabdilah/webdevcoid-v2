@@ -24,7 +24,6 @@ export type IntroElements = {
   cover: HTMLElement;
   cursor: HTMLElement;
   cursorShape: SVGPathElement;
-  rings: HTMLElement[];
 };
 
 export type IntroCallbacks = {
@@ -41,7 +40,7 @@ const CFG = {
 };
 
 /** Size of the finished logo (wide framing) relative to the stage; the write-on close-ups are unaffected. */
-const WIDE_SCALE = 0.86;
+const WIDE_SCALE = 0.7;
 
 const NS = "http://www.w3.org/2000/svg";
 const lerp = (x: number, y: number, t: number) => x + (y - x) * t;
@@ -444,7 +443,7 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
   // ================================================================ SCRIPTED CURSOR
   // Same look and feel as the site cursor: black arrow with a white rim that turns to face its direction of
   // travel and squishes a touch while moving; over the logo (a clickable thing) it morphs into the circle,
-  // presses down to 70% and springs back, with a double ripple.
+  // presses down to 70% and springs back.
   const cursorState = { x: 0, y: 0, heading: 0 };
   function cursorPhase() {
     if (revealed) return;
@@ -502,19 +501,8 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
       .to(CAM, { hv: 0.03, duration: 0.55, ease: "power2.out" }, arrive) // the logo leans in
       .to(C, { press: 0.7, duration: 0.1, ease: "power2.in" }, arrive + 0.6) // press, like the real cursor
       .to(CAM, { hv: 0.014, duration: 0.12, ease: "power2.in" }, "<")
-      .call(() => ripple())
       .to(C, { press: 1, duration: 0.55, ease: "elastic.out(1, 0.5)" }) // release with a little spring
       .call(() => reveal(), undefined, "-=0.45");
-  }
-  function ripple() {
-    el.rings.forEach((ring, i) => {
-      gsap.set(ring, { x: cursorState.x, y: cursorState.y });
-      gsap.fromTo(
-        ring,
-        { scale: 0.3, opacity: i ? 0.4 : 0.75 },
-        { scale: i ? 2.1 : 1.45, opacity: 0, duration: i ? 0.95 : 0.7, delay: i * 0.08, ease: "power2.out" },
-      );
-    });
   }
 
   // ================================================================ REVEAL: zoom through the logo
@@ -610,7 +598,7 @@ export function runIntro(el: IntroElements, cb: IntroCallbacks): () => void {
     tl.kill();
     cursorTl?.kill();
     revealTl?.kill();
-    gsap.killTweensOf([Dither.st, CAM, el.cursor, el.cover, el.vignette, el.solid, el.stage, ...el.rings]);
+    gsap.killTweensOf([Dither.st, CAM, el.cursor, el.cover, el.vignette, el.solid, el.stage]);
     clearZoom();
     place = null;
     el.defs.innerHTML = "";
