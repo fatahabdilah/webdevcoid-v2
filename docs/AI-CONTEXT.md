@@ -210,9 +210,11 @@ See `social/README.md` for how to open and re-render.
 
 ### Promo film (`social/promo/`)
 
-- **Format:** landscape 1920×1080, 10 s, 30 fps.
+- **Format:** landscape 1920×1080, 30 fps. The page runs 10 s (all times below are page times); the video is rendered slower, **13.1 s**, because the owner found parts too fast to read. The warp is `0-5.3:1.25,5.3-5.83:2.4,5.83-10:1.25`: 1.25× everywhere, and 2.4× while the customer's last message is up in scene 3 (it was on screen too briefly; it also lands earlier now, `LINE2 = 4.9`), so it shows for about 1.4 s. `tools/slowshot.mjs` renders the frames on that warp and `tools/stretch.swift` slows the reference audio on the same warp with the pitch kept, so the beats still land on the cuts.
 - **Model:** a ClickUp ad. The owner wants it **"sama persis"**: the same moves, nothing extra.
+- **Copy ("alur 4", chosen 2026-10-14 from four question-led flows):** competitor question → what the competitor has → "Tokomu belum kelihatan." → search "jasa bikin website bisnis" → logo. The previous "ribet" version's template is kept as `promo.tpl.ribet.html` in the session scratchpad only.
 - **How the motion is matched:** every camera move is measured off the reference frame by frame, then fed through monotone curves. Check it side by side with the reference at the same timestamps before rendering.
+- **Smooth curves:** scene 1's moves are smooth easing curves that follow the measured shape. Interpolating every measured point made the text shake, because the measurements carry blur noise.
 - **What was measured:**
   - **Scene 1:**
     - before the cut, the line drifts right/up;
@@ -232,16 +234,16 @@ See `social/README.md` for how to open and re-render.
     - the planet rises (8.0–8.7 s) and the light climbs (to about 8.93 s);
     - the name clears from grey to white by 9.0 s, then everything holds.
 - **Scenes:**
-  1. "Jualan kamu masih **ribet**" focuses in word by word (about the length of "Work today is broken"). An editor-style selection grows out of "ribet".
-  2. Glowing tube rings with **generic** app-style icons (no brand logos) around "Harga, katalog, lokasi / tercecer di mana-mana".
-  3. "Pelanggan keburu…… / pindah toko." between **two wheels of customer messages** that keep rolling in, built with componentry.fun motion (its catalogue is at https://componentry.dev/r/registry.json, and each item is at https://componentry.dev/r/<name>.json, copyable code):
+  1. "Kenapa pembeli pilih **kompetitor**?" focuses in word by word; the copy opens with a question (the owner rejected "Jualan kamu masih ribet"). An editor-style selection grows out of "kompetitor". The line is 82 px so the longer question fits, and the punch-in is capped so the long word isn't cut off on the left.
+  2. Glowing tube rings with **generic** app-style icons (no brand logos) around "Tokonya rapi, infonya lengkap, / gampang dipercaya" (what the competitor has).
+  3. "Tokomu belum kelihatan." (72 px) between **two wheels of customer messages** asking trust questions ("Ini toko resmi?", "Ada website-nya?", "Kok ga ada di Google?") that keep rolling in, built with componentry.fun motion (its catalogue is at https://componentry.dev/r/registry.json, and each item is at https://componentry.dev/r/<name>.json, copyable code):
      - wheel-carousel: each message rides an arc (x = R(1 − cos θ), y = R sin θ), tilted by θ, fading by cos, shrinking with distance;
      - spiral-3d-slider's distance blur;
-     - letter-cascade for "pindah toko.";
+     - letter-cascade for "kelihatan.";
      - a soft breathing gradient behind (grain-gradient).
-     When the line lands, the wheels fade and the customer's last message, "Ga jadi deh kak, beli di tempat lain aja 🙏", lands sharp under the words.
+     When the line lands, the wheels fade and the customer's last message, "Aku beli di toko yang ada websitenya aja kak", lands sharp under the words.
      - The owner rejected hand-drawn strokes or circles on the words; they wanted the message visuals improved.
-  4. A very soft torus of light that is **almost still**: a few degrees of lean, a small drift, slow streaks. The owner found the reference's flips, and even a softened version, too harsh. It is a heavily blurred conic gradient with the blur on a wrapper outside the mask, plus a second copy set back in depth for the double edge). An Apple-style frosted-glass search bar (backdrop blur, bright rim, top sheen) types "jasa bikin website toko", like a real search; the next shot (the logo) is the answer.
+  4. A very soft torus of light that is **almost still**: a few degrees of lean, a small drift, slow streaks. The owner found the reference's flips, and even a softened version, too harsh. It is a heavily blurred conic gradient with the blur on a wrapper outside the mask, plus a second copy set back in depth for the double edge). An Apple-style frosted-glass search bar (backdrop blur, bright rim, top sheen) types "jasa bikin website bisnis", like a real search; the next shot (the logo) is the answer.
   5. The white lockup over a rising blue planet. The light is a curved bell (wide at the horizon, curving in to a column that fades upwards) with a brighter core, as in the reference.
      - The ending isn't static (the owner asked for moving light): from about 8.6 s the light breathes (the column swells and narrows a touch, the core pulses) and thin shafts drift inside it.
      - A glint (blue bloom, white core, thin flare) glides once along the horizon from left to right and fades by the end.

@@ -159,7 +159,7 @@ export const plans: Plan[] = [
     icon: "page",
     tagline: "Satu halaman fokus untuk promosi, produk, atau profil singkat.",
     from: false,
-    price: "1.490",
+    price: "2.990",
     features: [
       { label: "1 halaman desain custom", included: true },
       { label: "Responsif semua perangkat", included: true },
@@ -179,7 +179,7 @@ export const plans: Plan[] = [
     icon: "building",
     tagline: "Website lengkap untuk bisnis yang mau tampil profesional dan kredibel.",
     from: false,
-    price: "2.990",
+    price: "8.990",
     features: [
       { label: "Sampai 6 halaman custom", included: true },
       { label: "Responsif semua perangkat", included: true },
