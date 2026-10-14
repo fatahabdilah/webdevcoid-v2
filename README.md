@@ -38,7 +38,7 @@ The site is one page: `src/app/(site)/page.tsx`, with the fixed navbar and the f
 - `src/app/` – favicon, app icons, Open Graph image, `robots.ts` and `sitemap.ts`.
 - `public/images/`, `public/videos/` – images and the footer video.
 
-Brand colours: `#000000`, `#012685`, `#0450F0`, `#56A1F7`, `#FFFFFF` (the `--color-holo-*` tokens in `globals.css`, and `src/lib/brand.ts` for canvas and WebGL code).
+Brand colours: `#000000`, `#011F6C`, `#0346D6`, `#236EF3`, `#FFFFFF` (the `--color-holo-*` tokens in `globals.css`, and `src/lib/brand.ts` for canvas and WebGL code).
 
 Breakpoints: phone below 800px, tablet (`md`) from 800px, desktop (`lg`) from 1200px.
 
