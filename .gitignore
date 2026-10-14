@@ -45,6 +45,9 @@ next-env.d.ts
 /*.mp4
 /*.html
 
+# social media content (story, reel, their videos and render tools), kept local
+/social/
+
 # AI agent skills (local tooling, not part of the site)
 /.agents/
 /.claude/
