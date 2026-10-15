@@ -159,7 +159,7 @@ export const plans: Plan[] = [
     icon: "page",
     tagline: "Satu halaman fokus untuk promosi, produk, atau profil singkat.",
     from: false,
-    price: "2.990",
+    price: "1.990",
     features: [
       { label: "1 halaman desain custom", included: true },
       { label: "Responsif semua perangkat", included: true },
@@ -171,7 +171,7 @@ export const plans: Plan[] = [
       { label: "Admin panel / CMS", included: false },
     ],
     cta: "Mulai Sekarang",
-    renewal: "Perpanjangan domain & hosting: Rp750.000/tahun mulai tahun ke-2",
+    renewal: "Perpanjangan domain & hosting: Rp900.000/tahun mulai tahun ke-2",
     featured: false,
   },
   {
@@ -179,7 +179,7 @@ export const plans: Plan[] = [
     icon: "building",
     tagline: "Website lengkap untuk bisnis yang mau tampil profesional dan kredibel.",
     from: false,
-    price: "8.990",
+    price: "3.990",
     features: [
       { label: "Sampai 6 halaman custom", included: true },
       { label: "Responsif semua perangkat", included: true },
@@ -191,7 +191,7 @@ export const plans: Plan[] = [
       { label: "Admin panel / CMS", included: false },
     ],
     cta: "Mulai Sekarang",
-    renewal: "Perpanjangan domain & hosting: Rp1.500.000/tahun mulai tahun ke-2",
+    renewal: "Perpanjangan domain & hosting: Rp1.800.000/tahun mulai tahun ke-2",
     featured: true,
   },
   {
