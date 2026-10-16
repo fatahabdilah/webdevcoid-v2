@@ -9,7 +9,7 @@ Last updated: 2026-10-14.
 ## 1. The project
 
 - **What:** the marketing site for **webdev.co.id**, a website studio in Indonesia that builds company profiles, landing pages, online stores and custom web apps. It has a single page plus a 404 page.
-- **Stack:** Next.js 16.4 (App Router, Turbopack, `cacheComponents`), React 19.3, Tailwind CSS v4, `motion` (Motion for React), `lenis` (smooth scroll), `gsap` (preloader only), TypeScript.
+- **Stack:** Next.js 16.4 (App Router, Turbopack, `cacheComponents`), React 19.3, Tailwind CSS v4, `motion` (Motion for React), `lenis` (smooth scroll) TypeScript.
 - **Repo:** `git@github.com:fatahabdilah/webdevcoid-v2.git`, branch `main`. **The repo is public.**
 - **Language:** all site copy is Indonesian. The owner writes to you in casual Indonesian, often with typos. Reply in Indonesian.
 
@@ -33,7 +33,7 @@ Last updated: 2026-10-14.
 - **Root stays clean.** Only config files belong at the root. Put new working files somewhere sensible (e.g. `social/`). Don't use `public/`, since everything in it ships with the site and lands in the public repo.
 - **Check changes visually** with headless Chrome screenshots (desktop 1440, tablet ~1024, phone 390), and check mobile for every UI change. Run `npx tsc --noEmit -p .`, `npx eslint src`, and `npx next build` before saying something works.
 - **Dev server port varies.** Other local projects often hold ports 3000/3001, and webdev has run on 3002. Find the right one with `lsof -nP -iTCP -sTCP:LISTEN` plus each page's `<title>`.
-- **Stale CSS:** the dev server sometimes serves old CSS. A trivial comment edit in `globals.css` forces a rebuild. Some file-convention changes (e.g. a new `icon.svg`) need a dev server restart.
+- **Stale CSS:** the dev server sometimes serves old CSS. A trivial comment edit in `globals.css` forces a rebuild. Some file-convention changes (e.g. a new `icon.svg`) need a dev server restart. New rules added to `globals.css` were once not served at all, even after a touch; give a section's own CSS a co-located file imported by its component instead (e.g. `values-system.css`), and verify behaviour on a production build (`next build && next start -p 3005`).
 
 ---
 
@@ -97,12 +97,26 @@ The palette, from 2026-10-11 on:
 
 All copy lives in `src/content/` (`home.ts`, `portfolio.ts`, `site.ts`). Section order is Hero, About, Values, Services, Process, Portfolio, Pricing, FAQ, then the footer/contact.
 
-### Intro / preloader (`src/components/preloader/`)
+### Loader (`src/components/preloader/`)
 
-- **Sequence:** the logo writes on over a dither field. A scripted cursor then clicks the logo (a press only, no ring effect). The logo becomes a window, and the page zooms through it.
-- **Zoom implementation:** the zoom uses Web Animations on `[data-intro-zoom]` (the hero). It is pre-promoted in CSS via `html:has(.intro-root) [data-intro-zoom]`, which avoids hydration mismatches. Never set inline styles on the hero during the intro.
-- **Logo size:** the finished logo framing is `WIDE_SCALE = 0.7` in `runIntro.ts` (made smaller on request).
-- **Intro phases:** `src/lib/intro.ts` provides `introPhase()`, `markIntroDone()` and `useIntroDone()`.
+- **Since 2026-10-16** a simple, fast loader (the owner asked for "lebih simple dan/atau cepat"), about **1.4 s**: on black, the webdev mark builds itself (its three bars grow up one after another, then the bracket closes in from the left); at 0.8 s the camera **zooms through it** (0.6 s): the mark rushes towards us (to 22×) as the black fades, and the hero zooms out from 1.12 to 1 behind it. The owner wants a zoom here, **not** a slide ("ngezoom jangan naik").
+- **Tried and replaced:** a plain fade (the mark focusing in over a filling line, then the veil fading out), archived in `social/archive/loader-v2-simple-fade/`; then the same build-up with the black lifting like a curtain (rejected: zoom, don't slide up).
+- **How it runs:** all CSS (`preloader.css`), so it plays from the first paint even before hydration. `Preloader.tsx` only follows the veil's CSS animation (`getAnimations()`) to call `markIntroEntered()` when it starts to lift and `markIntroDone()` when it's gone. Skipped with reduced motion.
+- **Intro state** (`src/lib/intro.ts`): `introPhase()`, `useIntroEntered()`, `useIntroDone()` are unchanged; the navbar, cursor, smooth scroll, entrance animations and the animated backgrounds still wait on them. `[data-intro-zoom]` on the hero is what settles.
+- **The old intro** (logo write-on over a dither field, a scripted cursor click, a zoom out through the logo) is archived in `social/archive/intro-v1/` with a README on how to restore it (`git checkout 760477c -- src/components/preloader src/lib/intro.ts`). `tsconfig.json` excludes `social/` so the archive isn't type-checked.
+
+### Kenapa kami (`Values.tsx` → `ValuesSystem.tsx`)
+
+Figma 1373:2051, adapted. Dark section (`#101010`).
+- **Left:** SubTitle "002 kenapa kami", the gradient h2 "Kenapa webdev.co.id?", the "Lihat cara kerja" outline link to `/#process`. The owner removed the supporting paragraph under the heading. Below it the three values (`values` in `home.ts`, each with `short` and three `keywords`) as an accordion.
+- **Accordion:** CSS only (`grid-template-rows` 0fr → 1fr, 0.5 s, the same ease both ways). Each body holds all three texts stacked (the others invisible), so every body is as tall as the longest text; with one opening as the other closes, the list keeps one height and the page below never moves (the owner noticed the whole page bobbing with the earlier motion/spring version).
+- **Auto-play:** the open value's loading line (`.vs-progress`, a CSS scaleX animation, 5.2 s) fills; its `animationend` opens the next one, 1 → 2 → 3 → 1 forever. A click picks one. Off screen the whole section gets `.vs-paused` (all animations paused, SMIL too via `pauseAnimations()`); with reduced motion nothing loops.
+- **Right:** a card with layered brand gradients (navy centre, a drifting blurred conic band, a bright top-right corner, a blue pool below, dots and grain). In it the diagram: the webdev emblem at the centre, the three value nodes on a ring, arcs orbiting, light running along spokes and curves, the open value's node lit (ping + gradient fill), its keywords as pills round the emblem, and its number + short name in a caption under the ring. (Per-node labels beside the nodes were dropped: they got cut off at narrow widths.)
+- CSS lives in `src/components/home/values-system.css`, not `globals.css`.
+
+### Emblem (`src/components/Emblem.tsx`)
+
+The webdev emblem from the Brand Hub (Figma 1244:242 / 1241:2 "Mockup / Emblem Ring"), drawn entirely in code, no images: the outer hairline ring and the holo ring are CSS conic gradients (colours sampled from the design's ring renders) masked to annuli; the disc is a black → grey linear gradient; the mark is the design's vector split into its four parts, each with its own chrome gradient (dark band, brand-blue fringe, white highlights), a soft dark inner edge, a fine light bevel, and a sheen that sweeps over it every 7 s (`emblem.css`). The chrome uses brand blues instead of the orange/yellow fringes of Figma's shader. History: the live Figma shader (WebGPU + experimental HTML-in-Canvas) only showed a plain white mark in most browsers; an exported render on white left white bits at the edges, so the owner asked for it in code.
 
 ### Services (`Services.tsx` → `ServiceBento.tsx` + `ServiceArt.tsx`)
 
@@ -128,6 +142,14 @@ Each illustration plays a short story:
 
 Stories pause off screen (`useStory` uses an IntersectionObserver).
 
+### Cara kerja (`Process.tsx`)
+
+- **Since 2026-10-16** it follows the owner's Figma frame (Brand Hub, node 1175:3827, a "verification layer" section), adapted to webdev, on a **white** background (it used to be a dark scroll-lit timeline).
+- **The card:** four stages as a flow, each a small frosted-glass illustration joined by dashed lines, numbered I–IV with a white label: Konsultasi (WhatsApp, struktur, jenis website ticked off), Desain custom (rings round a pen chip), Preview & revisi (three tilted notes), Website tayang ("Online · namabisnismu.com"). On desktop the card is white at the top and melts into the brand blues behind the labels (a wide blurred gradient, as in the design); on tablets it's a 2 × 2 grid and on phones a column, both on a fully blue card so the white labels stay readable (label contrast measured about 5.3:1 on desktop).
+- **Keep it like the Figma.** An animated version with new graphics (a chat, a browser filling in, a phone preview, an address bar typing) was tried and rejected by the owner ("back, buat kaya yang di figma"); only the reveal-on-scroll remains.
+- **The grid under it** spells each stage out (bold lead + grey text). Copy: `stages` in `src/content/home.ts` (it replaced the five `steps`).
+- The reference's third-party logos (TikTok, Instagram, YouTube) and its serif numerals were not carried over: webdev icons and Geist instead.
+
 ### "Butuhnya bukan website baru?" (`ExistingSite.tsx`)
 
 Two WhatsApp cards; one tilted preview screen is up at a time (hover hands it over). After them come "Yang selalu kamu dapat", the CTA card and the included-features card.
@@ -139,6 +161,13 @@ Two WhatsApp cards; one tilted preview screen is up at a time (hover hands it ov
 ### Performance
 
 Everything that animates continuously must pause off screen.
+
+Optimised on 2026-10-16 (Lighthouse, production build, local): mobile performance 64 → about 88 (median of five runs; TBT 750 → ~220 ms, LCP 4.4 → ~3.1 s, DOM 2,040 → 1,366 elements, CLS 0), desktop 99 (LCP 0.7 s); accessibility, best practices and SEO 100. What did it, so keep it that way:
+- **Decorative SVG illustrations mount near the screen, not at load:** the four service bento arts (`LazyArt` in `ServiceBento.tsx`, an empty box of the art's exact aspect ratio until 600 px away) and the two "Butuhnya bukan website baru?" preview screens (`ExistingSite.tsx`). They were about half the page's DOM, and their layout and hydration dominated the load.
+- **Scroll reveals don't listen to the intro:** `Reveal`/`Words` subscribe to the intro state only when `onMount` (`useIntroEnteredIf`), so they don't all re-render when the loader opens.
+- **The hero's ASCII field runs at 30 fps** unless the pointer's ripple is live.
+- **`gsap` was removed** (only the archived intro used it).
+- The WebGL pieces (ASCII field, liquid metal buttons, particle text) were already lean: off-screen pauses, capped pixel ratios, sleeping when settled. The remaining long task is React hydrating the rest of the page; LCP is the hero heading, which waits for the loader by design.
 
 ---
 
@@ -210,7 +239,13 @@ See `social/README.md` for how to open and re-render.
 
 ### Promo film (`social/promo/`)
 
-- **Format:** landscape 1920×1080, 30 fps. The page runs 10 s (all times below are page times); the video is rendered slower, **13.1 s**, because the owner found parts too fast to read. The warp is `0-5.3:1.25,5.3-5.83:2.4,5.83-10:1.25`: 1.25× everywhere, and 2.4× while the customer's last message is up in scene 3 (it was on screen too briefly; it also lands earlier now, `LINE2 = 4.9`), so it shows for about 1.4 s. `tools/slowshot.mjs` renders the frames on that warp and `tools/stretch.swift` slows the reference audio on the same warp with the pitch kept, so the beats still land on the cuts.
+- **Format:** landscape 1920×1080, 30 fps. The page runs 10 s (all times below are page times); the video is re-paced to **13.2 s**, because the owner found parts too fast to read (and asked to also speed up what could be faster). The warp, in page time, is `0-0.3:1.25,0.3-0.7:3,0.7-0.8:1.25,0.8-1.83:1,1.83-4.1:1.1,4.1-5.3:1.25,5.3-5.83:2.4,5.83-5.93:1.25,5.93-6.36:1,6.36-8:1.3,8-10:1.25`:
+  - 0.3–0.7 at 3×: the opening question holds still and whole for about 1.2 s (its words now land at 0.03/0.14/0.25/0.36 and the line only speeds off from 0.66);
+  - 0.8–1.83 at 1×: the punch-in on "kompetitor?" was held too long;
+  - the rings at 1.1×; the empty ring before the search bar (5.93–6.36) at 1×, the typing at 1.3×;
+  - 5.3–5.83 at 2.4×: the customer's last message (which also lands earlier, `LINE2 = 4.9`) shows for about 1.4 s;
+  - everything else at 1.25×.
+  `tools/slowshot.mjs` renders the frames on that warp and `tools/stretch.swift` slows the reference audio on the same warp with the pitch kept, so the beats still land on the cuts (checked with `analyze.swift`).
 - **Model:** a ClickUp ad. The owner wants it **"sama persis"**: the same moves, nothing extra.
 - **Copy ("alur 4", chosen 2026-10-14 from four question-led flows):** competitor question → what the competitor has → "Tokomu belum kelihatan." → search "jasa bikin website bisnis" → logo. The previous "ribet" version's template is kept as `promo.tpl.ribet.html` in the session scratchpad only.
 - **How the motion is matched:** every camera move is measured off the reference frame by frame, then fed through monotone curves. Check it side by side with the reference at the same timestamps before rendering.
@@ -235,7 +270,7 @@ See `social/README.md` for how to open and re-render.
     - the name clears from grey to white by 9.0 s, then everything holds.
 - **Scenes:**
   1. "Kenapa pembeli pilih **kompetitor**?" focuses in word by word; the copy opens with a question (the owner rejected "Jualan kamu masih ribet"). An editor-style selection grows out of "kompetitor". The line is 82 px so the longer question fits, and the punch-in is capped so the long word isn't cut off on the left.
-  2. Glowing tube rings with **generic** app-style icons (no brand logos) around "Tokonya rapi, infonya lengkap, / gampang dipercaya" (what the competitor has).
+  2. Glowing tube rings with **generic** app-style icons (no brand logos) around "Tokonya rapi, infonya lengkap, / gampang dipercaya" (what the competitor has; 22/33 px). No icons ride the inner ring, which frames the words; icons there ran over them.
   3. "Tokomu belum kelihatan." (72 px) between **two wheels of customer messages** asking trust questions ("Ini toko resmi?", "Ada website-nya?", "Kok ga ada di Google?") that keep rolling in, built with componentry.fun motion (its catalogue is at https://componentry.dev/r/registry.json, and each item is at https://componentry.dev/r/<name>.json, copyable code):
      - wheel-carousel: each message rides an arc (x = R(1 − cos θ), y = R sin θ), tilted by θ, fading by cos, shrinking with distance;
      - spiral-3d-slider's distance blur;
@@ -250,6 +285,8 @@ See `social/README.md` for how to open and re-render.
 - **Files:**
   - `webdev-promo.mp4` has no audio.
   - `webdev-promo-sound.mp4` carries the reference audio, for preview only.
+  - `webdev-promo-music.mp4` is the version to post: the reference audio up to the punch-in on "kompetitor?", then **"Far Beyond" by Ikoliks** (the owner's mp3, in Downloads) from 49.72 s, placed at 2.686 s so its biggest drop (57.72 s, 120 BPM) lands on the logo cut (10.69 s); the song's breakdown falls on the search bar, and the cuts to scenes 3 and 4 land on its beats. Built with `tools/splice.swift` (music gain 0.55: the song is far denser than the reference, RMS 0.31 vs 0.09), then AAC and `mux.swift`.
+  - The owner then asked for something with a "dek-jetak" tick. Three trap beats by Arulo from **Mixkit** (Mixkit Stock Music Free License: free for commercial and social use, no attribution) were picked by measuring tick regularity and hi-hat content, each spliced the same way with its drop on the logo cut: `webdev-promo-trapanomics.mp4` ("Trapanomics", 80 BPM, from 13.00 s, drop 21.00), `webdev-promo-wakafloka.mp4` ("Waka Floka Type", 130 BPM, from 49.00 s: quiet over the rings, the beat comes in on the cut to scene 3, drop 57.00), `webdev-promo-complicated.mp4` ("Complicated", from 16.25 s: a low build, then the drop at 24.25). Pixabay was tried first but its pages sit behind a bot check, so nothing was downloaded from there.
 - **CSS gotchas:**
   - Load every Geist weight explicitly before measuring text. A hidden scene's font isn't fetched until it shows.
   - Put blur filters on a wrapper outside any CSS mask; the mask cuts the blur back.
@@ -293,6 +330,20 @@ See `social/README.md` for how to open and re-render.
   - Sound design on every cut.
   - The music ducks under the voice.
 - **Caveat:** edge-tts uses Microsoft's online voice unofficially. It's free with no key, but there is a small terms risk for paid ads.
+
+### Reel 3 (`social/reel3/`)
+
+- **Brief:** "make one interesting piece" in the look the owner picked (see the video-style notes: dark navy, soft blue light, one focal point, type focusing in from blur, one light-blue accent word). Motion ideas learned from the TWS ad (punch words, a glass card rising in 3D, a closing line under light), not copied from it.
+- **Format:** vertical 1080×1920 (Reels), 14.4 s, 30 fps. Cuts sit on the beat grid of **"Infinity" by Arulo (Mixkit, free licence)**, 75 BPM, played from 48.0 s, so the hit after its silence (60.0 s) lands on the lockup at 12.0 s. Scenes change on whole beats (0.8 s), punch words on half beats.
+- **Scenes:**
+  1. Punch words, Geist 800 caps filled white → blue: "BANYAK / YANG / BILANG / IG / AJA / CUKUP." (0–2.4)
+  2. "Padahal pembeli / cari yang **meyakinkan**." (2.4–4.8)
+  3. A glass card (the site's hero screenshot, with a soft reflection and a light sheen) rises from below, tipped back, and turns to face the camera over a blue bloom; "Website bikin tokomu / **kelihatan serius**." (4.8–7.2)
+  4. A 3D carousel turns past real work (arifsyauqi, michaelutomo) and stops on the "+ Bisnismu, berikutnya." card; "Desain custom, / dari **nol**." Then the camera **zooms into that card** (owner's request): its holo gradient grows to fill the frame. (7.2–10.4)
+  5. On the same holo gradient (white glow top left → blue → navy), "Saatnya bisnismu / **online**.", then the lockup lands on the hit with a glow and a band of light. **No tagline** (removed on request). (10.4–14.4)
+- Scenes leave and arrive with a short vertical whip (motion blur).
+- **Sound:** the owner found the earlier sound very poor, so it is now a real music bed plus **recorded** sound effects from Mixkit (free licence), laid with `tools/mix.swift` from `reel3/audio/mix.json`: quick zoom impacts on the punch words, whooshes on the cuts, a flying swoosh as the card rises, a riser and an air-zoom into the card, and a movie logo impact (its peak on 12.0) with a light sparkle. Nothing synthesised.
+- **Files:** `reel3.tpl.html` (template; build with `tools/buildreveal.js`), `webdev-reel3.html`, `webdev-reel3.mp4` (no audio), `webdev-reel3-sound.mp4` (with the mix), `audio/` (the music, the effects and `mix.json`).
 
 ### Render pipeline
 

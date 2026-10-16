@@ -2,104 +2,59 @@
 
 import { useEffect, useRef, useState } from "react";
 import { markIntroDone, markIntroEntered } from "@/lib/intro";
-import { cursorPath } from "@/lib/cursorShape";
+import { LOGO_MARK_D } from "@/lib/logoPaths";
 import { ANIMATIONS_ENABLED } from "../motion";
-import { runIntro } from "./runIntro";
 import "./preloader.css";
 
+/** The mark's four shapes: three bars, then the bracket. */
+const PARTS = LOGO_MARK_D.match(/M[^M]+/g) ?? [];
+
 /**
- * First-load intro: logo write-on (starts immediately) → scripted cursor click → zoom through the logo.
- * Rendered on the server so the veil covers the page from the first paint; Esc skips it.
- * Skipped entirely when site animations are off (e.g. capturing the page into Figma).
+ * First-load loader, about 1.4 s: the webdev mark builds itself on black (its three bars grow up one after
+ * another, then the bracket closes), then the camera zooms through it: the mark rushes towards us as the black
+ * fades, and the hero zooms out from behind it. It's all CSS (preloader.css), so it plays from the first paint even
+ * before React hydrates; this component only follows the veil's animation to tell the rest of the site when
+ * the page has opened ("entered": navbar, cursor, smooth scroll, entrance animations) and when it's gone.
+ * The previous intro (logo write-on, scripted click, zoom through the logo) is archived in social/archive/intro-v1.
+ * Skipped with reduced motion, and when site animations are off (e.g. capturing the page into Figma).
  */
 export function Preloader() {
   const [mounted, setMounted] = useState(ANIMATIONS_ENABLED);
   const rootRef = useRef<HTMLDivElement>(null);
-  const coverRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!ANIMATIONS_ENABLED) {
+    const finish = () => {
       markIntroDone();
-      return;
-    }
+      setMounted(false);
+    };
     const root = rootRef.current;
-    const cover = coverRef.current;
-    if (!root || !cover) return;
-    const q = <T extends Element>(name: string) => root.querySelector<T>(`[data-intro="${name}"]`)!;
-    return runIntro(
-      {
-        root,
-        cover,
-        stage: q<HTMLElement>("stage"),
-        defs: q<SVGDefsElement>("defs"),
-        cam: q<SVGGElement>("cam"),
-        ink: q<SVGGElement>("ink"),
-        solid: q<SVGGElement>("solid"),
-        hole: q<SVGGElement>("hole"),
-        dither: q<HTMLCanvasElement>("dither"),
-        vignette: q<HTMLElement>("vignette"),
-        cursor: q<HTMLElement>("cursor"),
-        cursorShape: q<SVGPathElement>("cursor-shape"),
-      },
-      {
-        onEnter: markIntroEntered,
-        onDone: () => {
-          markIntroDone();
-          setMounted(false);
-        },
-      },
-    );
+    if (!ANIMATIONS_ENABLED || !root || matchMedia("(prefers-reduced-motion: reduce)").matches) return finish();
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+    scrollTo(0, 0);
+
+    // The veil's own CSS animation (it may already be under way if hydration came late)
+    const lift = root.getAnimations().find((a) => (a as CSSAnimation).animationName === "intro-lift");
+    if (!lift) return finish();
+    const delay = Number(lift.effect?.getTiming().delay ?? 0);
+    const elapsed = Number(lift.currentTime ?? 0);
+    const enter = setTimeout(() => markIntroEntered(), Math.max(0, delay - elapsed));
+    let cancelled = false;
+    lift.finished.then(() => !cancelled && finish(), () => !cancelled && finish());
+    return () => {
+      cancelled = true;
+      clearTimeout(enter);
+    };
   }, []);
 
   if (!mounted) return null;
 
   return (
-    <>
-      <div ref={coverRef} className="intro-cover" aria-hidden />
-      <div ref={rootRef} className="intro-root" aria-hidden>
-        {/* Dark veil; at the click the logo becomes a window cut into it */}
-        <svg className="intro-veil" preserveAspectRatio="none">
-          <defs>
-            <mask id="intro-hole" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
-              <rect width="100%" height="100%" fill="#fff" />
-              <g data-intro="hole" fill="#000" visibility="hidden" />
-            </mask>
-          </defs>
-          <rect width="100%" height="100%" fill="#070404" mask="url(#intro-hole)" />
-        </svg>
-        <div className="intro-vignette" data-intro="vignette" />
-        <canvas className="intro-dither" data-intro="dither" />
-        <div className="intro-stage" data-intro="stage">
-          <svg viewBox="0 0 599 125" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs data-intro="defs" />
-            <g data-intro="cam">
-              <g data-intro="ink" fill="#f3eee6" />
-              <g data-intro="solid" fill="#f3eee6" opacity="0" />
-            </g>
-          </svg>
-        </div>
-        {/* Scripted cursor, drawn like the site cursor (arrow ↔ circle morph) */}
-        <div className="intro-cursor" data-intro="cursor">
-          <svg viewBox="0 0 50 54" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              data-intro="cursor-shape"
-              d={cursorPath(0)}
-              fill="black"
-              stroke="white"
-              strokeWidth={4.5}
-              strokeLinejoin="round"
-              paintOrder="stroke"
-              filter="url(#intro-cursor-shadow)"
-            />
-            <defs>
-              <filter id="intro-cursor-shadow" x={-5} y={-5} width={60} height={64} filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                <feDropShadow dx={0} dy={2.25} stdDeviation={2.25} floodColor="#000" floodOpacity={0.35} />
-              </filter>
-            </defs>
-          </svg>
-        </div>
-      </div>
-      <div className="intro-grain" aria-hidden />
-    </>
+    <div ref={rootRef} className="intro-root" aria-hidden>
+      <svg className="intro-mark" viewBox="0 0 107 124.852" fill="#fff">
+        {PARTS.map((d, i) => (
+          <path key={i} className={i < 3 ? "intro-bar" : "intro-bracket"} style={{ animationDelay: `${0.05 + i * 0.08}s` }} fillRule="evenodd" d={d} />
+        ))}
+      </svg>
+    </div>
   );
 }

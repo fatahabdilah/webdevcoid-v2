@@ -4,7 +4,7 @@ import { AsciiBackground } from "../AsciiBackground";
 import { ParticleText } from "../ParticleText";
 
 export function Hero() {
-  // data-intro-zoom: the intro zooms this first screen (not the whole page) out from behind the logo
+  // data-intro-zoom: the first-load loader settles this first screen (not the whole page) in behind its veil
   return (
     <section data-intro-zoom="" className="relative flex flex-col items-center overflow-clip bg-black">
       {/* Animated ASCII background + a dark veil behind the copy */}

@@ -1,131 +1,102 @@
-/* Intro preloader. Everything is prefixed `intro-`. */
+/* First-load loader (Preloader.tsx). Everything is prefixed `intro-`. Timeline from the first paint:
+   0.05–0.7 s the mark builds (bars grow up one after another, the bracket closes); at 0.8 s the camera zooms
+   through it (0.6 s): the mark rushes towards us as the black fades, and the hero zooms out from 1.12 to 1. */
 
-/* Lock scrolling for as long as the overlay is mounted */
+/* Lock scrolling for as long as the loader is mounted */
 html:has(.intro-root),
 html:has(.intro-root) body {
   overflow: hidden;
-}
-
-/* The first screen under the overlay sits on its own layer at the zoom's starting scale from the first
-   paint, so it is painted long before the window opens (doing that on the zoom's first frame hitched).
-   Origin: the middle of what is on screen (svh: the screen with mobile toolbars shown). At the reveal
-   the overlay gets data-revealing and a Web Animation takes over the scale (runIntro.ts). */
-html:has(.intro-root) [data-intro-zoom] {
-  will-change: transform;
-  transform-origin: 50% 50vh;
-  transform-origin: 50% 50svh;
-}
-html:has(.intro-root:not([data-revealing])) [data-intro-zoom] {
-  transform: scale(1.22);
 }
 
 .intro-root {
   position: fixed;
   inset: 0;
   z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: #000;
   cursor: none;
   user-select: none;
   -webkit-user-select: none;
+  /* the black fades as the zoom gets going */
+  animation: intro-lift 0.6s cubic-bezier(0.5, 0, 0.75, 0) 0.8s forwards;
 }
-.intro-veil,
-.intro-dither {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-.intro-dither {
-  pointer-events: none;
-}
-.intro-stage {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 0 16px;
-  opacity: 0;
-  will-change: opacity;
-}
-.intro-stage svg {
-  display: block;
-  /* the dither field's cleared area around the logo follows this width (measured in runIntro) */
-  width: min(60vw, 520px);
-  height: auto;
-  overflow: visible;
-  shape-rendering: geometricPrecision;
-}
-.intro-vignette {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse 80% 75% at 50% 50%, transparent 52%, rgba(0, 0, 0, 0.66) 100%);
-}
-/* Scripted cursor: same size and artwork as the site cursor; transform is set every frame */
-.intro-cursor {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 26px;
-  height: 26px;
-  margin: -13px 0 0 -13px;
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  will-change: transform;
-}
-.intro-cursor svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
+@keyframes intro-lift {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
-/* Film grain over everything while the intro runs */
-.intro-grain {
-  position: fixed;
-  inset: -50%;
-  z-index: 1001;
-  pointer-events: none;
-  opacity: 0.045;
-  will-change: transform;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: intro-grain 0.5s steps(5) infinite;
+.intro-mark {
+  width: auto;
+  height: 72px;
+  overflow: visible;
+  /* the zoom: the mark rushes towards the camera, faster and faster */
+  animation: intro-zoom 0.6s cubic-bezier(0.7, 0, 0.84, 0) 0.8s forwards;
 }
-@keyframes intro-grain {
-  0% {
-    transform: translate3d(0, 0, 0);
+@keyframes intro-zoom {
+  to {
+    transform: scale(22);
+    opacity: 0;
   }
-  20% {
-    transform: translate3d(-3%, 2%, 0);
+}
+.intro-mark path {
+  transform-box: fill-box;
+}
+/* each bar grows up from its foot */
+.intro-bar {
+  transform-origin: 50% 100%;
+  animation: intro-bar 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes intro-bar {
+  from {
+    transform: scaleY(0);
+    opacity: 0;
   }
-  40% {
-    transform: translate3d(2%, -3%, 0);
+  30% {
+    opacity: 1;
   }
-  60% {
-    transform: translate3d(-2%, -1%, 0);
+  to {
+    transform: none;
   }
-  80% {
-    transform: translate3d(3%, 3%, 0);
+}
+/* the bracket closes in from the left */
+.intro-bracket {
+  animation: intro-bracket 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes intro-bracket {
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-8px);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: none;
+  }
+}
+
+/* The first screen zooms out from behind the mark (it starts large, from the first paint) */
+html:has(.intro-root) [data-intro-zoom] {
+  transform-origin: 50% 50vh;
+  transform-origin: 50% 50svh;
+  animation: intro-settle 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes intro-settle {
+  0%,
+  57% {
+    transform: scale(1.12);
   }
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: none;
   }
-}
-
-/* Light behind the logo window; it fades to reveal the page during the zoom */
-.intro-cover {
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  background: #f3eee6;
-  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .intro-root,
-  .intro-cover,
-  .intro-grain {
+  .intro-root {
     display: none;
+  }
+  html:has(.intro-root) [data-intro-zoom] {
+    animation: none;
   }
 }

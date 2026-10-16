@@ -63,20 +63,17 @@ const planGlyphs: Record<Plan["icon"], ReactNode> = {
   ),
 };
 
-/** Plan tile: grey glass, or the brand gradient on the recommended plan, with the plan's glyph in white. */
-function PlanIcon({ plan }: { plan: Plan }) {
+/** Plan tile with the plan's glyph in white: grey glass, turning to the brand gradient on the active (highlighted)
+ *  card. The gradient fades in over the grey alongside the card's text (gradients can't be colour-transitioned). */
+function PlanIcon({ plan, active }: { plan: Plan; active: boolean }) {
   return (
-    <div
-      className={`flex size-12 items-center justify-center rounded-xl text-white ${
-        plan.featured ? "shadow-[inset_0_-1.5px_1.2px_0_#d7d7d7]" : "bg-grey-03 shadow-[inset_0_0_7px_0_#fff,inset_0_-1.5px_1.2px_0_#000]"
-      }`}
-      style={
-        plan.featured
-          ? { background: "radial-gradient(70.7% 70.7% at 50% 50%, var(--color-holo-75) 0%, var(--color-holo-50) 55%, var(--color-holo-25) 100%)" }
-          : undefined
-      }
-    >
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <div className="relative flex size-12 items-center justify-center overflow-hidden rounded-xl bg-grey-03 text-white shadow-[inset_0_0_7px_0_#fff,inset_0_-1.5px_1.2px_0_#000]">
+      <span
+        aria-hidden
+        className={`absolute inset-0 rounded-[inherit] shadow-[inset_0_-1.5px_1.2px_0_#d7d7d7] transition-opacity duration-300 ease-out ${active ? "opacity-100" : "opacity-0"}`}
+        style={{ background: "radial-gradient(70.7% 70.7% at 50% 50%, var(--color-holo-75) 0%, var(--color-holo-50) 55%, var(--color-holo-25) 100%)" }}
+      />
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden className="relative" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         {planGlyphs[plan.icon]}
       </svg>
     </div>
@@ -140,7 +137,7 @@ function PlanCard({ plan, highlighted, fromPremium, pointer, onActivate }: PlanC
         </motion.div>
       )}
       <div className="relative flex flex-col gap-6 border-b border-grey-07 pb-6 lg:pb-8">
-        <PlanIcon plan={plan} />
+        <PlanIcon plan={plan} active={highlighted} />
         <div className="flex flex-col gap-2">
           <h3 className={`t-title-m ${fade} ${highlighted ? "text-white" : "text-grey-01"}`}>{noOrphan(plan.name)}</h3>
           <p className={`t-body-m text-balance ${fade} ${highlighted ? "text-white" : "text-grey-03"}`}>{noOrphan(plan.tagline)}</p>

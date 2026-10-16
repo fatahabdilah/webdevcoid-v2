@@ -1,178 +1,134 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValueEvent, useScroll, useTransform } from "motion/react";
-import { steps } from "@/content/home";
-import { ProcessChat, ProcessEye, ProcessPen, ProcessRocket, ProcessStructure } from "../icons";
+import type { CSSProperties } from "react";
+import { stages } from "@/content/home";
+import { noOrphan } from "@/lib/text";
+import { Check, ProcessChat, ProcessEye, ProcessPen, ProcessRocket, ProcessStructure, WhatsApp } from "../icons";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
-import { noOrphan } from "@/lib/text";
-
-/** One per step: chat (consultation on WhatsApp), sitemap (structure), pen (design), eye (preview), rocket (launch). */
-const icons = {
-  chat: ProcessChat,
-  structure: ProcessStructure,
-  pen: ProcessPen,
-  eye: ProcessEye,
-  rocket: ProcessRocket,
-};
-
-const ease = "duration-500 ease-framer";
-/** Section background; inactive steps sit flush on it. */
-const sectionBg = "bg-[#101010]";
-/** Highlight behind an active step. */
-const activeStepBg = "bg-[linear-gradient(180deg,#1e1e1e_0%,#000_205.06%)]";
-/** Icon and text of steps the fill hasn't reached yet are shown at 20%. Applied per part rather than
- *  on the whole step, so the dot keeps sitting above the rail. */
-const dimmed = (active: boolean) => `transition-opacity ${ease} ${active ? "opacity-100" : "opacity-20"}`;
 
 /**
- * Step background: the section colour with the step gradient faded in once the step is reached
- * (gradients can't be colour-transitioned, so the overlay's opacity is animated instead).
- * `half` renders just the top or bottom half of that surface, lined up with the step's gradient.
+ * "Cara kerja" (Figma 1175:3827, adapted to webdev): one card shows the four stages as a flow (a small
+ * glass illustration per stage, joined by dashed lines, numbered I–IV), and a grid underneath spells
+ * each stage out. White section; the card fades from white into the brand blues.
  */
-function StepSurface({ active, className = "", half }: { active: boolean; className?: string; half?: "top" | "bottom" }) {
-  return (
-    <span aria-hidden className={`absolute ${sectionBg} ${className}`}>
-      <span
-        className={`absolute inset-0 rounded-[inherit] transition-opacity ${ease} ${activeStepBg} ${half ? `bg-[length:100%_200%] ${half === "top" ? "bg-top" : "bg-bottom"}` : ""} ${
-          active ? "opacity-100" : "opacity-0"
-        }`}
-      />
-    </span>
-  );
-}
 
-function Dot({ active }: { active: boolean }) {
-  return (
-    <span
-      className={`relative flex size-9 shrink-0 rounded-xl p-[3px] transition-[background] ${ease}`}
-      style={{ background: active ? "linear-gradient(270deg, var(--color-holo-0), var(--color-holo-25), var(--color-holo-50), var(--color-holo-75), var(--color-holo-100))" : "transparent" }}
-    >
-      <span
-        className={`flex size-full items-center justify-center rounded-lg transition-all ${ease} ${
-          active ? "scale-100 border-0" : "scale-[0.7] border-[3px] border-grey-02 bg-grey-00"
-        }`}
-        style={
-          active
-            ? { background: "radial-gradient(70.7% 70.7% at 50% 50%, var(--color-holo-100) 0%, var(--color-holo-75) 25%, var(--color-holo-50) 50%, var(--color-holo-25) 75%, var(--color-holo-0) 100%)" }
-            : undefined
-        }
-      >
-        <span className={`size-3 rounded-full transition-colors ${ease} ${active ? "bg-white" : "bg-grey-01"}`} />
-      </span>
-    </span>
-  );
-}
+const icons = { chat: ProcessChat, pen: ProcessPen, eye: ProcessEye, rocket: ProcessRocket };
 
-function IconBlock({ step, active, showNumber, small }: { step: (typeof steps)[number]; active: boolean; showNumber: boolean; small?: boolean }) {
-  const Icon = icons[step.icon];
+/** Frosted card floating on the gradient: translucent white, a hairline white edge, soft light from below. */
+const glass =
+  "border-[0.5px] border-white bg-white/50 shadow-[0_0.8px_1.6px_rgba(0,0,0,0.08),inset_0_-20px_66px_rgba(255,255,255,0.7)] backdrop-blur-md";
+
+/** Phones and tablets: the whole card is blue (white labels sit under every stage there). */
+const cardBgStacked =
+  "bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-holo-75)_50%,white)_0%,var(--color-holo-75)_12%,var(--color-holo-50)_55%,var(--color-holo-25)_100%)]";
+/** Desktop: white at the top, melting into the brand blues behind the labels (a wide blurred band, as in the design). */
+const cardGlow =
+  "linear-gradient(180deg, var(--color-holo-100) 0%, color-mix(in srgb, var(--color-holo-75) 22%, white) 14%, color-mix(in srgb, var(--color-holo-75) 55%, white) 27%, var(--color-holo-75) 40%, var(--color-holo-50) 56%, var(--color-holo-25) 82%)";
+
+/** I · consultation: the chat and the brief, ticked off. */
+function StageConsult() {
+  const rows = [
+    { Icon: WhatsApp, title: "WhatsApp", sub: "Terhubung" },
+    { Icon: ProcessStructure, title: "Struktur halaman", sub: "Disusun" },
+    { Icon: Check, title: "Jenis website", sub: "Dipilih" },
+  ];
   return (
-    <div className="flex items-center gap-4">
-      <div
-        className={`relative flex ${small ? "size-14" : "size-20"} shrink-0 items-center justify-center rounded-xl border bg-grey-01 bg-clip-padding transition-colors ${ease} ${
-          active ? "border-transparent text-white" : "border-grey-02 text-white-03"
-        }`}
-      >
-        <span
-          aria-hidden
-          className={`absolute inset-0 rounded-[11px] bg-[linear-gradient(180deg,var(--color-holo-50)_0%,var(--color-holo-0)_100%)] transition-opacity ${ease} ${active ? "opacity-100" : "opacity-0"}`}
-        />
-        <Icon className={`relative ${small ? "h-6" : "h-[34px]"} w-auto`} />
-        {/* Inner glow sits on top of the fill, as in the design */}
-        <span
-          aria-hidden
-          className={`pointer-events-none absolute inset-0 rounded-[11px] transition-shadow ${ease} ${
-            active ? "shadow-[inset_0_0_12px_0_#000]" : "shadow-[inset_0_0_12px_0_rgba(255,255,255,0.06)]"
-          }`}
-        />
+    <div className={`relative h-[227px] w-[216px] overflow-hidden rounded-[14px] ${glass}`}>
+      <div className="flex flex-col gap-[23px] px-[27px] pt-[31px]">
+        {rows.map(({ Icon, title, sub }) => (
+          <div key={title} className="flex h-[39px] items-center gap-[7px]">
+            <span className="flex size-8 shrink-0 items-center justify-center text-grey-01">
+              <Icon className="h-6 w-auto" />
+            </span>
+            <span className="flex flex-col px-[2.6px] whitespace-nowrap">
+              <span className="text-[15.8px] leading-[23.7px] font-medium tracking-[-0.01em] text-grey-01/80">{title}</span>
+              <span className="text-[14px] leading-[21px] font-medium tracking-[-0.01em] text-grey-01/60">{sub}</span>
+            </span>
+          </div>
+        ))}
       </div>
-      {/* Number badge: same dark chip for every step (Figma 1078:558) */}
-      {showNumber && (
-        <div className="flex size-8 items-center justify-center rounded-xl bg-[#1f1f1f]">
-          <span className="t-body-m text-white">{step.number}</span>
-        </div>
-      )}
     </div>
   );
 }
 
-function Step({ step, index, active, first, last }: { step: (typeof steps)[number]; index: number; active: boolean; first: boolean; last: boolean }) {
-  const mirrored = index % 2 === 1;
-
+/** II · design: rings of light round a frosted chip with the pen. */
+function StageDesign() {
   return (
-    <div className={`relative flex w-full items-center rounded-2xl px-4 max-md:gap-4 md:h-40 ${mirrored ? "md:px-0" : "md:px-10"}`}>
-      <StepSurface active={active} className="inset-0 -z-10 rounded-2xl" />
-      {/* Center column with the dot; it also masks the line above the first and below the last step.
-          Phones: the dot lines up with the icon (28px padding + half the 56px icon = 56px; the 36px dot starts at 38px). */}
-      <div className="relative z-[2] flex w-10 shrink-0 self-stretch items-center justify-center max-md:items-start max-md:pt-[38px] md:order-2 md:w-40">
-        {first && <StepSurface active={active} half="top" className="inset-x-0 top-0 h-1/2 max-md:h-[56px]" />}
-        {last && <StepSurface active={active} half="bottom" className="inset-x-0 bottom-0 h-1/2 max-md:top-[56px] max-md:h-auto" />}
-        <span className="relative" data-dot="">
-          <Dot active={active} />
-        </span>
+    <div className="relative flex size-[198px] items-center justify-center rounded-full border border-white/40 bg-white/20">
+      <span className="size-[138px] rounded-full border border-white/80 bg-white/20" />
+      <span className="absolute size-[158px] rounded-full border border-white/70 opacity-35" />
+      <span className={`absolute flex size-[68px] items-center justify-center rounded-full text-grey-01 ${glass}`}>
+        <ProcessPen className="h-7 w-auto" />
+      </span>
+    </div>
+  );
+}
+
+/** III · preview: three notes stacked at slight angles. */
+function StagePreview() {
+  const notes = [
+    { Icon: ProcessEye, text: "Preview beranda", w: 170, x: 4, y: 0, r: -6.9 },
+    { Icon: ProcessPen, text: "Revisi warna", w: 152, x: 0, y: 76, r: 5.3 },
+    { Icon: Check, text: "Disetujui", w: 150, x: 22, y: 150, r: -4 },
+  ];
+  return (
+    <div className="relative h-[227px] w-[192px]">
+      {notes.map(({ Icon, text, w, x, y, r }) => (
+        <div
+          key={text}
+          className={`absolute flex h-[73px] items-center gap-[7px] rounded-[13.5px] px-6 ${glass}`}
+          style={{ width: w, left: x, top: y, transform: `rotate(${r}deg)` }}
+        >
+          <span className="flex size-8 shrink-0 items-center justify-center text-grey-01">
+            <Icon className="h-[22px] w-auto" />
+          </span>
+          <span className="w-[80px] text-[15.2px] leading-[17px] font-medium tracking-[-0.01em] text-grey-01/80">{text}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** IV · launch: the site is online. */
+function StageLive() {
+  return (
+    <div className={`relative flex h-[111px] w-[256px] items-center gap-[15px] overflow-hidden rounded-[15px] bg-white/30 pl-5 ${glass}`}>
+      <span className="flex size-[59px] shrink-0 items-center justify-center rounded-full bg-grey-01/10 text-grey-01">
+        <ProcessRocket className="h-[30px] w-auto" />
+      </span>
+      <span className="flex flex-col">
+        <span className="text-[26px] leading-[31px] font-semibold tracking-[-0.02em] text-grey-01/80">Online</span>
+        <span className="text-[14.8px] leading-[22px] font-medium tracking-[-0.01em] text-grey-01/80">namabisnismu.com</span>
+      </span>
+    </div>
+  );
+}
+
+const illustrations = [StageConsult, StageDesign, StagePreview, StageLive];
+
+/** Desktop grid placement: column `--c`, row 1 (illustrations) or 2 (labels). */
+const at = (c: number) => ({ "--c": c }) as CSSProperties;
+const row1 = "lg:[grid-column:var(--c)] lg:[grid-row:1]";
+const row2 = "lg:[grid-column:var(--c)] lg:[grid-row:2]";
+
+/** Between two stages: a dashed line (down on phones, across on desktop; none in the tablet 2 × 2) and, on desktop, a divider between the labels. */
+function Connector({ col }: { col: number }) {
+  return (
+    <div className="contents">
+      <div className={`flex h-10 items-center justify-center md:hidden lg:flex lg:h-auto lg:px-3 ${row1}`} style={at(col)}>
+        <span className="h-full w-0 border-l-2 border-dashed border-white/60 lg:h-0 lg:w-full lg:border-t-2 lg:border-l-0" />
       </div>
-
-      {/* Phones: icon above the text, so the text gets the card's full width. From md the wrapper
-          dissolves (display: contents) and both sides sit either side of the line. */}
-      <div className="flex min-w-0 flex-1 flex-col items-start gap-4 py-7 md:contents">
-        {/* Icon side */}
-        <div className={`flex shrink-0 items-center md:flex-1 md:py-10 ${dimmed(active)} ${mirrored ? "md:order-3 md:justify-start" : "md:order-1 md:justify-end"}`}>
-          <div className="md:hidden">
-            <IconBlock step={step} active={active} showNumber={false} small />
-          </div>
-          <div className="hidden md:block">
-            <IconBlock step={step} active={active} showNumber />
-          </div>
-        </div>
-
-        {/* Text side */}
-        <div className={`flex w-full md:w-auto md:flex-1 md:py-10 ${dimmed(active)} ${mirrored ? "md:order-1 md:justify-end" : "md:order-3 md:justify-start"}`}>
-          <div className={`flex w-full flex-col gap-1 ${mirrored ? "md:max-w-[320px] md:text-right" : "md:max-w-[300px]"}`}>
-            <h3 className="t-title-s text-white">{noOrphan(step.title)}</h3>
-            <p className="t-body-m text-white-03">{noOrphan(step.text)}</p>
-          </div>
-        </div>
+      <div className={`hidden items-center justify-center lg:flex ${row2}`} style={at(col)}>
+        <span className="h-[38px] w-px rounded-full bg-white/30" />
       </div>
     </div>
   );
 }
 
 export function Process() {
-  const mainRef = useRef<HTMLDivElement>(null);
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const centers = useRef<number[]>([]);
-  const [active, setActive] = useState(1);
-  const { scrollYProgress } = useScroll({ target: mainRef, offset: ["start center", "end center"] });
-  const lineY = useTransform(scrollYProgress, (p) => `${(p - 1) * 100}%`);
-
-  useEffect(() => {
-    const measure = () => {
-      const main = mainRef.current;
-      if (!main) return;
-      // Where each step's dot sits along the rail (0–1): a step lights up when the fill reaches its dot
-      const top = main.getBoundingClientRect().top;
-      centers.current = itemRefs.current.map((el) => {
-        const dot = el?.querySelector("[data-dot]")?.getBoundingClientRect();
-        return dot ? (dot.top + dot.height / 2 - top) / main.offsetHeight : 1;
-      });
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    if (mainRef.current) ro.observe(mainRef.current);
-    return () => ro.disconnect();
-  }, []);
-
-  useMotionValueEvent(scrollYProgress, "change", (p) => {
-    // The first step is on from the start (the rail begins at its dot); later steps light up once the fill reaches them.
-    setActive(Math.max(1, centers.current.filter((c) => p >= c).length));
-  });
-
   return (
-    <section id="process" className={`flex justify-center ${sectionBg} px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]`}>
-      <div className="flex w-full max-w-[1040px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
+    <section id="process" className="flex justify-center bg-white px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
+      <div className="flex w-full max-w-[1220px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
         <SectionHeader
-          tone="dark"
           number="004"
           name="cara kerja"
           title="Kamu arahkan, kami yang bangun."
@@ -180,25 +136,60 @@ export function Process() {
           titleWidth="max-w-[8.2em]"
           body="Cukup ceritakan bisnismu lewat WhatsApp. Struktur, desain, dan kontennya kami yang susun."
         />
-        <Reveal y={50} amount={0.2} className="w-full">
-          {/* isolate: step surfaces (-z-10) stay behind the rail but above the section background */}
-          <div ref={mainRef} className="relative isolate flex w-full flex-col gap-4">
-            {steps.map((s, i) => (
-              <div key={s.number} ref={(el) => void (itemRefs.current[i] = el)}>
-                <Step step={s} index={i} active={i < active} first={i === 0} last={i === steps.length - 1} />
-              </div>
-            ))}
-            {/* Grey rail with the gradient fill that follows the scroll position */}
-            <div className="pointer-events-none absolute top-0 bottom-0 left-9 z-[1] w-px bg-grey-02 md:left-1/2 md:-translate-x-1/2">
-              <div className="absolute inset-y-0 -left-px w-[3px] overflow-hidden">
-                <motion.div
-                  className="h-full w-full rounded-full"
-                  style={{ y: lineY, background: "linear-gradient(180deg, var(--color-holo-0), var(--color-holo-25), var(--color-holo-50), var(--color-holo-75), var(--color-holo-100))" }}
-                />
+
+        <div className="flex w-full flex-col items-center gap-10 md:gap-16 lg:gap-[89px]">
+          {/* The flow */}
+          <Reveal y={50} amount={0.2} className="w-full">
+            <div className={`relative isolate w-full overflow-hidden rounded-[32px] px-5 py-12 md:rounded-[48px] md:py-16 lg:bg-white lg:bg-none lg:px-8 lg:pt-16 lg:pb-10 ${cardBgStacked}`}>
+              <div aria-hidden className="pointer-events-none absolute -inset-x-[40%] top-[60px] -z-10 hidden h-[640px] blur-[100px] lg:block" style={{ backgroundImage: cardGlow }} />
+              <div className="flex flex-col items-center md:grid md:grid-cols-2 md:items-start md:gap-x-6 md:gap-y-14 lg:grid-cols-[auto_minmax(24px,1fr)_auto_minmax(24px,1fr)_auto_minmax(24px,1fr)_auto] lg:grid-rows-[228px_auto] lg:items-center lg:gap-0">
+                {stages.map((stage, i) => {
+                  const Illustration = illustrations[i];
+                  return (
+                    <div key={stage.numeral} className="flex flex-col items-center lg:contents">
+                      {i > 0 && <Connector col={i * 2} />}
+                      <Reveal y={24} delay={0.1 * i} amount={0.4} className={`flex justify-center ${row1}`} style={at(i * 2 + 1)}>
+                        <Illustration />
+                      </Reveal>
+                      {/* Numeral and name under the illustration (the labels row on desktop) */}
+                      <div className={`flex flex-col items-center gap-2 pt-6 pb-2 text-center text-white lg:gap-4 lg:pt-[50px] lg:pb-[13px] ${row2}`} style={at(i * 2 + 1)}>
+                        <span className="t-body-l text-white">{stage.numeral}</span>
+                        <span className="text-[22px] leading-[27px] font-medium tracking-[-0.025em] whitespace-nowrap">{stage.label}</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+
+          {/* Each stage spelled out */}
+          <Reveal y={30} amount={0.3} className="w-full max-w-[1120px]">
+            <div className="grid w-full grid-cols-1 md:grid-cols-2">
+              {stages.map((stage, i) => {
+                const Icon = icons[stage.icon];
+                const right = i % 2 === 1, top = i < 2;
+                return (
+                  <div
+                    key={stage.numeral}
+                    className={`flex border-grey-07 py-6 md:py-[30px] ${i < stages.length - 1 ? "max-md:border-b" : ""} ${top ? "md:border-b" : "md:items-end"} ${
+                      right ? "md:justify-end md:pl-8" : "md:border-r md:pr-8"
+                    }`}
+                  >
+                    <div className="flex w-full max-w-[434px] items-start gap-2.5">
+                      <span className="flex w-6 shrink-0 justify-center py-[3px] text-grey-01 opacity-90">
+                        <Icon className="h-5 w-auto" />
+                      </span>
+                      <p className="t-body-l font-medium text-grey-03">
+                        <span className="font-semibold text-grey-01">{stage.lead}</span> {noOrphan(stage.text)}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

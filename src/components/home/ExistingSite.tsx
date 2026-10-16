@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { existingSite } from "@/content/home";
 import { waLink } from "@/content/site";
 import { noOrphan } from "@/lib/text";
@@ -28,12 +28,30 @@ const ease = "duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:tran
 /**
  * "Butuhnya bukan website baru?": two cards that open WhatsApp. Exactly one preview screen is up at a
  * time: the first card's rests up, hovering (or focusing) the other hands it over, leaving hands it back.
- * The screens are server-rendered illustrations passed in as `previews`, in card order.
+ * The screens are illustrations passed in as `previews`, in card order. They're only mounted once the cards
+ * come near the screen (they're decorative SVGs, absolutely placed, so nothing shifts), which keeps them out of
+ * the page's first render.
  */
 export function ExistingSite({ previews }: { previews: ReactNode[] }) {
   const [shown, setShown] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        setNear(true);
+        io.disconnect();
+      },
+      { rootMargin: "600px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   return (
-    <div className="flex flex-col gap-2 md:grid md:grid-cols-2">
+    <div ref={ref} className="flex flex-col gap-2 md:grid md:grid-cols-2">
       {existingSite.items.map((item, i) => {
         const up = shown === i;
         return (
@@ -55,7 +73,7 @@ export function ExistingSite({ previews }: { previews: ReactNode[] }) {
                   up ? "-translate-y-[calc(100%-0.75rem)]" : "translate-y-6"
                 }`}
               >
-                <span className="block overflow-hidden rounded-xl border border-white shadow-[0_18px_40px_-12px_rgba(1,31,108,0.35)]">{previews[i]}</span>
+                <span className="block overflow-hidden rounded-xl border border-white shadow-[0_18px_40px_-12px_rgba(1,31,108,0.35)]">{near && previews[i]}</span>
               </span>
             </span>
 

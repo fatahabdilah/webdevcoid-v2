@@ -2,7 +2,7 @@
 
 import { Fragment, useLayoutEffect, useRef, type CSSProperties, type ElementType } from "react";
 import { motion, type HTMLMotionProps, type Transition, type Variants } from "motion/react";
-import { useIntroEntered } from "@/lib/intro";
+import { useIntroEnteredIf } from "@/lib/intro";
 import { noOrphan } from "@/lib/text";
 
 /**
@@ -29,7 +29,8 @@ type RevealProps = HTMLMotionProps<"div"> & {
 /** Fades (and optionally slides) an element in, like Framer's Appear effect. */
 export function Reveal({ y = 0, x = 0, delay = 0, onMount, amount = 0.5, transition, ...rest }: RevealProps) {
   // On-mount reveals wait for the intro to open onto the page, so they play where they can be seen
-  const entered = useIntroEntered();
+  // (scroll reveals don't listen, so they don't all re-render when it opens)
+  const entered = useIntroEnteredIf(!!onMount);
   if (!ANIMATIONS_ENABLED) return <motion.div {...rest} />;
   const t = { ...(transition ?? spring), delay };
   const hidden = { opacity: 0, x, y };
@@ -113,7 +114,7 @@ export function Words({
   gradient,
 }: WordsProps) {
   const ref = useGradientSlices(gradient, text);
-  const entered = useIntroEntered();
+  const entered = useIntroEnteredIf(!!onMount);
   if (!ANIMATIONS_ENABLED) {
     return (
       <Tag className={className}>

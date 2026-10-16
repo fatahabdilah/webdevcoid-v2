@@ -267,8 +267,10 @@ function createAsciiBackground(
   let lastDraw = 0;
   const frame = (now: number) => {
     raf = requestAnimationFrame(frame);
-    // While the intro's window zooms open the field keeps moving at half rate, so the zoom keeps its frames
-    if (introPhase() === "zoom" && now - lastDraw < 1000 / 30 - 2) return;
+    // The field drifts slowly, so 30 fps is plenty; full rate only while the pointer's ripple is live (and never
+    // while the loader zooms away, so it keeps its frames)
+    const rippling = ptr.on || mi > 0.001;
+    if ((!rippling || introPhase() === "zoom") && now - lastDraw < 1000 / 30 - 2) return;
     lastDraw = now;
     render(now);
   };

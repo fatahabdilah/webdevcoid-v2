@@ -9,22 +9,29 @@
  * number of lines; "\n" marks a fixed line break where the break itself must match (see components/Lines).
  */
 
-/** "Kenapa kami", value proposition (2.3, 2.4). */
+/** "Kenapa kami", value proposition (2.3, 2.4). `short` labels the value's node in the diagram;
+ * `keywords` float round the emblem while the value is open. */
 export const values = [
   {
     number: "01",
+    short: "Desain custom",
+    keywords: ["Dari nol", "Sesuai brand", "Harga jelas"],
     title: "Desain custom,\nharga masuk akal",
     text: "Dibuat dari nol untuk bisnismu, bukan dari template jadi.",
     icon: "/images/values/custom.svg",
   },
   {
     number: "02",
+    short: "Kualitas premium",
+    keywords: ["Satu tim", "Konten disusun", "Preview tiap tahap"],
     title: "Kualitas premium,\nproses tanpa ribet",
     text: "Satu tim mengurus desain, konten, sampai website tayang.",
     icon: "/images/values/premium.svg",
   },
   {
     number: "03",
+    short: "Cepat dibuka",
+    keywords: ["Ringan di HP", "SEO", "Mudah dicari"],
     title: "Cepat dibuka,\nbantu bisnis tumbuh",
     text: "Ringan di HP, mudah dicari, dan menarik calon pelanggan.",
     icon: "/images/values/fast.svg",
@@ -95,35 +102,37 @@ export const included = [
   { label: "Dioptimasi SEO,\nmudah dicari", icon: "seo" },
 ] as const;
 
-export const steps = [
+/**
+ * "Cara kerja": four stages, shown as a flow across one card (I–IV) and spelled out in the grid under it.
+ * `label` names the stage in the card; `lead` + `text` read as one sentence in the grid.
+ */
+export const stages = [
   {
-    number: "01",
-    title: "Konsultasi gratis",
+    numeral: "I",
+    label: "Konsultasi",
+    lead: "Konsultasi gratis.",
     text: "Ceritakan bisnismu di WhatsApp, kami bantu pilih yang pas.",
     icon: "chat",
   },
   {
-    number: "02",
-    title: "Struktur & konten",
-    text: "Halaman dan isinya kami susun, kamu cukup mengarahkan.",
-    icon: "structure",
-  },
-  {
-    number: "03",
-    title: "Desain custom",
-    text: "Tampilan dibuat dari nol, sesuai brand dan warna bisnismu.",
+    numeral: "II",
+    label: "Desain custom",
+    lead: "Disusun dan didesain dari nol.",
+    text: "Halaman dan isinya kami susun, tampilannya sesuai brand bisnismu.",
     icon: "pen",
   },
   {
-    number: "04",
-    title: "Preview tiap tahap",
-    text: "Lihat hasil tiap tahap dan beri masukan sebelum tayang.",
+    numeral: "III",
+    label: "Preview & revisi",
+    lead: "Preview di setiap tahap.",
+    text: "Lihat hasilnya dan beri masukan sebelum website tayang.",
     icon: "eye",
   },
   {
-    number: "05",
-    title: "Website tayang",
-    text: "Domain, hosting, dan SSL kami pasang. Bisnismu siap online.",
+    numeral: "IV",
+    label: "Website tayang",
+    lead: "Siap online.",
+    text: "Domain, hosting, dan SSL kami pasang. Bisnismu siap dikunjungi.",
     icon: "rocket",
   },
 ] as const;
