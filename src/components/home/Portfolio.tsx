@@ -100,7 +100,7 @@ function ProjectSlider() {
 
 export function Portfolio() {
   return (
-    <section id="portfolio" className="flex justify-center px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
+    <section id="portfolio" className="relative z-[1] flex justify-center px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
       <div className="flex w-full max-w-[1280px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
         <SectionHeader number="005" name="portfolio" title="Karya yang sudah tayang" />
         <Reveal y={50} amount={0.2} className="w-full max-w-[640px] lg:max-w-[1040px] lg:px-16">

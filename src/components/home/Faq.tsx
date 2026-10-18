@@ -62,7 +62,7 @@ export function Faq() {
   return (
     <section
       id="faq"
-      className="flex justify-center px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]"
+      className="relative z-[1] flex justify-center px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]"
     >
       <div className="flex w-full max-w-[1040px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
         <SectionHeader number="007" name="FAQ" title="Yang sering ditanyakan" />

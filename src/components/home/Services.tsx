@@ -8,7 +8,7 @@ import { Lines } from "../Lines";
 import { IncludedIcon } from "./IncludedIcon";
 import { ExistingSite } from "./ExistingSite";
 import { CarePreview, RedesignPreview } from "./ServiceArt";
-import { ServiceBento } from "./ServiceBento";
+import { ServiceTabs } from "./ServiceTabs";
 
 
 /** Titles of the groups below the bento (left from md, like the cards under them). */
@@ -79,24 +79,26 @@ export function Services() {
         />
 
         <div className="flex w-full max-w-[400px] flex-col gap-2 md:max-w-none">
-          <ServiceBento />
+          <Reveal y={50} amount={0.15}>
+            <ServiceTabs />
+          </Reveal>
+
+          {/* Right under the services: the free consultation, and what every plan includes (that comes first below desktop) */}
+          {/* equal rows when stacked (from md); side by side, one 500px row, the same height as the services card above */}
+          <div className="grid gap-2 md:auto-rows-fr lg:h-[500px] lg:grid-cols-[2fr_3fr]">
+            <Reveal y={50} delay={0.1} amount={0.2} className="order-2 lg:order-1">
+              <CtaCard />
+            </Reveal>
+            <Reveal y={50} delay={0.15} amount={0.2} className="order-1 lg:order-2">
+              <IncludedCard />
+            </Reveal>
+          </div>
 
           {/* For businesses that already have a website */}
           <Reveal y={50} amount={0.2} className="flex flex-col gap-5 pt-14 md:pt-20 lg:pt-24">
             <h3 className={groupTitle}>{existingSite.title}</h3>
             <ExistingSite previews={[<RedesignPreview key="redesign" />, <CarePreview key="care" />]} />
           </Reveal>
-
-          {/* Row 2: CTA + what every plan includes (that comes first below desktop) */}
-          <h3 className={`${groupTitle} mb-3 pt-14 md:pt-20 lg:pt-24`}>Yang selalu kamu dapat</h3>
-          <div className="flex flex-col-reverse gap-2 lg:h-[420px] lg:flex-row">
-            <Reveal y={50} delay={0.4} amount={0.2} className="lg:w-[40%] lg:shrink-0">
-              <CtaCard />
-            </Reveal>
-            <Reveal y={50} delay={0.45} amount={0.2} className="lg:flex-1">
-              <IncludedCard />
-            </Reveal>
-          </div>
         </div>
       </div>
     </section>

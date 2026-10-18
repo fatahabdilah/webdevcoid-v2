@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { stages } from "@/content/home";
 import { noOrphan } from "@/lib/text";
-import { Check, ProcessChat, ProcessEye, ProcessPen, ProcessRocket, ProcessStructure, WhatsApp } from "../icons";
+import { Check, ProcessChatLine, ProcessEye, ProcessEyeLine, ProcessPen, ProcessPenLine, ProcessRocket, ProcessRocketLine, ProcessStructure, WhatsApp } from "../icons";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
 
@@ -11,7 +11,8 @@ import { SectionHeader } from "../SectionHeader";
  * each stage out. White section; the card fades from white into the brand blues.
  */
 
-const icons = { chat: ProcessChat, pen: ProcessPen, eye: ProcessEye, rocket: ProcessRocket };
+/** The stage details' icons: line, as icons beside text (the illustrations above keep the filled ones). */
+const icons = { chat: ProcessChatLine, pen: ProcessPenLine, eye: ProcessEyeLine, rocket: ProcessRocketLine };
 
 /** Frosted card floating on the gradient: translucent white, a hairline white edge, soft light from below. */
 const glass =
@@ -37,7 +38,7 @@ function StageConsult() {
         {rows.map(({ Icon, title, sub }) => (
           <div key={title} className="flex h-[39px] items-center gap-[7px]">
             <span className="flex size-8 shrink-0 items-center justify-center text-grey-01">
-              <Icon className="h-6 w-auto" />
+              <Icon className="size-6" />
             </span>
             <span className="flex flex-col px-[2.6px] whitespace-nowrap">
               <span className="text-[15.8px] leading-[23.7px] font-medium tracking-[-0.01em] text-grey-01/80">{title}</span>
@@ -79,7 +80,7 @@ function StagePreview() {
           style={{ width: w, left: x, top: y, transform: `rotate(${r}deg)` }}
         >
           <span className="flex size-8 shrink-0 items-center justify-center text-grey-01">
-            <Icon className="h-[22px] w-auto" />
+            <Icon className="size-[22px]" />
           </span>
           <span className="w-[80px] text-[15.2px] leading-[17px] font-medium tracking-[-0.01em] text-grey-01/80">{text}</span>
         </div>
@@ -178,7 +179,7 @@ export function Process() {
                   >
                     <div className="flex w-full max-w-[434px] items-start gap-2.5">
                       <span className="flex w-6 shrink-0 justify-center py-[3px] text-grey-01 opacity-90">
-                        <Icon className="h-5 w-auto" />
+                        <Icon className="size-5" />
                       </span>
                       <p className="t-body-l font-medium text-grey-03">
                         <span className="font-semibold text-grey-01">{stage.lead}</span> {noOrphan(stage.text)}

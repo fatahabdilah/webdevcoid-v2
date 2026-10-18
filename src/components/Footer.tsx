@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 import { contact, waLink } from "@/content/site";
-import { Instagram, LogoMark, LogoWordmark, Mail, WhatsApp } from "./icons";
+import { Instagram, LogoMark, LogoWordmark, Mail, WhatsAppLine } from "./icons";
 import { LazyVideo } from "./LazyVideo";
 import { Reveal } from "./motion";
 
 const contacts = [
   { label: "Instagram", value: `@${contact.instagram}`, href: contact.instagramUrl, Icon: Instagram, external: true },
   { label: "Email", value: contact.email, href: `mailto:${contact.email}`, Icon: Mail, external: false },
-  { label: "WhatsApp", value: contact.whatsappDisplay, href: waLink(), Icon: WhatsApp, external: true },
+  { label: "WhatsApp", value: contact.whatsappDisplay, href: waLink(), Icon: WhatsAppLine, external: true },
 ];
 
 /** The three contacts as plain icon + address links in one row (stacked below md), right under the closing line. */

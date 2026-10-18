@@ -6,22 +6,10 @@ import { waLink } from "@/content/site";
 import { noOrphan } from "@/lib/text";
 import { LineIcon } from "../LineIcon";
 import { bentoCard } from "./surfaces";
+import { RiPencilLine, RiShieldCheckLine } from "@remixicon/react";
 
-/** Line icons for the cards (Lucide geometry). */
-const icons = {
-  pencil: (
-    <>
-      <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
-      <path d="m15 5 4 4" />
-    </>
-  ),
-  shield: (
-    <>
-      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-      <path d="m9 12 2 2 4-4" />
-    </>
-  ),
-};
+/** The cards' icons (Remix Icon). */
+const icons = { pencil: RiPencilLine, shield: RiShieldCheckLine };
 
 const ease = "duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none";
 
@@ -80,9 +68,10 @@ export function ExistingSite({ previews }: { previews: ReactNode[] }) {
             {/* Icon left, arrow right. The arrow shows on the card that isn't showing its screen
                 (below sm there are no screens, so both keep it). */}
             <span className="relative flex items-start justify-between">
-              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="text-grey-01">
-                {icons[item.icon]}
-              </svg>
+              {(() => {
+                const I = icons[item.icon];
+                return <I size={22} aria-hidden className="text-grey-01" />;
+              })()}
               <span
                 className={`flex size-9 items-center justify-center rounded-full bg-white text-grey-01 shadow-[var(--shadow-card)] transition-opacity duration-300 ease-out ${up ? "sm:opacity-0" : ""}`}
               >

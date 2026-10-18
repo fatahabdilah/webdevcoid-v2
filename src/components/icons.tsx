@@ -1,5 +1,25 @@
-// Generated from the Framer project vector layers. Colors are mapped to currentColor.
+// The webdev logo (from the official lockup), and every other icon on the site from Remix Icon (remixicon.com, free
+// for use in a website's UI; not for logos, and brand glyphs only for their own brand). All draw in currentColor.
 import type { SVGProps } from "react";
+import {
+  RiChat3Fill,
+  RiChat3Line,
+  RiCheckLine,
+  RiEyeFill,
+  RiEyeLine,
+  RiInstagramLine,
+  RiLayoutMasonryFill,
+  RiMailLine,
+  RiPenNibFill,
+  RiPenNibLine,
+  RiPlayLargeFill,
+  RiRocketFill,
+  RiRocketLine,
+  RiVerifiedBadgeFill,
+  RiWhatsappFill,
+  RiWhatsappLine,
+  type RemixiconComponentType,
+} from "@remixicon/react";
 import { LOGO_MARK_D, LOGO_WORDMARK_D } from "@/lib/logoPaths";
 
 type IconProps = SVGProps<SVGSVGElement>;
@@ -25,17 +45,31 @@ function make(width: number, height: number, inner: string) {
 // wordmark height 0.4387h, wordmark width 3.586h, gap 0.3064h.
 export const LogoMark = make(107, 124.852, `<path fill-rule="evenodd" clip-rule="evenodd" d="${LOGO_MARK_D}" fill="currentColor"></path>`);
 export const LogoWordmark = make(447.7, 54.77, `<path transform="translate(-145.253 -35.4007)" d="${LOGO_WORDMARK_D}" fill="currentColor"></path>`);
-export const Check = make(16, 16, "<g><path d=\"M 0 16 L 0 0 L 16 0 L 16 16 Z\" fill=\"transparent\"></path><path d=\"M 3.333 8 L 6.667 11.333 L 13.333 4.667\" fill=\"transparent\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path></g>");
-export const PlayLarge = make(40, 40, "<path d=\"M 0 40 L 0 0 L 40 0 L 40 40 Z\" fill=\"transparent\"></path><path d=\"M 10 6.667 L 10 33.333 C 10 33.63 10.079 33.921 10.229 34.177 C 10.379 34.433 10.594 34.644 10.853 34.788 C 11.112 34.933 11.405 35.006 11.701 35 C 11.998 34.994 12.287 34.909 12.54 34.753 L 34.207 21.42 C 34.449 21.271 34.65 21.062 34.789 20.813 C 34.928 20.565 35.001 20.285 35.001 20 C 35.001 19.715 34.928 19.435 34.789 19.186 C 34.65 18.938 34.449 18.729 34.207 18.58 L 12.54 5.247 C 12.287 5.091 11.998 5.006 11.701 5 C 11.405 4.994 11.112 5.067 10.853 5.211 C 10.594 5.356 10.379 5.567 10.229 5.823 C 10.079 6.079 10 6.37 10 6.667 Z\" fill=\"currentColor\"></path>");
-/** WhatsApp glyph (Simple Icons, CC0): every contact button opens a WhatsApp chat. */
-export const WhatsApp = make(24, 24, "<path d=\"M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z\" fill=\"currentColor\"></path>");
-/** Line glyphs for the footer contacts (Lucide geometry), stroked in currentColor. */
-export const Instagram = make(24, 24, "<g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"2.5\" width=\"19\" height=\"19\" rx=\"5.5\"></rect><circle cx=\"12\" cy=\"12\" r=\"4.2\"></circle></g><circle cx=\"17.4\" cy=\"6.6\" r=\"1.15\" fill=\"currentColor\"></circle>");
-export const Mail = make(24, 24, "<g fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"4.5\" width=\"19\" height=\"15\" rx=\"3\"></rect><path d=\"m21.5 7.5-8.47 5.4a1.94 1.94 0 0 1-2.06 0L2.5 7.5\"></path></g>");
-export const Badge = make(16, 16, "<path d=\"M 10.168 7.126 C 9.51 6.339 9.181 5.945 8.803 6.006 C 8.425 6.067 8.248 6.541 7.895 7.49 L 7.803 7.736 C 7.702 8.006 7.652 8.141 7.554 8.24 C 7.457 8.339 7.322 8.392 7.054 8.497 L 6.809 8.593 C 5.865 8.963 5.392 9.148 5.338 9.526 C 5.284 9.904 5.685 10.225 6.485 10.867 L 6.693 11.033 C 6.92 11.215 7.034 11.306 7.1 11.431 C 7.166 11.556 7.176 11.7 7.197 11.989 L 7.216 12.252 C 7.29 13.268 7.327 13.775 7.672 13.949 C 8.016 14.122 8.441 13.845 9.289 13.293 L 9.509 13.15 C 9.75 12.993 9.871 12.915 10.009 12.892 C 10.148 12.87 10.288 12.907 10.57 12.98 L 10.826 13.047 C 11.816 13.304 12.312 13.433 12.579 13.162 C 12.846 12.891 12.707 12.399 12.431 11.416 L 12.36 11.162 C 12.281 10.882 12.242 10.742 12.262 10.604 C 12.281 10.465 12.358 10.344 12.511 10.1 L 12.65 9.879 C 13.189 9.022 13.458 8.594 13.278 8.253 C 13.098 7.912 12.588 7.885 11.569 7.83 L 11.306 7.815 C 11.016 7.8 10.871 7.792 10.745 7.728 C 10.618 7.665 10.525 7.553 10.338 7.33 Z\" fill=\"currentColor\"></path><path d=\"M 9.918 3.444 L 10.04 3.792 C 10.175 4.174 10.242 4.366 10.372 4.506 C 10.502 4.647 10.681 4.722 11.039 4.87 L 11.365 5.006 C 12.625 5.53 13.255 5.793 13.327 6.328 C 13.357 6.551 13.282 6.76 13.107 6.994 C 13.048 6.978 12.991 6.965 12.938 6.954 C 12.587 6.883 12.14 6.859 11.686 6.834 L 11.359 6.816 C 11.296 6.813 11.248 6.81 11.206 6.808 C 11.178 6.775 11.146 6.737 11.105 6.688 L 10.895 6.436 C 10.601 6.085 10.314 5.741 10.047 5.502 C 9.762 5.247 9.286 4.915 8.645 5.018 C 7.997 5.122 7.651 5.593 7.465 5.93 C 7.292 6.242 7.137 6.659 6.979 7.081 L 6.866 7.386 C 6.847 7.438 6.831 7.479 6.818 7.515 C 6.782 7.529 6.741 7.545 6.689 7.565 L 6.385 7.684 C 5.965 7.849 5.55 8.011 5.241 8.189 C 4.908 8.38 4.441 8.734 4.348 9.385 C 4.256 10.029 4.6 10.5 4.859 10.779 C 5.053 10.987 5.313 11.206 5.591 11.431 C 4.545 11.715 3.989 11.82 3.673 11.479 C 3.317 11.095 3.501 10.399 3.87 9.005 L 3.965 8.645 C 4.069 8.249 4.122 8.051 4.096 7.855 C 4.069 7.659 3.967 7.486 3.763 7.142 L 3.578 6.828 C 2.86 5.614 2.501 5.008 2.741 4.525 C 2.98 4.042 3.66 4.003 5.019 3.925 L 5.37 3.905 C 5.757 3.883 5.95 3.872 6.118 3.782 C 6.287 3.692 6.411 3.533 6.66 3.217 L 6.887 2.928 C 7.764 1.813 8.203 1.256 8.707 1.342 C 9.211 1.427 9.447 2.1 9.918 3.444 Z\" fill=\"currentColor\"></path>");
-// Process step glyphs, filled in currentColor like the rest of the set
-export const ProcessChat = make(34, 34, "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M9 4h16a7 7 0 0 1 7 7v8a7 7 0 0 1-7 7H14.5l-6.3 4.9c-.9.7-2.2.1-2.2-1v-4.3A7 7 0 0 1 2 19v-8a7 7 0 0 1 7-7Zm1.5 9a2 2 0 1 0 0 4a2 2 0 1 0 0-4Zm6.5 0a2 2 0 1 0 0 4a2 2 0 1 0 0-4Zm6.5 0a2 2 0 1 0 0 4a2 2 0 1 0 0-4Z\" fill=\"currentColor\"></path>");
-export const ProcessPen = make(34, 34, "<g transform=\"translate(-3.7 -0.4) scale(0.6)\" fill=\"currentColor\" stroke=\"currentColor\" stroke-width=\"3\" stroke-linejoin=\"round\"><path fill-rule=\"evenodd\" d=\"M12 52 19.77 28.67 27.55 25.13 38.87 36.45 35.33 44.23Z M24.02 35.6a4.4 4.4 0 1 0 0 8.8a4.4 4.4 0 1 0 0-8.8Z\"></path><path d=\"M28.27 23.01 35.34 15.94 48.06 28.66 40.99 35.73Z\"></path><path stroke=\"none\" d=\"M50 6c.8 5 2 6.2 7 7-5 .8-6.2 2-7 7-.8-5-2-6.2-7-7 5-.8 6.2-2 7-7Z\"></path></g>");
-export const ProcessEye = make(34, 34, "<path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M17 7c7.3 0 12.6 5.3 14.8 8.6.6.9.6 1.9 0 2.8C29.6 21.7 24.3 27 17 27S4.4 21.7 2.2 18.4c-.6-.9-.6-1.9 0-2.8C4.4 12.3 9.7 7 17 7Zm0 3.5a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13Zm0 3.5a3 3 0 1 0 0 6a3 3 0 1 0 0-6Z\" fill=\"currentColor\"></path>");
-export const ProcessStructure = make(34, 34, "<path d=\"M 10 3.75 L 23.333 3.75 C 23.386 3.75 23.438 3.753 23.488 3.76 C 24.04 1.598 26 0 28.333 0 C 31.095 0 33.333 2.239 33.333 5 C 33.333 7.333 31.735 9.293 29.574 9.845 C 29.58 9.896 29.583 9.947 29.583 10 L 29.583 23.333 C 29.583 23.386 29.58 23.438 29.574 23.488 C 31.735 24.04 33.333 26 33.333 28.333 C 33.333 31.095 31.095 33.333 28.333 33.333 C 26 33.333 24.04 31.735 23.488 29.574 C 23.438 29.58 23.386 29.583 23.333 29.583 L 10 29.583 C 9.947 29.583 9.896 29.58 9.845 29.574 C 9.293 31.735 7.333 33.333 5 33.333 C 2.239 33.333 0 31.095 0 28.333 C 0 26 1.598 24.04 3.76 23.488 C 3.753 23.438 3.75 23.386 3.75 23.333 L 3.75 10 C 3.75 9.947 3.753 9.896 3.76 9.845 C 1.598 9.293 0 7.333 0 5 C 0 2.239 2.239 0 5 0 C 7.333 0 9.293 1.598 9.845 3.76 C 9.896 3.753 9.947 3.75 10 3.75 Z M 6.24 9.845 C 6.247 9.896 6.25 9.947 6.25 10 L 6.25 23.333 C 6.25 23.386 6.247 23.438 6.24 23.488 C 8.005 23.939 9.394 25.328 9.845 27.093 C 9.896 27.087 9.947 27.083 10 27.083 L 23.333 27.083 C 23.386 27.083 23.438 27.087 23.488 27.093 C 23.939 25.328 25.328 23.939 27.093 23.488 C 27.087 23.438 27.083 23.386 27.083 23.333 L 27.083 10 C 27.083 9.947 27.087 9.896 27.093 9.845 C 25.328 9.394 23.939 8.005 23.488 6.24 C 23.438 6.247 23.386 6.25 23.333 6.25 L 10 6.25 C 9.947 6.25 9.896 6.247 9.845 6.24 C 9.394 8.005 8.005 9.394 6.24 9.845 Z\" fill=\"currentColor\"></path>");
-export const ProcessRocket = make(38, 38, "<path d=\"M 13.724 8.605 L 9.485 12.831 C 8.706 13.608 7.991 14.32 7.427 14.964 C 7.065 15.378 6.702 15.831 6.396 16.331 L 6.354 16.29 C 6.276 16.212 6.237 16.172 6.197 16.134 C 5.461 15.419 4.594 14.851 3.644 14.46 C 3.593 14.439 3.542 14.418 3.439 14.377 L 2.807 14.127 C 1.953 13.789 1.725 12.688 2.375 12.039 C 4.242 10.178 6.484 7.943 7.566 7.494 C 8.52 7.099 9.55 6.967 10.544 7.114 C 11.455 7.248 12.317 7.716 13.724 8.605 Z\" fill=\"currentColor\"></path><path d=\"M 20.961 30.855 C 21.303 31.202 21.53 31.447 21.735 31.708 C 22.005 32.054 22.247 32.42 22.458 32.805 C 22.695 33.238 22.88 33.7 23.248 34.625 C 23.548 35.377 24.545 35.576 25.124 34.999 L 25.264 34.859 C 27.131 32.998 29.373 30.763 29.823 29.685 C 30.22 28.733 30.352 27.706 30.205 26.715 C 30.07 25.807 29.601 24.948 28.709 23.546 L 24.457 27.785 C 23.66 28.58 22.929 29.308 22.269 29.879 C 21.873 30.221 21.439 30.563 20.961 30.855 Z\" fill=\"currentColor\"></path><path d=\"M 19.032 29.031 C 18.746 29.136 18.463 29.189 18.167 29.189 C 16.826 29.189 15.747 28.113 13.589 25.962 L 13.36 25.734 L 16.768 22.275 C 17.253 21.783 17.247 20.992 16.755 20.507 C 16.263 20.023 15.472 20.029 14.987 20.52 L 11.59 23.969 L 11.3 23.68 C 9.142 21.528 8.063 20.452 8.063 19.115 C 8.063 18.794 8.125 18.488 8.249 18.179 C 8.643 17.2 9.66 16.186 11.3 14.551 L 21.045 4.836 C 22.448 3.437 23.15 2.737 24.042 2.368 C 24.934 2 25.927 2 27.911 2 L 28.859 2 C 31.911 2 33.437 2 34.385 2.945 C 35.334 3.891 35.334 5.412 35.334 8.455 L 35.334 9.4 C 35.334 11.379 35.334 12.368 34.964 13.258 C 34.594 14.147 33.893 14.847 32.489 16.246 L 22.744 25.962 C 21.063 27.638 20.037 28.661 19.032 29.031 Z M 27.322 9.988 C 26.058 8.728 24.009 8.728 22.745 9.988 C 21.48 11.248 21.48 13.292 22.745 14.552 C 24.009 15.812 26.058 15.812 27.322 14.552 C 28.587 13.292 28.587 11.248 27.322 9.988 Z\" fill=\"currentColor\"></path>");
+
+/** A Remix icon with the props the call sites use: width (or height) is its size; without one, CSS (size-*) sizes it. */
+function remix(I: RemixiconComponentType) {
+  return function Icon({ width, height, className }: Pick<IconProps, "width" | "height" | "className">) {
+    return <I size={width ?? height} className={className} aria-hidden />;
+  };
+}
+
+export const Check = remix(RiCheckLine);
+export const PlayLarge = remix(RiPlayLargeFill);
+/** Every contact button opens a WhatsApp chat. */
+export const WhatsApp = remix(RiWhatsappFill);
+/** Line WhatsApp, for rows of line icons (the footer contacts). */
+export const WhatsAppLine = remix(RiWhatsappLine);
+export const Instagram = remix(RiInstagramLine);
+export const Mail = remix(RiMailLine);
+export const Badge = remix(RiVerifiedBadgeFill);
+// Process step glyphs
+export const ProcessChat = remix(RiChat3Fill);
+export const ProcessPen = remix(RiPenNibFill);
+export const ProcessEye = remix(RiEyeFill);
+export const ProcessStructure = remix(RiLayoutMasonryFill);
+export const ProcessRocket = remix(RiRocketFill);
+/** Line versions of the Process glyphs, for icons beside text (the stage details); the filled ones sit in the glass illustrations. */
+export const ProcessChatLine = remix(RiChat3Line);
+export const ProcessPenLine = remix(RiPenNibLine);
+export const ProcessEyeLine = remix(RiEyeLine);
+export const ProcessRocketLine = remix(RiRocketLine);

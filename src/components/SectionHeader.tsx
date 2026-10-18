@@ -28,7 +28,7 @@ type SectionHeaderProps = {
   as?: "h1" | "h2";
   /** "dark" for sections on a black background. */
   tone?: Tone;
-  /** Tone of the number pill alone; defaults to `tone`. (Pricing keeps it light: it sits in the white fade at the top.) */
+  /** Tone of the number pill alone; defaults to `tone`. */
   pillTone?: Tone;
   /** Title measure (an em-based max-width class), to choose where a title breaks. */
   titleWidth?: string;

@@ -18,7 +18,7 @@ export const values = [
     keywords: ["Dari nol", "Sesuai brand", "Harga jelas"],
     title: "Desain custom,\nharga masuk akal",
     text: "Dibuat dari nol untuk bisnismu, bukan dari template jadi.",
-    icon: "/images/values/custom.svg",
+    icon: "custom",
   },
   {
     number: "02",
@@ -26,7 +26,7 @@ export const values = [
     keywords: ["Satu tim", "Konten disusun", "Preview tiap tahap"],
     title: "Kualitas premium,\nproses tanpa ribet",
     text: "Satu tim mengurus desain, konten, sampai website tayang.",
-    icon: "/images/values/premium.svg",
+    icon: "premium",
   },
   {
     number: "03",
@@ -34,44 +34,54 @@ export const values = [
     keywords: ["Ringan di HP", "SEO", "Mudah dicari"],
     title: "Cepat dibuka,\nbantu bisnis tumbuh",
     text: "Ringan di HP, mudah dicari, dan menarik calon pelanggan.",
-    icon: "/images/values/fast.svg",
+    icon: "fast",
   },
 ];
 
 /**
- * The service bentos, in grid order: 1 1 2 / 3 4 4 on desktop (row 1 the fixed-price plans, row 2 the
- * custom work). Wide cards sit text-left, art-right.
+ * The services, as the tabs of the Layanan card (components/home/ServiceTabs.tsx), in the order of the pricing
+ * plans they match (`plan` is the plan's name; its price is read from `plans`, so the two never disagree).
+ * Custom shows two illustrations in turn (an online store and a dashboard).
  */
+export type ServiceArtName = "company" | "landing" | "store" | "webapp";
 export type Service = {
+  key: string;
   title: string;
   text: string;
-  /** Which live illustration (components/home/ServiceArt.tsx). */
-  art: "company" | "landing" | "store" | "webapp";
-  wide?: boolean;
+  /** The three points beside the illustration. */
+  points: string[];
+  plan: string;
+  /** Live illustrations (components/home/ServiceArt.tsx); more than one take turns, each with its chip label. */
+  arts: { art: ServiceArtName; label: string }[];
 };
 
 export const services: Service[] = [
   {
-    title: "Company Profile",
-    text: "Tampil kredibel dan mudah ditemukan saat calon pelanggan mencari di Google.",
-    art: "company",
-    wide: true,
-  },
-  {
+    key: "landing",
     title: "Landing Page",
     text: "Satu halaman promo yang fokus mengubah pengunjung jadi pembeli.",
-    art: "landing",
+    points: ["1 halaman desain custom", "Form terhubung WhatsApp", "Domain, hosting, dan SSL tahun pertama"],
+    plan: "Landing Page",
+    arts: [{ art: "landing", label: "Halaman promo" }],
   },
   {
-    title: "Web App",
-    text: "Dashboard dan sistem yang mengurus data serta pekerjaan rutin otomatis.",
-    art: "webapp",
+    key: "company",
+    title: "Company Profile",
+    text: "Tampil kredibel dan mudah ditemukan saat calon pelanggan mencari di Google.",
+    points: ["Sampai 6 halaman custom", "SEO, mudah dicari di Google", "Form WhatsApp + email"],
+    plan: "Company Profile",
+    arts: [{ art: "company", label: "Ditemukan di Google" }],
   },
   {
-    title: "Toko Online",
-    text: "Pelanggan pilih produk, isi keranjang, lalu pesan langsung lewat WhatsApp.",
-    art: "store",
-    wide: true,
+    key: "custom",
+    title: "Custom",
+    text: "Toko online, dashboard, atau sistem yang dibuat sesuai kebutuhan bisnismu.",
+    points: ["Halaman & fitur sesuai kebutuhan", "Admin panel / CMS", "Integrasi pembayaran"],
+    plan: "Custom",
+    arts: [
+      { art: "store", label: "Toko online" },
+      { art: "webapp", label: "Dashboard" },
+    ],
   },
 ];
 

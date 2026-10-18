@@ -407,7 +407,10 @@ html.lenis body {
 }
 .aurora {
   position: absolute;
-  inset: 0;
+  /* reaches past the section, behind the Portfolio and FAQ padding (those sit above it, z-index 1): full blue from
+     well above the "Harga" pill to well below the consultation card (the section's own padding is generous too), the
+     fades happen out there and end before the FAQ heading */
+  inset: -80px 0 -200px;
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
@@ -415,14 +418,14 @@ html.lenis body {
   --aurora-r: 0px;
   /* closing: quick, accelerating back into the card */
   transition: --aurora-r 0.8s cubic-bezier(0.55, 0, 0.75, 0.45);
-  /* Vivid blue at the very top (navy and the shade folds sit lower, behind the title), so the fade from white
-     runs white → light blue → blue instead of going grey on the way */
+  /* Brand blues only, no navy or black (the owner asked for no dark patches): light blue at the top, blue behind
+     the title, light blue again and white at the bottom, so the fades into the white sections stay clean */
   background: linear-gradient(
     180deg,
-    var(--color-holo-50) 0%,
-    var(--color-holo-25) 38%,
-    var(--color-holo-50) 62%,
-    var(--color-holo-75) 82%,
+    var(--color-holo-75) 0%,
+    var(--color-holo-50) 38%,
+    var(--color-holo-75) 66%,
+    color-mix(in srgb, var(--color-holo-75) 45%, var(--color-holo-100)) 84%,
     var(--color-holo-100) 96%
   );
   /* Soft edges into the white sections above and below, eased (smoothstep stops) rather than linear: a linear
@@ -430,22 +433,22 @@ html.lenis body {
   --aurora-edges: linear-gradient(
     180deg,
     rgb(0 0 0 / 0) 0,
-    rgb(0 0 0 / 0.043) 52.5px,
-    rgb(0 0 0 / 0.156) 105px,
-    rgb(0 0 0 / 0.316) 157.5px,
-    rgb(0 0 0 / 0.5) 210px,
-    rgb(0 0 0 / 0.684) 262.5px,
-    rgb(0 0 0 / 0.844) 315px,
-    rgb(0 0 0 / 0.957) 367.5px,
-    #000 420px,
-    #000 calc(100% - 260px),
-    rgb(0 0 0 / 0.957) calc(100% - 227.5px),
-    rgb(0 0 0 / 0.844) calc(100% - 195px),
-    rgb(0 0 0 / 0.684) calc(100% - 162.5px),
-    rgb(0 0 0 / 0.5) calc(100% - 130px),
-    rgb(0 0 0 / 0.316) calc(100% - 97.5px),
-    rgb(0 0 0 / 0.156) calc(100% - 65px),
-    rgb(0 0 0 / 0.043) calc(100% - 32.5px),
+    rgb(0 0 0 / 0.043) 30px,
+    rgb(0 0 0 / 0.156) 60px,
+    rgb(0 0 0 / 0.316) 90px,
+    rgb(0 0 0 / 0.5) 120px,
+    rgb(0 0 0 / 0.684) 150px,
+    rgb(0 0 0 / 0.844) 180px,
+    rgb(0 0 0 / 0.957) 210px,
+    #000 240px,
+    #000 calc(100% - 300px),
+    rgb(0 0 0 / 0.957) calc(100% - 262.5px),
+    rgb(0 0 0 / 0.844) calc(100% - 225px),
+    rgb(0 0 0 / 0.684) calc(100% - 187.5px),
+    rgb(0 0 0 / 0.5) calc(100% - 150px),
+    rgb(0 0 0 / 0.316) calc(100% - 112.5px),
+    rgb(0 0 0 / 0.156) calc(100% - 75px),
+    rgb(0 0 0 / 0.043) calc(100% - 37.5px),
     rgb(0 0 0 / 0) 100%
   );
   /* the reveal circle (soft 180px rim), intersected with those edges */
@@ -479,9 +482,9 @@ html.lenis body {
 .aurora > i.light {
   background: radial-gradient(50% 55% at 50% 58%, color-mix(in srgb, var(--color-holo-75) 45%, rgb(255 255 255 / 0.55)), transparent);
 }
-/* shadow folds, centred behind the title rather than at the top edge, so no black reaches the white fade */
+/* shadow folds, centred behind the title: brand blue, not black (the owner asked for no black in this background) */
 .aurora > i.shade {
-  background: radial-gradient(50% 30% at 50% 30%, rgb(0 0 0 / 0.5), transparent);
+  background: radial-gradient(50% 30% at 50% 30%, color-mix(in srgb, var(--color-holo-50) 35%, transparent), transparent);
 }
 /* film grain (static, painted once) */
 .aurora::after {

@@ -6,11 +6,24 @@ import { motion, useSpring } from "motion/react";
 import { brand, mix } from "@/lib/brand";
 import { useMedia } from "@/lib/useMedia";
 import { VIEW_H, VIEW_W, cursorPath } from "@/lib/cursorShape";
+import {
+  RiArrowLeftSLine,
+  RiCalendarLine,
+  RiCheckLine,
+  RiExpandLeftRightLine,
+  RiFlashlightFill,
+  RiMenuLine,
+  RiSearchLine,
+  RiShieldCheckFill,
+  RiShoppingBag3Line,
+  RiTimeLine,
+  RiWhatsappFill,
+} from "@remixicon/react";
 
 /*
- * Illustrations for the service bentos (ServiceBento.tsx), in webdev.co.id's style: white UI cards, brand
+ * Illustrations for the services (ServiceTabs.tsx), in webdev.co.id's style: white UI cards, brand
  * blues, Geist, real photos (free Unsplash, no brands). Each tells its service's own story as a short
- * storyboard; only the active card plays (see ServiceBento), the rest hold their finished frame, as does
+ * storyboard; only the shown one plays (see ServiceTabs), the rest hold their finished frame, as does
  * every card with reduced motion. Canvases are sized so one canvas unit is ~0.75px on desktop in every card.
  */
 
@@ -36,90 +49,32 @@ function useIds() {
 type Ids = ReturnType<typeof useIds>;
 const url = (id: string) => `url(#${id})`;
 
-/** A 24-unit icon (Lucide geometry), centred on (cx, cy) at the given size. */
+/** A 24-unit icon, centred on (cx, cy) at the given size. */
 function Icon({ cx, cy, size, children }: { cx: number; cy: number; size: number; children: ReactNode }) {
   const s = size / 24;
   return <g transform={`translate(${cx - size / 2} ${cy - size / 2}) scale(${s})`}>{children}</g>;
 }
 
-const stroke = (color: string, width = 2) =>
-  ({ fill: "none", stroke: color, strokeWidth: width, strokeLinecap: "round", strokeLinejoin: "round" }) as const;
-
-/** Lucide glyphs (24-unit geometry, stroked by the caller). */
+/** Remix Icon glyphs (24-unit boxes, like the Icon frame above). */
 const glyph = {
-  users: (
-    <>
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-    </>
-  ),
-  grid: (
-    <>
-      <rect x="3" y="3" width="7" height="7" rx="1.5" />
-      <rect x="14" y="3" width="7" height="7" rx="1.5" />
-      <rect x="14" y="14" width="7" height="7" rx="1.5" />
-      <rect x="3" y="14" width="7" height="7" rx="1.5" />
-    </>
-  ),
-  image: (
-    <>
-      <rect x="3" y="3" width="18" height="18" rx="2" />
-      <circle cx="9" cy="9" r="2" />
-      <path d="m21 15-3.09-3.09a2 2 0 0 0-2.82 0L6 21" />
-    </>
-  ),
-  search: (
-    <>
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </>
-  ),
-  bag: (
-    <>
-      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
-      <path d="M3 6h18M16 10a4 4 0 0 1-8 0" />
-    </>
-  ),
-  megaphone: (
-    <>
-      <path d="m3 11 18-5v12L3 14v-3z" />
-      <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
-    </>
-  ),
-  chat: <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />,
-  check: <path d="M20 6 9 17l-5-5" />,
-  shield: (
-    <>
-      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
-      <path d="m9 12 2 2 4-4" />
-    </>
-  ),
-  calendar: (
-    <>
-      <rect x="3" y="4" width="18" height="18" rx="2" />
-      <path d="M16 2v4M8 2v4M3 10h18" />
-    </>
-  ),
-  bolt: <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />,
-  clock: (
-    <>
-      <circle cx="12" cy="12" r="10" />
-      <path d="M12 6v6l4 2" />
-    </>
-  ),
-  lock: (
-    <>
-      <rect x="5" y="11" width="14" height="10" rx="2" />
-      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-    </>
-  ),
+  search: RiSearchLine,
+  check: RiCheckLine,
+  clock: RiTimeLine,
+  bolt: RiFlashlightFill,
+  bag: RiShoppingBag3Line,
+  calendar: RiCalendarLine,
+  shield: RiShieldCheckFill,
+  menu: RiMenuLine,
+  back: RiArrowLeftSLine,
+  slide: RiExpandLeftRightLine,
 };
 type GlyphName = keyof typeof glyph;
 
-/** WhatsApp glyph (Simple Icons, CC0), filled, in a 24-unit box. */
-const WA =
-  "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z";
+/** A glyph in the given colour; `bold` adds a 1-unit stroke, for the small white marks on blue. */
+function Glyph({ name, color, bold }: { name: GlyphName; color: string; bold?: boolean }) {
+  const I = glyph[name];
+  return <I size={24} color={color} {...(bold ? { stroke: color, strokeWidth: 1, strokeLinejoin: "round" as const } : {})} />;
+}
 
 /* ------------------------------------------------------------------ Kit */
 
@@ -196,7 +151,7 @@ function Chip({ id, x, y, label, icon, fs = 17, rotate = 0 }: { id: Ids; x: numb
       <rect x={x + 0.75} y={y + 0.75} width={w - 1.5} height={h - 1.5} rx={h / 2 - 0.75} fill="none" stroke={EDGE} strokeWidth="1.5" />
       <circle cx={x + h / 2} cy={y + h / 2} r={h * 0.33} fill={url(id("blue"))} />
       <Icon cx={x + h / 2} cy={y + h / 2} size={h * 0.34}>
-        <g {...stroke("#fff", 2.8)}>{glyph[icon]}</g>
+        <Glyph name={icon} color="#fff" bold />
       </Icon>
       <text x={x + h * 0.95} y={y + h / 2 + fs * 0.36} fontSize={fs} fontWeight={500} fill={INK}>
         {label}
@@ -211,7 +166,11 @@ function PillButton({ id, x, y, w, h, label, fs, whatsapp }: { id: Ids; x: numbe
   return (
     <g>
       <rect x={x} y={y} width={w} height={h} rx={h / 2} fill={url(id("blue"))} filter={url(id("lift"))} />
-      {whatsapp && <path d={WA} fill="#fff" transform={`translate(${textX - label.length * fs * 0.28 - fs * 1.55} ${y + h / 2 - fs * 0.55}) scale(${(fs * 1.1) / 24})`} />}
+      {whatsapp && (
+        <g transform={`translate(${textX - label.length * fs * 0.28 - fs * 1.55} ${y + h / 2 - fs * 0.55}) scale(${(fs * 1.1) / 24})`}>
+          <RiWhatsappFill size={24} color="#fff" />
+        </g>
+      )}
       <text x={textX} y={y + h / 2 + fs * 0.36} fontSize={fs} fontWeight={600} fill="#fff" textAnchor="middle">
         {label}
       </text>
@@ -516,7 +475,7 @@ export function CompanyProfileArt(props: StoryProps) {
           <ScreenBar w={sw} address="klinik gigi bekasi" />
           <rect x="24" y="40" width="330" height="34" rx="17" fill="#fff" stroke={tint(0.8)} strokeWidth="1.2" />
           <Icon cx={44} cy={57} size={13}>
-            <g {...stroke(MUTED, 2.4)}>{glyph.search}</g>
+            <Glyph name="search" color={MUTED} />
           </Icon>
           <text x="60" y="61" fontSize="12" fill={INK}>
             klinik gigi bekasi
@@ -595,7 +554,7 @@ export function CompanyProfileArt(props: StoryProps) {
               <rect x={16 + i * 170} y="256" width="160" height="54" rx="10" fill={SOFT} />
               <circle cx={38 + i * 170} cy="283" r="10" fill={tint(0.55)} />
               <Icon cx={38 + i * 170} cy={283} size={10}>
-                <g {...stroke("#fff", 3)}>{glyph.check}</g>
+                <Glyph name="check" color="#fff" bold />
               </Icon>
               <text x={56 + i * 170} y="279" fontSize="10.5" fontWeight={600} fill={INK}>
                 {name}
@@ -645,7 +604,9 @@ export function LandingPageArt(props: StoryProps) {
       <text x="67" y="50" fontSize="11.5" fontWeight={600} fill={INK}>
         Senja
       </text>
-      <path d="M294 42h14M294 48h14" {...stroke(INK, 1.6)} />
+      <Icon cx={301} cy={45} size={20}>
+        <Glyph name="menu" color={INK} />
+      </Icon>
       <Photo id={id} name="lilin" src="/images/stock/lilin.jpg" x={44} y={64} w={268} h={110} r={12} width={540} />
       <rect x="56" y="74" width="44" height="20" rx="10" fill="#fff" />
       <text x="78" y="88" fontSize="10.5" fontWeight={700} fill={BLUE} textAnchor="middle">
@@ -662,7 +623,7 @@ export function LandingPageArt(props: StoryProps) {
       </text>
       <path d="M123 216.5h52" stroke={SUBTLE} strokeWidth="1" />
       <Icon cx={50} cy={238} size={11}>
-        <g {...stroke(MUTED, 2.4)}>{glyph.clock}</g>
+        <Glyph name="clock" color={MUTED} />
       </Icon>
       <text x="60" y="241.5" fontSize="10" fill={MUTED} style={{ fontVariantNumeric: "tabular-nums" }}>
         Promo berakhir {clock}
@@ -752,7 +713,7 @@ export function WebAppArt(props: StoryProps) {
       <Card id={id} x={302} y={96} w={234} h={172} />
       <circle cx="328" cy="124" r="12" fill={SOFT} />
       <Icon cx={328} cy={124} size={13}>
-        <g {...stroke(BLUE, 2.2)}>{glyph.bolt}</g>
+        <Glyph name="bolt" color={BLUE} />
       </Icon>
       <text x="348" y="128.5" fontSize="12.5" fontWeight={600} fill={INK}>
         Berjalan otomatis
@@ -766,7 +727,7 @@ export function WebAppArt(props: StoryProps) {
             <circle cx="333" cy={y + 15} r="7.5" fill={done ? tint(0.55) : "#fff"} stroke={done ? "none" : tint(0.7)} strokeWidth="1.4" style={{ transition: "fill 0.3s" }} />
             <g style={{ opacity: done ? 1 : 0, transition: "opacity 0.3s" }}>
               <Icon cx={333} cy={y + 15} size={9}>
-                <g {...stroke("#fff", 3.2)}>{glyph.check}</g>
+                <Glyph name="check" color="#fff" bold />
               </Icon>
             </g>
             <text x="348" y={y + 19} fontSize="11" fill={done ? INK : MUTED}>
@@ -820,7 +781,7 @@ export function OnlineStoreArt(props: StoryProps) {
           </text>
           <rect x="12" y={tb + 26} width={sb - 24} height="22" rx="11" fill={SOFT} />
           <Icon cx={26} cy={tb + 37} size={10}>
-            <g {...stroke(MUTED, 2.6)}>{glyph.search}</g>
+            <Glyph name="search" color={MUTED} />
           </Icon>
           <text x="36" y={tb + 40.5} fontSize="9" fill={SUBTLE}>
             Cari produk
@@ -889,12 +850,14 @@ export function OnlineStoreArt(props: StoryProps) {
 
       {/* Front: the product page */}
       <Phone id={id} name="product" x={254} y={40} w={FRONT_W} h={470}>
-        <path d={`M18 ${tf + 6}l-6 6 6 6`} {...stroke(INK, 1.8)} />
+        <Icon cx={15} cy={tf + 12} size={20}>
+          <Glyph name="back" color={INK} />
+        </Icon>
         <text x={sf / 2} y={tf + 16} fontSize="11" fontWeight={600} fill={INK} textAnchor="middle">
           Detail produk
         </text>
         <Icon cx={sf - 22} cy={tf + 12} size={16}>
-          <g {...stroke(INK, 2)}>{glyph.bag}</g>
+          <Glyph name="bag" color={INK} />
         </Icon>
         <g style={{ opacity: added ? 1 : 0, transition: "opacity 0.3s" }}>
           <circle cx={sf - 14} cy={tf + 5} r="6.5" fill={BLUE} stroke="#fff" strokeWidth="1.5" />
@@ -995,7 +958,9 @@ export function RedesignPreview() {
       <path d={`M${split} 36V240`} stroke="#fff" strokeWidth="3" />
       <circle cx={split} cy="152" r="17" fill={NAVY} fillOpacity=".12" />
       <circle cx={split} cy="150" r="15" fill="#fff" />
-      <path d={`M${split - 4} 145l-5 5 5 5M${split + 4} 145l5 5-5 5`} {...stroke(BLUE, 2.2)} />
+      <Icon cx={split} cy={150} size={20}>
+        <Glyph name="slide" color={BLUE} bold />
+      </Icon>
       <rect x="24" y="200" width="46" height="20" rx="10" fill="#fff" />
       <text x="47" y="214" fontSize="11" fontWeight={600} fill={MUTED} textAnchor="middle">
         Lama
@@ -1024,7 +989,7 @@ export function CarePreview() {
       </text>
       <rect x="276" y="48" width="66" height="22" rx="11" fill={SOFT} />
       <Icon cx={290} cy={59} size={11}>
-        <g {...stroke(BLUE, 2.6)}>{glyph.calendar}</g>
+        <Glyph name="calendar" color={BLUE} />
       </Icon>
       <text x="318" y="63" fontSize="10.5" fontWeight={600} fill={BLUE} textAnchor="middle">
         Oktober
@@ -1037,7 +1002,7 @@ export function CarePreview() {
             <rect x="16" y={y} width="328" height="40" rx="11" fill={SOFT} stroke={EDGE} strokeWidth="1.2" />
             <circle cx="38" cy={y + 20} r="10" fill={url(id("blue"))} />
             <Icon cx={38} cy={y + 20} size={11}>
-              <g {...stroke("#fff", 3.2)}>{live ? glyph.shield : glyph.check}</g>
+              <Glyph name={live ? "shield" : "check"} color="#fff" bold={!live} />
             </Icon>
             <text x="56" y={y + 24.5} fontSize="12.5" fill={INK}>
               {task}

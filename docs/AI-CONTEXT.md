@@ -33,7 +33,7 @@ Last updated: 2026-10-14.
 - **Root stays clean.** Only config files belong at the root. Put new working files somewhere sensible (e.g. `social/`). Don't use `public/`, since everything in it ships with the site and lands in the public repo.
 - **Check changes visually** with headless Chrome screenshots (desktop 1440, tablet ~1024, phone 390), and check mobile for every UI change. Run `npx tsc --noEmit -p .`, `npx eslint src`, and `npx next build` before saying something works.
 - **Dev server port varies.** Other local projects often hold ports 3000/3001, and webdev has run on 3002. Find the right one with `lsof -nP -iTCP -sTCP:LISTEN` plus each page's `<title>`.
-- **Stale CSS:** the dev server sometimes serves old CSS. A trivial comment edit in `globals.css` forces a rebuild. Some file-convention changes (e.g. a new `icon.svg`) need a dev server restart. New rules added to `globals.css` were once not served at all, even after a touch; give a section's own CSS a co-located file imported by its component instead (e.g. `values-system.css`), and verify behaviour on a production build (`next build && next start -p 3005`).
+- **Stale CSS:** the dev server sometimes serves old CSS. A trivial comment edit in `globals.css` forces a rebuild. Some file-convention changes (e.g. a new `icon.svg`) need a dev server restart. New rules added to `globals.css` were once not served at all, even after a touch; give a section's own CSS a co-located file imported by its component instead (e.g. `src/components/preloader/preloader.css`), and verify behaviour on a production build (`next build && next start -p 3005`).
 
 ---
 
@@ -63,6 +63,12 @@ The palette, from 2026-10-11 on:
 
 - Never use the word **"UMKM"**.
 - Plan names are **Company Profile**, **Landing Page** and **Custom**. Write **"SEO"**.
+
+### Icons
+
+- **Every icon is Remix Icon** (`@remixicon/react`, remixicon.com), on the owner's request; the only exception is the webdev logo itself (`LogoMark`/`LogoWordmark` in `icons.tsx`, and the emblem). Remix's license allows use in a website's UI for free; it forbids selling the icons as a pack or using one as a logo, and brand glyphs (WhatsApp, Instagram) may only stand for their own brand.
+- Shared ones live in `src/components/icons.tsx` (WhatsApp, Instagram, Mail, Check, Badge, Play, the Process glyphs) and `LineIcon.tsx` (plus and arrows, thickened with a 1-unit stroke to sit with the pills). Section-specific sets sit next to their section (values, plan tiles, the included-in-every-price icons, ExistingSite, the ServiceArt illustrations, which nest Remix SVGs in their 24-unit `Icon` frame).
+- Style: **Fill** for glyphs inside a shape (tiles, discs, badges, the Process glass illustrations, the WhatsApp glyph in buttons); **Line** for icons beside text (the Process stage details, the ExistingSite cards, the footer contacts, including WhatsApp there via `WhatsAppLine`) and small UI marks (arrows, checks, search bars). Icons with the same role in one row or list share one style. The ServiceArt mockups mix both, like the app UIs they draw. Pick new icons from Remix, never draw or pull from another set.
 
 ### Buttons and calls to action
 
@@ -105,42 +111,31 @@ All copy lives in `src/content/` (`home.ts`, `portfolio.ts`, `site.ts`). Section
 - **Intro state** (`src/lib/intro.ts`): `introPhase()`, `useIntroEntered()`, `useIntroDone()` are unchanged; the navbar, cursor, smooth scroll, entrance animations and the animated backgrounds still wait on them. `[data-intro-zoom]` on the hero is what settles.
 - **The old intro** (logo write-on over a dither field, a scripted cursor click, a zoom out through the logo) is archived in `social/archive/intro-v1/` with a README on how to restore it (`git checkout 760477c -- src/components/preloader src/lib/intro.ts`). `tsconfig.json` excludes `social/` so the archive isn't type-checked.
 
-### Kenapa kami (`Values.tsx` → `ValuesSystem.tsx`)
+### Admin (`/admin`, login required)
 
-Figma 1373:2051, adapted. Dark section (`#101010`).
-- **Left:** SubTitle "002 kenapa kami", the gradient h2 "Kenapa webdev.co.id?", the "Lihat cara kerja" outline link to `/#process`. The owner removed the supporting paragraph under the heading. Below it the three values (`values` in `home.ts`, each with `short` and three `keywords`) as an accordion.
-- **Accordion:** CSS only (`grid-template-rows` 0fr → 1fr, 0.5 s, the same ease both ways). Each body holds all three texts stacked (the others invisible), so every body is as tall as the longest text; with one opening as the other closes, the list keeps one height and the page below never moves (the owner noticed the whole page bobbing with the earlier motion/spring version).
-- **Auto-play:** the open value's loading line (`.vs-progress`, a CSS scaleX animation, 5.2 s) fills; its `animationend` opens the next one, 1 → 2 → 3 → 1 forever. A click picks one. Off screen the whole section gets `.vs-paused` (all animations paused, SMIL too via `pauseAnimations()`); with reduced motion nothing loops.
-- **Right:** a card with layered brand gradients (navy centre, a drifting blurred conic band, a bright top-right corner, a blue pool below, dots and grain). In it the diagram: the webdev emblem at the centre, the three value nodes on a ring, arcs orbiting, light running along spokes and curves, the open value's node lit (ping + gradient fill), its keywords as pills round the emblem, and its number + short name in a caption under the ring. (Per-node labels beside the nodes were dropped: they got cut off at narrow widths.)
-- CSS lives in `src/components/home/values-system.css`, not `globals.css`.
+The owner's **Content Studio** (their claude.ai artifact: Design and Sales boards, approvals, schedule, activity), served behind a login, after the pattern of the owner's other dashboard ("Creative Terminal", its HANDOFF-API.md): the artifact's HTML untouched, `window.claude` answered by a shim over the site's own API. Nothing in the public site changes; robots.txt disallows `/admin` and every admin response is `no-store`, `noindex`, `X-Frame-Options: DENY`.
+- **Files:** `src/app/admin/studio.html` (the artifact exactly as exported; edit it there), `src/app/admin/route.ts` (serves it to a signed-in account and injects the shim), `src/app/admin/login/route.ts` (plain HTML login page, outside the site layout so no intro/cursor/smooth scroll), `src/app/admin/logout/route.ts`, `src/app/admin/api/{doc,inbox}/route.ts`, `src/lib/admin/{auth,store}.ts`, `supabase/admin.sql`, `scripts/admin-setup.mjs`.
+- **The shim:** the Studio only calls `db.doc("board/state"|"board/sales").onSnapshot`, `db.collection("inbox").add` / `.orderBy().limit().onSnapshot`, and `user.id()` / `user.can()`. The shim answers these from `/admin/api` and polls every 5 s (and on tab focus). A 403 is passed to the Studio as `invalid_argument`, which it shows as "this account can only view".
+- **Accounts and roles:** `owner` (everything) = `ADMIN_EMAIL` + `ADMIN_PASSWORD_HASH`; optional read-only `team` = `ADMIN_TEAM_EMAIL` + `ADMIN_TEAM_PASSWORD_HASH`; `ADMIN_SESSION_SECRET` signs the cookie; `ADMIN_API_TOKEN` (bearer, owner rights) lets an agent sync without a browser. Hashes are `scrypt:<salt>:<hash>` (colons: Next expands `$` in .env files). `npm run admin:setup` (owner + Supabase) and `npm run admin:setup -- team` write `.env.local` (git-ignored). Session: HMAC-signed, HttpOnly, SameSite=Lax cookie on `/admin`, 7 days; removing an account from env signs it out. Logins throttled 5 failures / IP / 15 min (in memory). Errors are `{code, message}` (codes as in the handoff: `not_granted`, `bad_request`, `quota_exceeded`, `unavailable`).
+- **Data: Supabase** when `SUPABASE_URL` and `SUPABASE_SECRET_KEY` (an `sb_secret_…` key, or a legacy `service_role` JWT) are set: tables `admin_docs` and `admin_inbox` from `supabase/admin.sql` (run once in the SQL Editor), RLS on with no policies so only the server's secret key reaches them, called over Supabase's REST API with plain fetch (no SDK). Without those env vars it falls back to JSON files in `data/admin/` (local only; they would not survive serverless hosting). Tested against a mock of the REST API; not yet against a live project.
+- **Filling the board:** the agent PUTs the whole document: `curl -X PUT -H "Authorization: Bearer $ADMIN_API_TOKEN" -H "Content-Type: application/json" --data @state.json "https://webdev.co.id/admin/api/doc?path=board/state"` (same for `board/sales`). Until then the Studio shows its own "Board belum dikirim". Inbox: `GET /admin/api/inbox`, mark handled with `PATCH /admin/api/inbox?id=…` (`{"status":"done"}`). The old board lives in the claude.ai artifact's own database, on another claude.ai account than the one connected on 2026-10-18; migrating it needs that artifact's link.
+- The repo is public, so `studio.html` (team names, workflow) is visible on GitHub once pushed; the board data and credentials are not.
 
-### Emblem (`src/components/Emblem.tsx`)
+### Kenapa kami (`Values.tsx`)
 
-The webdev emblem from the Brand Hub (Figma 1244:242 / 1241:2 "Mockup / Emblem Ring"), drawn entirely in code, no images: the outer hairline ring and the holo ring are CSS conic gradients (colours sampled from the design's ring renders) masked to annuli; the disc is a black → grey linear gradient; the mark is the design's vector split into its four parts, each with its own chrome gradient (dark band, brand-blue fringe, white highlights), a soft dark inner edge, a fine light bevel, and a sheen that sweeps over it every 7 s (`emblem.css`). The chrome uses brand blues instead of the orange/yellow fringes of Figma's shader. History: the live Figma shader (WebGPU + experimental HTML-in-Canvas) only showed a plain white mark in most browsers; an exported render on white left white bits at the edges, so the owner asked for it in code.
+**Three value cards** (the owner's pick, restored 2026-10-18 after trying a self-playing list + system diagram). White section: centred header (light pill, plain dark title, the line "Website yang bukan cuma bagus dilihat, tapi cepat dan mendukung tujuan bisnismu."), then per card a light shell (`grey-08`, white border, hairline) around a dark tile (navy-black `#363a44` → `#00040f`, the site's one black, shared with the pricing Custom card and the liquid-metal button) with a dotted field, the value's Remix icon (pen nib / diamond / flash) on a brand-blue disc in a blue-glowing double ring, and its number tab at the tile's foot; title and text below in dark greys.
+- The list + diagram version (loading line 1 → 2 → 3, the webdev emblem with the chrome mark from Figma 1390:2858, value nodes and keywords) is archived locally in `social/archive/kenapa-kami-system/` with a README on bringing it back; `short` and `keywords` stay on each value in `home.ts` for it. The chrome mark render also lives at `social/story/bg/mark-chrome.png`.
 
-### Services (`Services.tsx` → `ServiceBento.tsx` + `ServiceArt.tsx`)
+### Services (`Services.tsx` → `ServiceTabs.tsx` + `ServiceArt.tsx`)
 
-The bento grid:
+**Tabs** (option C of the owner's layout study in Figma, section 1428:219; the 4-card bento was replaced 2026-10-18): a pill tab bar (Landing Page · Company Profile · Custom, the pricing plans' order; opens on Company Profile, the recommended plan; arrow keys move between tabs; the dark pill slides) over one large card: title, story, three points with checks on the left; the live illustration large on the right. Custom shows the online-store and dashboard illustrations in turn (switching when one story finishes, or on its "Toko online / Dashboard" chips). Text and illustration cross-fade with a blur; every tab's text block is stacked invisibly in the same grid cell, so the card keeps one height and the page never moves when switching. Data: `services` in `home.ts` (`key, title, text, points, plan, arts[]`).
+- **No prices in Layanan** (the owner's call, 2026-10-18; prices live in Harga), as in the old bento.
+- Illustrations (unchanged): Company Profile = Google search → the clinic site (laptop, with the site's own demo cursor); Landing Page = promo → order counter; Custom = online store (catalogue → cart → WhatsApp, three phones) and dashboard + automated jobs. Only the shown one plays; stories pause off screen (`useStory` uses an IntersectionObserver).
+- Below the card: the blue consultation card + "Sudah termasuk di setiap harga" (the old "Yang selalu kamu dapat" heading is gone). **Row 1 (the tabs card) and row 2 are both 500px tall on desktop** (the owner asked for equal rows); stacked from md the two row-2 cards share equal grid rows. Then "Butuhnya bukan website baru?".
 
-- **Order:** Company Profile (wide), Landing Page, Web App (Custom), Toko Online (wide).
-- **Layout:** desktop `1 1 2 / 3 4 4`, tablet `1 1 / 2 3 / 4 4`, stacked on phones.
-- **Card content:** each card shows only the title, one line of text and a live illustration. There are **no price labels and no CTA link** (both removed on request).
-- **Device mock-ups only in two cards:** top-left (Company Profile, MacBook-style laptop) and bottom-right (Toko Online, three stacked iPhone-style phones).
-- **The demo cursor appears only in the Company Profile card,** and is always the site's own arrow.
+### Harga (`Pricing.tsx`)
 
-Each illustration plays a short story:
-
-- **Company Profile:** Google search → the clinic site.
-- **Landing Page:** promo → order counter.
-- **Web App:** dashboard + automated jobs.
-- **Toko Online:** catalogue → cart → WhatsApp.
-
-**Only one story plays at a time:**
-
-- On desktop, the hovered card plays; otherwise the cards take turns via `onLoop`.
-- On touch screens, the card crossing the middle of the screen plays.
-
-Stories pause off screen (`useStory` uses an IntersectionObserver).
+- Hovering (or, stacked, scrolling to) the premium "Custom" plan opens the **aurora** ambient behind the section (`.aurora` in `globals.css`: a blue gradient with drifting light curtains and shade folds, dots and grain). It uses **brand blues only, no navy or black** (the owner asked twice, 2026-10-18): light blue → blue behind the title → light blue → white, and the shade folds are a faint blue (35%). The ambient reaches **80px above and 200px below the section** (`inset: -80px 0 -200px`, eased fades of 240px top / 300px bottom; reaching 200–320px up read as "ketinggian") and the section pads `pt-24 pb-28 md:pt-28 md:pb-36 lg:pt-[140px] lg:pb-[180px]`, so a white gap follows the Portfolio dots, the blue is full just above the "Harga" pill, to well below the consultation card, fading out before the FAQ heading (the owner asked twice for more reach); it runs behind the Portfolio and FAQ padding, which sit above it (`relative z-[1]`), and the section clips only horizontally (`overflow-x-clip`). The reveal origin is measured against the ambient's own box. While it is on, the whole header turns dark-tone together, the "006 harga" pill included (white text on a translucent pill), and back when it closes. The Custom card itself keeps its dark gradient.
 
 ### Cara kerja (`Process.tsx`)
 
@@ -177,18 +172,23 @@ See `social/README.md` for how to open and re-render.
 
 ### Instagram Story (`social/story/`)
 
-- **Format:** 1080×1920, 13.5 s, 30 fps.
+- **Format:** 1080×1920, 11.6 s, 30 fps (render with `node social/tools/render.mjs <abs html> <framesDir> 11.6 30`, then `encode.swift`).
 - **Composition:**
   - The webdev mark sits on a gradient tile hanging from a cord.
   - The tile drops in and swings like a pendulum.
   - **The cord is a wipe:** one side shows "BUTUH / WEBSITE?", the other "YUK, / NGOBROL."
-  - The first line is blue (`#0346D6`) and the second black; the owner tried "question black, answer blue" and reverted it.
+  - The headline is **one gradient across both lines** (owner: "satu kesatuan", not one gradient per line): navy at the top of the first line → blue → light at the bottom of the second, the Brand Hub post's colours (Figma 1387:2841). Set per letter (each paints its slice of a two-line-tall gradient) so the rise-in keeps it; tracking −0.02em as in the post. It is the file's fill style "GRADIENT FIXX LASTT", and the post's type also has an **inner shadow** (black 25%, y 3.93, blur 3.93 at 83 px = 0.0473em), reproduced as the SVG filter `#type-inner` (y 6.05, stdDeviation 3.03 at 128 px) on both headlines. (Earlier: first line blue, second black.)
+  - The hanging tile is **brand blue**, deeper than the headline (navy → blue, no light blue), with the plain **white mark**. Tried and reverted: a black tile with the white mark ("jelek kalo item"), and the chromatic-metal mark (Figma 1390:2858, cut to `story/bg/mark-chrome.png`, kept on disk) on blue and then on black.
+  - If the chrome mark is wanted again: `story/bg/mark-chrome.png` is Figma's shader render cut with `social/tools/cutmark.cjs` (vector shape ∩ flood fill of the export's flat grey #444, un-premultiplied so no fringe): `NODE_PATH=$PWD/node_modules node social/tools/cutmark.cjs <export.png> <vector.svg> <out.png> 68`.
+  - **One black** (`--ink: #00040f`, the CTA plate's navy-black) for the lockup, the cord, the button plate and the cursor body.
+  - Colour logic: monochrome brand blue plus neutrals, roughly 60% neutral (white wall, grain, light) / 30% blue (headline, tile) / 10% ink (lockup, cord, CTA); the CTA is the strongest contrast on screen and lights blue on hover.
+  - Background as in the post: white, Figma's grey grain (`story/bg/light-2.png`, 40%, quarter-turned and flipped) and window-light shadows (`story/bg/light-1.png`), the post's boxes scaled ×1920/1350. It replaced the bluish wall gradient.
   - The swing is wide enough to clear the text at both ends, while the tile stays inside the frame.
 - **Type:**
   - Headline: Geist 700, 128 px. Weight 900 was too heavy.
-  - Top: the official lockup (`social/brand/webdev-lockup.svg`) **in black**.
-  - Bottom: one hashtag, **#jasawebsite**, in a single colour (navy). Not #webdevcoid.
-- **Layout:** the space under the hashtag is left for Instagram's WhatsApp sticker.
+  - Top: the official lockup (`social/brand/webdev-lockup.svg`) **in black**, 230 px wide (mark ~47 px tall) and centred on the frame's middle, the same as the Brand Hub Instagram posts (Figma 1387:2841: lockup at x 425–655 of 1080, 75 px from the top).
+  - Bottom: the site's **black liquid-metal button** ("Klik link di bio" + arrow, 2.4× the site's pill), replacing the old #jasawebsite hashtag. The WebGL effect is the site's own: `social/tools/build-lm.mjs` transpiles `LiquidMetal.tsx` and `cursorShape.ts` into `social/story/liquid-metal.js` (re-run it after changing either). At 7.0 s the site's cursor comes in from the bottom right, morphs into the circle on the button's right end (clear of the label) at 8.3 s, the metal lights; it clicks at 9.7 s (ripple), and the video ends at 11.6 s. Rejected on the way: a blue gradient pill with a shine sweep ("gausa berkilau") and a white link-sticker pill.
+- **Layout:** the space under the button is left for Instagram's WhatsApp sticker.
 
 ### Reel (`social/reel/`)
 

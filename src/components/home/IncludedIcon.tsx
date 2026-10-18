@@ -1,10 +1,11 @@
-import { useId, type ReactNode } from "react";
+import { useId } from "react";
+import { RiMacbookFill, RiGlobalFill, RiLockFill, RiSeoFill, type RemixiconComponentType } from "@remixicon/react";
 import { brand, mix } from "@/lib/brand";
 
 /*
  * Icons for "Sudah termasuk di setiap harga" (Services.tsx), after the Figma "included" icons: a frosted
  * outer shape, a blue inner shape and a glowing white glyph, in a 92-unit box. Each item gets its own
- * outline (circle, shield, rounded square, arch) and a glyph that says what it is.
+ * outline (circle, shield, rounded square, arch) and a Remix Icon glyph that says what it is.
  */
 
 /** Outer and inner outlines (with their offsets in the 92-unit box) and where the glyph centres. */
@@ -40,43 +41,8 @@ const shapes: Record<"circle" | "shield" | "square" | "arch", Shape> = {
   },
 };
 
-const glyphStroke = { fill: "none", stroke: "#fff", strokeLinecap: "round", strokeLinejoin: "round" } as const;
-
-/** 30-unit glyphs, drawn in white. */
-const glyphs: Record<string, ReactNode> = {
-  // Domain & hosting: the web
-  globe: (
-    <g {...glyphStroke} strokeWidth="2.4">
-      <circle cx="15" cy="15" r="12" />
-      <ellipse cx="15" cy="15" rx="5" ry="12" />
-      <path d="M3.5 11h23M3.5 19h23" />
-    </g>
-  ),
-  // SSL: a lock
-  lock: (
-    <g>
-      <path d="M10 13.5V10a5 5 0 0 1 10 0v3.5" {...glyphStroke} strokeWidth="2.8" />
-      <rect x="5.5" y="13" width="19" height="14" rx="3.5" fill="#fff" />
-      <circle cx="15" cy="20" r="2.2" fill={brand.blue} />
-    </g>
-  ),
-  // Responsive: laptop and phone
-  devices: (
-    <g {...glyphStroke} strokeWidth="2.3">
-      <rect x="2" y="6" width="17" height="12" rx="2" />
-      <path d="M0.5 22.5H19" />
-      <rect x="21.5" y="10" width="8" height="15" rx="2.2" fill="#fff" />
-    </g>
-  ),
-  // SEO: found in search, climbing
-  search: (
-    <g {...glyphStroke}>
-      <circle cx="13" cy="13" r="9.5" strokeWidth="2.6" />
-      <path d="M20.2 20.2 27 27" strokeWidth="3.2" />
-      <path d="M8.5 16l3-3 2 2 3.5-3.5" strokeWidth="2" />
-    </g>
-  ),
-};
+/** The glyphs (Remix Icon), 30 units, drawn in white: the web, a lock, devices, search. */
+const glyphs: Record<string, RemixiconComponentType> = { globe: RiGlobalFill, lock: RiLockFill, devices: RiMacbookFill, search: RiSeoFill };
 
 const items = {
   domain: { shape: "circle", glyph: "globe" },
@@ -134,7 +100,10 @@ export function IncludedIcon({ name }: { name: IncludedIconName }) {
       <path d={s.outer} transform={s.outerAt} fill={url(id("outer"))} filter={url(id("rim"))} />
       <path d={s.inner} transform={s.innerAt} fill={url(id("inner"))} filter={url(id("drop"))} />
       <g transform={`translate(${cx - 15} ${cy - 15})`} filter={url(id("glow"))}>
-        {glyphs[glyph]}
+        {(() => {
+          const I = glyphs[glyph];
+          return <I size={30} color="#fff" />;
+        })()}
       </g>
     </svg>
   );

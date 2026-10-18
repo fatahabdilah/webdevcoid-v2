@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
 import { motion } from "motion/react";
 import { plans, type Plan } from "@/content/home";
 import { STACKED_QUERY, useMedia } from "@/lib/useMedia";
@@ -13,6 +13,7 @@ import { Badge, Check } from "../icons";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
 import { noOrphan } from "@/lib/text";
+import { RiBuilding2Fill, RiDashboardFill, RiPagesFill, type RemixiconComponentType } from "@remixicon/react";
 
 /** Text colour follows the highlight (it slides in with a spring; the colour fades alongside). */
 const fade = "transition-colors duration-300 ease-out";
@@ -38,30 +39,8 @@ function Price({ plan, light }: { plan: Plan; light: boolean }) {
   );
 }
 
-/** What each plan is, as a 24-unit line glyph: one page with its button, a company building, a dashboard. */
-const planGlyphs: Record<Plan["icon"], ReactNode> = {
-  page: (
-    <>
-      <rect x="4" y="2.5" width="16" height="19" rx="2.5" />
-      <path d="M8 7.5h8M8 11h5" />
-      <rect x="8" y="14.5" width="6" height="3" rx="1.5" fill="currentColor" stroke="none" />
-    </>
-  ),
-  building: (
-    <>
-      <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
-      <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4" />
-    </>
-  ),
-  dashboard: (
-    <>
-      <rect x="3" y="3" width="7" height="9" rx="1.5" />
-      <rect x="14" y="3" width="7" height="5" rx="1.5" />
-      <rect x="14" y="12" width="7" height="9" rx="1.5" />
-      <rect x="3" y="16" width="7" height="5" rx="1.5" />
-    </>
-  ),
-};
+/** What each plan is (Remix Icon): one page, a company building, a dashboard. */
+const planGlyphs: Record<Plan["icon"], RemixiconComponentType> = { page: RiPagesFill, building: RiBuilding2Fill, dashboard: RiDashboardFill };
 
 /** Plan tile with the plan's glyph in white: grey glass, turning to the brand gradient on the active (highlighted)
  *  card. The gradient fades in over the grey alongside the card's text (gradients can't be colour-transitioned). */
@@ -73,9 +52,10 @@ function PlanIcon({ plan, active }: { plan: Plan; active: boolean }) {
         className={`absolute inset-0 rounded-[inherit] shadow-[inset_0_-1.5px_1.2px_0_#d7d7d7] transition-opacity duration-300 ease-out ${active ? "opacity-100" : "opacity-0"}`}
         style={{ background: "radial-gradient(70.7% 70.7% at 50% 50%, var(--color-holo-75) 0%, var(--color-holo-50) 55%, var(--color-holo-25) 100%)" }}
       />
-      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden className="relative" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        {planGlyphs[plan.icon]}
-      </svg>
+      {(() => {
+        const I = planGlyphs[plan.icon];
+        return <I size={22} aria-hidden className="relative" />;
+      })()}
     </div>
   );
 }
@@ -276,7 +256,8 @@ export function Pricing() {
     const aurora = auroraRef.current;
     const card = section?.querySelector<HTMLElement>("[data-premium]");
     if (!ambient || !section || !aurora || !card) return;
-    const s = section.getBoundingClientRect();
+    // measured against the ambient itself, which reaches past the section top and bottom
+    const s = aurora.getBoundingClientRect();
     const c = card.getBoundingClientRect();
     const x = c.left + c.width / 2 - s.left;
     const y = c.top + c.height / 2 - s.top;
@@ -290,13 +271,13 @@ export function Pricing() {
     <section
       ref={sectionRef}
       id="pricing"
-      className="relative isolate flex justify-center overflow-hidden px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]"
+      className="relative isolate flex justify-center overflow-x-clip px-5 pt-24 pb-28 md:px-10 md:pt-28 md:pb-36 lg:px-20 lg:pt-[140px] lg:pb-[180px]"
     >
       <Aurora on={ambient} ref={auroraRef} />
       <div className="flex w-full max-w-[1040px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
         <SectionHeader
           tone={headerDark ? "dark" : "light"}
-          pillTone="light"
+          pillTone={headerDark ? "dark" : "light"}
           titleGradient={false}
           number="006"
           name="harga"
