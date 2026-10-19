@@ -84,8 +84,8 @@ export function Services() {
           </Reveal>
 
           {/* Right under the services: the free consultation, and what every plan includes (that comes first below desktop) */}
-          {/* equal rows when stacked (from md); side by side, one 500px row, the same height as the services card above */}
-          <div className="grid gap-2 md:auto-rows-fr lg:h-[500px] lg:grid-cols-[2fr_3fr]">
+          {/* equal rows when stacked (from md); side by side, one 400px row, the same height as the services card above */}
+          <div className="grid gap-2 md:auto-rows-fr lg:h-[400px] lg:grid-cols-[2fr_3fr]">
             <Reveal y={50} delay={0.1} amount={0.2} className="order-2 lg:order-1">
               <CtaCard />
             </Reveal>

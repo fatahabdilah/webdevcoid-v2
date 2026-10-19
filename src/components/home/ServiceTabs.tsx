@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { services, type ServiceArtName } from "@/content/home";
 import { noOrphan } from "@/lib/text";
@@ -135,7 +135,7 @@ export function ServiceTabs() {
         id="service-panel"
         role="tabpanel"
         aria-labelledby={`service-tab-${s.key}`}
-        className={`${card} relative isolate grid w-full grid-cols-1 overflow-hidden lg:h-[500px] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]`}
+        className={`${card} relative isolate grid w-full grid-cols-1 overflow-hidden lg:h-[400px] lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]`}
       >
         <span
           aria-hidden
@@ -162,7 +162,13 @@ export function ServiceTabs() {
         {/* the live illustration, large; a fixed box below desktop so switching tabs never moves the page */}
         <div className="relative flex aspect-[740/480] items-end justify-center overflow-hidden px-4 md:px-10 lg:aspect-auto lg:h-full lg:px-0 lg:pt-12">
           <AnimatePresence mode="wait" initial={false}>
-            <motion.div key={`${s.key}-${a.art}`} {...swap} className="w-full" style={{ maxWidth: `${(w / 740) * 100}%` }}>
+            {/* on desktop the card is 400px: the art is capped to the height left above it (400 − 48 top padding) */}
+            <motion.div
+              key={`${s.key}-${a.art}`}
+              {...swap}
+              className="w-full max-w-[var(--fit-w)] lg:max-w-[min(var(--fit-w),var(--fit-h))]"
+              style={{ "--fit-w": `${(w / 740) * 100}%`, "--fit-h": `${Math.round((352 * w) / h)}px` } as CSSProperties}
+            >
               <div style={{ aspectRatio: `${w} / ${h}` }}>
                 <LazyArt
                   art={a.art}
