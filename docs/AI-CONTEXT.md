@@ -72,12 +72,19 @@ The palette, from 2026-10-11 on:
 
 ### Buttons and calls to action
 
-- **No WhatsApp icon on the "Konsultasi Gratis" buttons** (the owner removed it, 2026-10-21). They and "Kunjungi Situs" are `ArrowButton` (`src/components/ArrowButton.tsx`, after the Framer "Button Hover Effect" the owner picked): on hover the pill tightens and a circle with ↗ springs out of its right end. Dark tone = the liquid metal pill + a liquid metal circle (Layanan, Harga); light = the navbar's pale pill; outline = the portfolio cards. The circle's slot keeps a fixed height and the dark button keeps its footprint (negative right margin), so nothing around it moves or bobs.
-- **Two button sizes, everywhere:** large **53px tall, 26px sides** (Lihat Harga, Konsultasi Gratis in Layanan and Harga, the plan buttons) and small **48px tall, 20px sides, border included** (the navbar's Konsultasi, Kunjungi Situs); both Geist 16px semibold (phones: the navbar's label is tighter, and below 390px only its arrow circle shows).
+- **No WhatsApp icon on the "Konsultasi Gratis" buttons** (the owner removed it, 2026-10-21). They and "Kunjungi Situs" are `ArrowButton` (`src/components/ArrowButton.tsx`, after the Framer "Button Hover Effect" the owner picked): on hover the pill tightens and a circle springs out of its right end, with the **WhatsApp glyph (fill) for the consultation buttons** and **↗ for Kunjungi Situs** (the owner's call, 2026-10-21: the pill stays clean, the circle says where it goes). Dark tone = the liquid metal pill + a liquid metal circle (Layanan, Harga); light = the navbar's pale pill; outline = the portfolio cards. The circle's slot keeps a fixed height and the dark button keeps its footprint (negative right margin), so nothing around it moves or bobs.
+- **Two button sizes, everywhere:** large **53px tall, 26px sides** (Lihat Harga, Konsultasi Gratis in Layanan and Harga, the plan buttons) and small **48px tall, 20px sides, border included** (the navbar's Konsultasi, Kunjungi Situs); both Geist 16px semibold (phones: the navbar's label is tighter, and below 390px only its WhatsApp circle shows).
 - "Kunjungi situs"-type contact uses WhatsApp, not phone.
 - The **hero has a single button:** "Lihat Harga →".
 
+- **Loader performance (2026-10-21):** the loader animates only transform, opacity and filter (compositor), never clip-path, so it stays smooth while React hydrates underneath. Each liquid metal button is its own WebGL context (100+ ms to set up), so `LiquidMetal` starts only after the intro is done, once the button is within 400px of the screen, when the browser is idle; until then its CSS plate shows. Measured at 4× CPU throttle: frames in the first 2 s went from 16 to 77 on desktop.
+
 ### Layout
+
+- **One spacing system (checked 2026-10-21):** sections pad 100px top and bottom on desktop, 64px on phones (Harga 140/180 for its aurora), 80px / 20px at the sides; the section header sits 80 / 64 / 48px above its content; cards in a grid are 8px apart.
+- **Two content widths:** 1280px for wide sections (Hero, About, Layanan, Cara kerja, Portfolio) and 1040px for reading ones (Kenapa kami, Harga, FAQ, and the text grid under the Cara kerja card).
+- **Three corner radii:** large section cards 24px (`rounded-3xl`: Kenapa kami, the Layanan card and both cards under it, the Cara kerja card, Portfolio, Harga, About); cards inside them 16px (`rounded-2xl`: the plan cards, the Kenapa kami tiles, FAQ items, the portfolio image), concentric with their inset; chips, badges and small marks 12px. Drawn illustrations keep their own radii.
+- **Text:** section titles 72px / 40px; feature-card titles (the Layanan slide, Portfolio) 24px on phones and 32px from 640px; card titles 24px; body 18px or 16px.
 
 - **Single page only:** no new routes.
 - **About section image:** keeps the ▶ play icon, because a video will replace the photo later.

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { brand } from "@/lib/brand";
-import { introPhase, subscribeIntro } from "@/lib/intro";
+import { introPhase, isIntroDone, subscribeIntro } from "@/lib/intro";
 
 /*
  * Liquid metal button effect, ported from the "Liquid Metal Button — Sign up Pill" source
@@ -950,15 +950,44 @@ export function LiquidMetal({ litByLink = false }: { litByLink?: boolean }) {
     if (!layer || !button) return;
     // litByLink: the pill is one part of a larger link (ArrowButton's pill and circle), and lights with all of it
     const host = (litByLink && button.closest<HTMLElement>("a, button")) || button;
-    // A fresh canvas per mount: cleanup loses the WebGL context, and a reused canvas would
-    // hand back that dead context (React re-runs effects in dev).
-    const canvas = document.createElement("canvas");
-    canvas.className = "lm-canvas";
-    layer.appendChild(canvas);
-    const destroy = createLiquidMetal(canvas, button, layer, host);
+    // Each button is its own WebGL context, and setting one up (shaders, first frame) blocks the main thread for
+    // 100+ ms. So it waits for the intro to finish (doing it during the loader's zoom made it stutter), and for the
+    // button to come near the screen, then starts when the browser is idle. Until then the dark plate (CSS) shows.
+    let destroy: (() => void) | null = null;
+    let canvas: HTMLCanvasElement | null = null;
+    let near = false;
+    let idle = 0;
+    const whenIdle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 200));
+    const cancelIdle = window.cancelIdleCallback ?? window.clearTimeout;
+    const start = () => {
+      if (destroy || idle || !near || !isIntroDone()) return;
+      idle = whenIdle(
+        () => {
+          // A fresh canvas per mount: cleanup loses the WebGL context, and a reused canvas would
+          // hand back that dead context (React re-runs effects in dev).
+          canvas = document.createElement("canvas");
+          canvas.className = "lm-canvas";
+          layer.appendChild(canvas);
+          destroy = createLiquidMetal(canvas, button, layer, host);
+        },
+        { timeout: 1500 },
+      );
+    };
+    const io = new IntersectionObserver(
+      ([e]) => {
+        near = e.isIntersecting;
+        start();
+      },
+      { rootMargin: "400px 0px" },
+    );
+    io.observe(button);
+    const unsubscribe = subscribeIntro(start);
     return () => {
-      destroy();
-      canvas.remove();
+      io.disconnect();
+      unsubscribe();
+      cancelIdle(idle);
+      destroy?.();
+      canvas?.remove();
     };
   }, [litByLink]);
 

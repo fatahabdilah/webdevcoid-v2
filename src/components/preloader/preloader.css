@@ -9,7 +9,11 @@ html:has(.intro-root) body {
   overflow: hidden;
 }
 
+/* Everything here animates only transform, opacity and filter, which the compositor runs on its own, so the
+   loader stays smooth while the page hydrates and its entrance animations start underneath (clip-path ran on the
+   main thread and stuttered) */
 .intro-root {
+  will-change: opacity;
   position: fixed;
   inset: 0;
   z-index: 1000;
@@ -36,6 +40,7 @@ html:has(.intro-root) body {
   overflow: visible;
   /* the zoom goes through the mark's centre (53.5 / 592.951 of the lockup) */
   transform-origin: 9.02% 50%;
+  will-change: transform, opacity;
   /* the zoom: the mark rushes towards the camera, faster and faster */
   animation: intro-zoom 0.6s cubic-bezier(0.7, 0, 0.84, 0) 1s forwards;
 }
@@ -65,17 +70,18 @@ html:has(.intro-root) body {
     transform: none;
   }
 }
-/* the bracket closes in from the left */
+/* the bracket closes in from the left: it grows out from its left edge */
 .intro-bracket {
+  transform-origin: 0 50%;
   animation: intro-bracket 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes intro-bracket {
   from {
-    clip-path: inset(0 100% 0 0);
-    transform: translateX(-8px);
+    opacity: 0;
+    transform: translateX(-8px) scaleX(0.2);
   }
   to {
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
     transform: none;
   }
 }
@@ -88,14 +94,12 @@ html:has(.intro-root) body {
 }
 @keyframes intro-word {
   from {
-    clip-path: inset(0 100% 0 0);
     filter: blur(6px);
     opacity: 0;
-    transform: translateX(-10px);
+    transform: translateX(-14px);
   }
   to {
-    clip-path: inset(0 0 0 0);
-    filter: none;
+    filter: blur(0);
     opacity: 1;
     transform: none;
   }
@@ -108,6 +112,7 @@ html:has(.intro-root) body {
 
 /* The first screen zooms out from behind the mark (it starts large, from the first paint) */
 html:has(.intro-root) [data-intro-zoom] {
+  will-change: transform;
   transform-origin: 50% 50vh;
   transform-origin: 50% 50svh;
   animation: intro-settle 1.6s cubic-bezier(0.22, 1, 0.36, 1) both;

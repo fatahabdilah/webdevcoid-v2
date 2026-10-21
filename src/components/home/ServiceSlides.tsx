@@ -55,7 +55,7 @@ function LazyArt({ art, story }: { art: ServiceArtName; story: StoryProps }) {
 function Story({ service: s }: { service: (typeof services)[number] }) {
   return (
     <div className="flex flex-col">
-      <h3 className="t-title-l text-grey-01">{s.title}</h3>
+      <h3 className="t-title-m text-grey-01 sm:t-title-l">{s.title}</h3>
       <p className="t-body-l mt-3 max-w-[30ch] text-grey-03">{noOrphan(s.text)}</p>
       <ul className="mt-5 flex flex-col gap-3">
         {s.points.map((p) => (

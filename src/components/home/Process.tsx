@@ -136,7 +136,7 @@ function Connector({ col, reach = "" }: { col: number; reach?: string }) {
 export function Process() {
   return (
     <section id="process" className="flex justify-center bg-white px-5 py-16 md:px-10 md:py-20 lg:px-20 lg:py-[100px]">
-      <div className="flex w-full max-w-[1220px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
+      <div className="flex w-full max-w-[1280px] flex-col items-center gap-12 md:gap-16 lg:gap-20">
         <SectionHeader
           number="004"
           name="cara kerja"
@@ -149,7 +149,7 @@ export function Process() {
         <div className="flex w-full flex-col items-center gap-10 md:gap-16 lg:gap-[89px]">
           {/* The flow */}
           <Reveal y={50} amount={0.2} className="w-full">
-            <div className={`relative isolate w-full overflow-hidden rounded-[32px] px-5 py-12 md:rounded-[48px] md:py-16 lg:bg-white lg:bg-none lg:px-8 lg:pt-16 lg:pb-10 ${cardBgStacked}`}>
+            <div className={`relative isolate w-full overflow-hidden rounded-3xl px-5 py-12 md:py-16 lg:bg-white lg:bg-none lg:px-8 lg:pt-16 lg:pb-10 ${cardBgStacked}`}>
               <div aria-hidden className="pointer-events-none absolute -inset-x-[40%] top-[60px] -z-10 hidden h-[640px] blur-[100px] lg:block" style={{ backgroundImage: cardGlow }} />
               <div className="flex flex-col items-center md:grid md:grid-cols-2 md:items-start md:gap-x-6 md:gap-y-14 lg:grid-cols-[auto_minmax(24px,1fr)_auto_minmax(24px,1fr)_auto_minmax(24px,1fr)_auto] lg:grid-rows-[228px_auto] lg:items-center lg:gap-0">
                 {stages.map((stage, i) => {
@@ -173,7 +173,7 @@ export function Process() {
           </Reveal>
 
           {/* Each stage spelled out */}
-          <Reveal y={30} amount={0.3} className="w-full max-w-[1120px]">
+          <Reveal y={30} amount={0.3} className="w-full max-w-[1040px]">
             <div className="grid w-full grid-cols-1 md:grid-cols-2">
               {stages.map((stage, i) => {
                 const Icon = icons[stage.icon];

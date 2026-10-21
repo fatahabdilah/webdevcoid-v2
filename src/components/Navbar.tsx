@@ -56,7 +56,7 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          {/* "Konsultasi Gratis" from 640px, "Konsultasi" on phones, the arrow circle alone below 390px */}
+          {/* "Konsultasi Gratis" from 640px, "Konsultasi" on phones, the WhatsApp circle alone below 390px */}
           <ArrowButton tone="light" size="nav" label="Konsultasi gratis via WhatsApp">
             Konsultasi<span className="hidden sm:inline"> Gratis</span>
           </ArrowButton>

@@ -18,8 +18,8 @@ const ICONS: Record<string, RemixiconComponentType> = { custom: RiPenNibFill, pr
 function ValueCard({ number, title, text, icon }: (typeof values)[number]) {
   const Icon = ICONS[icon];
   return (
-    <div className="flex h-full w-full flex-col items-center gap-2 overflow-hidden rounded-[32px] border border-white bg-grey-08 p-2 shadow-[0_0_0_1px_var(--color-grey-07),0_10px_30px_-18px_rgba(0,0,0,0.25)] lg:items-start lg:justify-between">
-      <div className="relative flex h-[228px] w-full items-center justify-center overflow-hidden rounded-[26px] bg-[linear-gradient(180deg,#363a44_-143.93%,#00040f_100%)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] lg:aspect-square lg:h-auto">
+    <div className="flex h-full w-full flex-col items-center gap-2 overflow-hidden rounded-3xl border border-white bg-grey-08 p-2 shadow-[0_0_0_1px_var(--color-grey-07),0_10px_30px_-18px_rgba(0,0,0,0.25)] lg:items-start lg:justify-between">
+      <div className="relative flex h-[228px] w-full items-center justify-center overflow-hidden rounded-2xl bg-[linear-gradient(180deg,#363a44_-143.93%,#00040f_100%)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.06)] lg:aspect-square lg:h-auto">
         <div
           aria-hidden
           className="absolute top-1/2 left-1/2 z-0 size-[310px] -translate-x-1/2 -translate-y-1/2 bg-[url(/images/patterns/dots.svg)] bg-center opacity-10"

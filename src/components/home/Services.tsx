@@ -16,7 +16,7 @@ const groupTitle = "t-title-m md:t-title-l text-center text-grey-01 md:text-left
 function CtaCard() {
   return (
     <div
-      className="flex h-full w-full flex-col justify-center gap-10 rounded-2xl border border-grey-07 p-8 md:p-10 shadow-[inset_0_0_1px_0_rgba(255,255,255,0.3),inset_0_-2px_1px_0_rgba(0,0,0,0.12),inset_0_0_40px_0_rgba(255,255,255,0.15)] lg:justify-between lg:gap-12"
+      className="flex h-full w-full flex-col justify-center gap-10 rounded-3xl border border-grey-07 p-8 md:p-10 shadow-[inset_0_0_1px_0_rgba(255,255,255,0.3),inset_0_-2px_1px_0_rgba(0,0,0,0.12),inset_0_0_40px_0_rgba(255,255,255,0.15)] lg:justify-between lg:gap-12"
       style={{ backgroundImage: "var(--holo-radial)" }}
     >
       <Reveal y={50} className="flex flex-col gap-6">
@@ -39,7 +39,7 @@ function CtaCard() {
 
 function IncludedCard() {
   return (
-    <div data-included="" className="flex h-full w-full flex-col items-center gap-6 rounded-2xl border border-grey-07 bg-grey-09 px-4 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between lg:px-8">
+    <div data-included="" className="flex h-full w-full flex-col items-center gap-6 rounded-3xl border border-grey-07 bg-grey-09 px-4 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between lg:px-8">
       <div className="flex w-full flex-col gap-1 text-center md:w-auto md:text-left">
         <h3 className="t-title-m text-grey-01">Sudah termasuk di setiap&nbsp;harga</h3>
         <p className="t-body-m text-grey-03">Tanpa biaya tambahan, apa pun pilihan&nbsp;websitemu.</p>

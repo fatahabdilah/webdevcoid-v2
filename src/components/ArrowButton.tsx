@@ -1,4 +1,4 @@
-import { RiArrowRightUpLine } from "@remixicon/react";
+import { RiArrowRightUpLine, RiWhatsappFill } from "@remixicon/react";
 import { waLink } from "@/content/site";
 import { LiquidMetal } from "./LiquidMetal";
 
@@ -38,7 +38,8 @@ function Circle({ slot, open, className = "", children }: { slot: string; open: 
 }
 
 /**
- * The pill button with the hover of the Framer "Button Hover Effect": a circle with an arrow that springs out beside it.
+ * The pill button with the hover of the Framer "Button Hover Effect": a circle that springs out beside it, with the
+ * WhatsApp glyph when it opens a chat and ↗ when it opens another site.
  * Used for "Konsultasi Gratis" (a WhatsApp chat, the default link) and the portfolio's "Kunjungi Situs".
  * - dark (the blue cards): the liquid metal pill and a liquid metal circle, lit together; on hover the pill
  *   tightens and the circle springs out of its right end; the pill itself doesn't move.
@@ -48,6 +49,8 @@ function Circle({ slot, open, className = "", children }: { slot: string; open: 
  */
 export function ArrowButton({ children, href, tone = "dark", size = "default", className = "", label }: ArrowButtonProps) {
   const link = { href: href ?? waLink(), target: "_blank", rel: "noreferrer", "aria-label": label };
+  // the circle says where the button goes: the WhatsApp glyph for a chat (the default link), ↗ for another site
+  const Glyph = href ? RiArrowRightUpLine : RiWhatsappFill;
 
   if (tone === "outline") {
     return (
@@ -59,7 +62,7 @@ export function ArrowButton({ children, href, tone = "dark", size = "default", c
           {children}
         </span>
         <Circle className="bg-grey-01 text-white" open="group-hover:size-12 group-focus-visible:size-12" slot="h-12 group-hover:w-12 group-focus-visible:w-12">
-          <RiArrowRightUpLine className={`size-4.5 shrink-0 scale-50 opacity-0 ${arrowIn}`} />
+          <Glyph className={`size-4.5 shrink-0 scale-50 opacity-0 ${arrowIn}`} />
         </Circle>
       </a>
     );
@@ -81,7 +84,7 @@ export function ArrowButton({ children, href, tone = "dark", size = "default", c
         {/* the circle, liquid metal too: a dot tucked into the pill's end that springs out with the arrow */}
         <Circle open="group-hover:size-13.25 group-focus-visible:size-13.25" slot="h-13.25 group-hover:w-13.25 group-focus-visible:w-13.25">
           <LiquidMetal litByLink />
-          <RiArrowRightUpLine className={`relative z-[1] size-5 scale-50 text-white opacity-0 ${arrowIn}`} />
+          <Glyph className={`relative z-[1] size-5 scale-50 text-white opacity-0 ${arrowIn}`} />
         </Circle>
       </a>
     );
@@ -106,7 +109,7 @@ export function ArrowButton({ children, href, tone = "dark", size = "default", c
         open={nav ? "group-hover:size-12 group-focus-visible:size-12 max-[389px]:!size-12 max-[389px]:!opacity-100" : "group-hover:size-13.25 group-focus-visible:size-13.25"}
         slot={nav ? "h-12 group-hover:w-12 group-focus-visible:w-12 max-[389px]:!ml-0 max-[389px]:!w-12" : "h-13.25 group-hover:w-13.25 group-focus-visible:w-13.25"}
       >
-        <RiArrowRightUpLine className={`shrink-0 scale-50 opacity-0 ${arrowIn} ${nav ? "size-4.5 max-[389px]:scale-100 max-[389px]:opacity-100" : "size-5"}`} />
+        <Glyph className={`shrink-0 scale-50 opacity-0 ${arrowIn} ${nav ? "size-4.5 max-[389px]:scale-100 max-[389px]:opacity-100" : "size-5"}`} />
       </Circle>
     </a>
   );

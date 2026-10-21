@@ -126,8 +126,8 @@ function PlanCard({ plan, highlighted, fromPremium, pointer, onActivate }: PlanC
         <Price plan={plan} light={highlighted} />
 
         {plan.featured && (
-          <div className="absolute top-0 right-0 h-8 overflow-hidden rounded-[10px] p-px" style={{ backgroundImage: "var(--holo-gradient)" }}>
-            <div className="relative flex h-[30px] items-center justify-center gap-1 overflow-hidden rounded-[9px] bg-black px-2 py-1">
+          <div className="absolute top-0 right-0 h-8 overflow-hidden rounded-xl p-px" style={{ backgroundImage: "var(--holo-gradient)" }}>
+            <div className="relative flex h-[30px] items-center justify-center gap-1 overflow-hidden rounded-[11px] bg-black px-2 py-1">
               <Image src="/images/patterns/dots-badge.png" alt="" width={116} height={170} className="pointer-events-none absolute top-1/2 left-0 w-full opacity-20" />
               <Badge width={16} height={16} className="relative text-white" />
               <span className="t-body-s relative whitespace-nowrap text-white">Rekomendasi</span>
