@@ -1,20 +1,15 @@
 import Link from "next/link";
-import { WhatsApp } from "./icons";
 import { LineIcon } from "./LineIcon";
 import { LiquidMetal } from "./LiquidMetal";
 
 type ButtonProps = {
   href: string;
   children: string;
-  /** "primary": filled pill (liquid metal by default). "tertiary": outline pill for secondary links. */
-  variant?: "primary" | "tertiary";
   className?: string;
   /** Stretch to the parent width (pricing buttons). */
   block?: boolean;
   /** An arrow after the label. */
   arrow?: boolean;
-  /** The WhatsApp glyph before the label, for buttons that open a chat (as in the navbar). */
-  whatsapp?: boolean;
   /** Grey, low-emphasis primary button (pricing cards that aren't highlighted). Primary buttons
    *  that are neither muted nor inverted get the liquid metal effect. */
   muted?: boolean;
@@ -34,19 +29,18 @@ function Label({ children, dark, className = "" }: { children: string; dark?: bo
   );
 }
 
-export function Button({ href, children, variant = "primary", className = "", block, arrow, whatsapp, muted, inverted }: ButtonProps) {
+export function Button({ href, children, className = "", block, arrow, muted, inverted }: ButtonProps) {
   const external = /^https?:/.test(href) || href.startsWith("mailto:");
-  const liquid = variant === "primary" && !muted && !inverted;
+  const liquid = !muted && !inverted;
   const width = block ? "w-full" : "";
 
   const inner = liquid ? (
     // Same 53px height as the muted pill (2px ring + 49px body), so pricing buttons line up.
     <span className={`relative z-[1] flex items-center justify-center px-[26px] py-4 ${arrow ? "gap-1.75" : "gap-2"} ${width}`}>
-      {whatsapp && <WhatsApp className="size-4 shrink-0 text-white" />}
       <Label>{children}</Label>
       {arrow && <LineIcon name="arrow-right" size={9} className="text-white" />}
     </span>
-  ) : variant === "primary" ? (
+  ) : (
     <span
       className={`flex items-center justify-center rounded-full px-6 py-3.5 ${arrow ? "gap-1.75" : "gap-2"} ${transition} ${
         inverted
@@ -57,16 +51,9 @@ export function Button({ href, children, variant = "primary", className = "", bl
       <Label dark>{children}</Label>
       {arrow && <LineIcon name="arrow-right" size={9} className="text-grey-01" />}
     </span>
-  ) : (
-    // Outline pill so it reads as clickable; fills on hover
-    <span className={`flex items-center rounded-full border border-grey-01/20 px-5 py-2.5 ${transition} group-hover:border-grey-01 group-hover:bg-grey-01`}>
-      <Label dark className="group-hover:text-white">
-        {children}
-      </Label>
-    </span>
   );
 
-  const outer = `group relative inline-flex rounded-full ${variant === "primary" && !liquid ? "p-0.5" : ""} ${inverted ? "bg-[image:var(--holo-gradient)]" : ""} ${width} ${className}`;
+  const outer = `group relative inline-flex rounded-full ${!liquid ? "p-0.5" : ""} ${inverted ? "bg-[image:var(--holo-gradient)]" : ""} ${width} ${className}`;
   const content = (
     <>
       {liquid && <LiquidMetal />}

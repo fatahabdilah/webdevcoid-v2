@@ -532,6 +532,57 @@ html.lenis body {
   }
 }
 
+/* ---------- Layanan slides (ServiceSlides.tsx) ----------
+   The active number ring fills while its slide plays (the duration is the story length, set inline). */
+.service-ring {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: service-ring linear forwards;
+}
+@keyframes service-ring {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .service-ring {
+    display: none;
+  }
+}
+
+/* ---------- Process connectors (Process.tsx) ----------
+   A dashed line that keeps flowing towards the next stage: across on desktop, down on phones. */
+.flow-dash {
+  --dash: 6px;
+  --period: 12px;
+  color: rgb(255 255 255 / 0.6);
+  background-image: linear-gradient(to bottom, currentColor 0 var(--dash), transparent var(--dash) var(--period));
+  background-size: 2px var(--period);
+  animation: flow-dash-down 0.9s linear infinite;
+}
+@keyframes flow-dash-down {
+  to {
+    background-position: 0 var(--period);
+  }
+}
+/* lg (75rem, see @theme) */
+@media (min-width: 75rem) {
+  .flow-dash {
+    background-image: linear-gradient(to right, currentColor 0 var(--dash), transparent var(--dash) var(--period));
+    background-size: var(--period) 2px;
+    animation-name: flow-dash-right;
+  }
+}
+@keyframes flow-dash-right {
+  to {
+    background-position: var(--period) 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .flow-dash {
+    animation: none;
+  }
+}
 
 /* ---------- Service bento demos (ServiceArt.tsx) ----------
    The demo cursor's click: a quick press and a ripple from its tip. */

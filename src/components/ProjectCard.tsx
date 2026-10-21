@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { Project } from "@/content/portfolio";
-import { Button } from "./Button";
+import { ArrowButton } from "./ArrowButton";
 import { noOrphan } from "@/lib/text";
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -28,9 +28,9 @@ export function ProjectCard({ project }: { project: Project }) {
               <p className="t-body-m text-balance text-grey-03 md:text-pretty lg:text-balance">{noOrphan(project.description)}</p>
             </div>
             <div>
-              <Button href={project.url} variant="tertiary">
+              <ArrowButton href={project.url} tone="outline">
                 Kunjungi Situs
-              </Button>
+              </ArrowButton>
             </div>
           </div>
         </div>

@@ -57,3 +57,12 @@ next-env.d.ts
 
 # /admin data (board documents and inbox, written by the server)
 /data/
+
+# the agent runner's working copies (boards, inbox, generated images)
+/agents/.workspace/
+
+# local AI and design tooling and references (not part of the site)
+/.codex/
+/.impeccable/
+/DESIGN.md
+/webdev-brand-guidelines.pdf

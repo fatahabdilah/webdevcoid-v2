@@ -7,6 +7,7 @@ import { plans, type Plan } from "@/content/home";
 import { STACKED_QUERY, useMedia } from "@/lib/useMedia";
 import { waLink } from "@/content/site";
 import { Button } from "../Button";
+import { ArrowButton } from "../ArrowButton";
 import { CtaAvatar } from "../CtaAvatar";
 import { DitherDots } from "../DitherDots";
 import { Badge, Check } from "../icons";
@@ -310,9 +311,7 @@ export function Pricing() {
                 <p className="t-body-m text-white-02">Ceritakan kebutuhanmu, kami sarankan pilihan yang sesuai&nbsp;anggaran.</p>
               </div>
             </div>
-            <Button href={waLink()} whatsapp>
-              Konsultasi Gratis
-            </Button>
+            <ArrowButton>Konsultasi Gratis</ArrowButton>
           </Reveal>
         </div>
       </div>

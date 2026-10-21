@@ -20,3 +20,9 @@ create index if not exists admin_inbox_at_idx on public.admin_inbox (at desc nul
 
 alter table public.admin_docs  enable row level security;
 alter table public.admin_inbox enable row level security;
+
+-- Studio images (slide previews), served at /_blob/<name> to signed-in accounts (src/lib/admin/blobs.ts).
+-- A private bucket: only the server's secret key reads and writes it.
+insert into storage.buckets (id, name, public)
+values ('admin-blobs', 'admin-blobs', false)
+on conflict (id) do nothing;

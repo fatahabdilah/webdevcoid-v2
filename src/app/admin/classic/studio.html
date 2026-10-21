@@ -1,5 +1,5 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>webdev Content Studio (Copy)</title>
+<title>webdev Content Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
@@ -789,6 +789,44 @@ button.g-lab:hover .t{color:var(--accent-text)}
   .msg-dm{max-width:100%}
 }
 
+/* ---------- palet perintah, ritme ---------- */
+.pal-trig{display:flex;align-items:center;gap:10px;width:100%;height:38px;padding:0 10px 0 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--sunken);color:var(--ink-3);font-size:13px;text-align:left}
+.pal-trig:hover{color:var(--ink-2);border-color:var(--line-2)}
+.pal-trig .pt-l{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+kbd{font:500 9.5px/1 var(--f-mono);color:var(--ink-3);border:1px solid var(--line-2);border-bottom-width:2px;padding:3px 5px;border-radius:3px;background:var(--surface)}
+.shell.collapsed .pal-trig{width:44px;height:38px;padding:0;justify-content:center}
+.shell.collapsed .pal-trig :is(.pt-l,kbd){display:none}
+.pal{position:fixed;inset:0;z-index:65;display:flex;justify-content:center;align-items:flex-start;padding:max(12vh,calc(16px + env(safe-area-inset-top,0px))) 16px 16px;background:var(--scrim);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.pal[hidden]{display:none}
+.pal-box{width:min(640px,100%);display:flex;flex-direction:column;border:1px solid var(--line-2);border-radius:var(--r);background:linear-gradient(180deg,var(--raised),var(--surface));box-shadow:var(--pop);overflow:hidden;animation:palIn .22s var(--out,ease) both}
+@keyframes palIn{from{opacity:0;transform:translateY(-8px) scale(.985)}to{opacity:1;transform:none}}
+.pal-in{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);color:var(--ink-3)}
+.pal-in input{flex:1;min-width:0;border:0;background:none;outline:none;font-size:16px;color:var(--ink)}
+.pal-list{max-height:min(56vh,480px);overflow-y:auto;padding:6px;overscroll-behavior:contain}
+.pal-g{padding:10px 10px 4px;font:500 9.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.pal-i{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;min-height:40px;padding:6px 10px;border:1px solid transparent;border-radius:var(--r);background:none;color:var(--ink-2);text-align:left}
+.pal-i .pl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.pal-i .pl .id{margin-right:8px}
+.pal-i .pm{font:500 10px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
+.pal-i[aria-selected="true"]{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.pal-i[aria-selected="true"] .ic{color:var(--accent-text)}
+.pal-e{padding:22px 12px;color:var(--ink-3);font-size:13px}
+.pal-f{display:flex;gap:18px;padding:10px 16px;border-top:1px solid var(--line);color:var(--ink-3)}
+.ritme{display:flex;flex-direction:column}
+.rt{display:grid;grid-template-columns:76px 10px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;position:relative}
+.rt .mono{font-size:11px;color:var(--ink-3)}
+.rt > i{width:7px;height:7px;border-radius:50%;background:var(--inset);box-shadow:0 0 0 3px var(--surface);position:relative;z-index:1}
+.rt::before{content:"";position:absolute;left:89px;top:0;bottom:0;width:1px;background:var(--line)}
+.rt:first-child::before{top:50%}.rt:last-child::before{bottom:50%}
+.rt .rt-t{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-2);min-width:0}
+.rt .rt-t .av{width:20px;height:20px;font-size:9.5px}
+.rt.past .rt-t,.rt.past .mono{opacity:.55}
+.rt.past > i{background:var(--ink-3)}
+.rt.on > i{background:var(--accent);box-shadow:0 0 0 3px var(--surface),0 0 10px var(--accent)}
+.rt.on.you > i{background:var(--you);box-shadow:0 0 0 3px var(--surface),0 0 10px var(--you)}
+.rt.on .rt-t{color:var(--ink)}
+.rt.you:not(.past) .mono{color:var(--you-text)}
+
 /* ---------- hover: cincin border ikut kursor, glow, tarikan magnet, ikon bergerak ---------- */
 @property --gr{syntax:'<length>';inherits:false;initial-value:0px}
 :root{--spring:cubic-bezier(.34,1.56,.64,1);--out:cubic-bezier(.22,1,.36,1)}
@@ -837,21 +875,22 @@ button.g-lab:hover .t{color:var(--accent-text)}
 <canvas id="bgfx" aria-hidden="true"></canvas>
 <div class="shell" id="shell">
   <aside class="side" aria-label="Navigasi utama">
-    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><div class="brand-txt"><b>webdev.co.id</b><span class="lbl">Studio · ruang kerja Mic</span></div><button class="side-toggle" id="side-toggle" type="button" aria-label="Ciutkan sidebar" title="Ciutkan sidebar"><span data-i="PanelLeftClose"></span></button></div>
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><div class="brand-txt"><b>webdev.co.id</b><span class="lbl">Ruang kerja Mic</span></div><button class="side-toggle" id="side-toggle" type="button" aria-label="Ciutkan sidebar" title="Ciutkan sidebar"><span data-i="PanelLeftClose"></span></button></div>
+    <button class="pal-trig" type="button" data-pal title="Cari atau lompat (⌘K)"><span data-i="Search"></span><span class="pt-l">Cari atau lompat…</span><kbd>⌘K</kbd></button>
     <div class="nav-h lbl">Divisi</div>
     <nav class="nav" id="nav"></nav>
     <div class="side-today" id="side-today"></div>
     <div class="side-foot">
       <button class="btn primary" data-cmd="" type="button" id="cmd-btn" title="Kirim perintah"><span data-i="Send"></span><span class="bl" id="cmd-lbl">Perintah ke Michael</span></button>
       <div class="sync off" id="sync"><span class="dot"></span><span class="lbl" id="sync-text">Menghubungkan…</span></div>
-      <div class="side-keys lbl">Tekan 1–7 untuk pindah subhalaman</div>
+      <div class="side-keys lbl">1–7 pindah subhalaman · ⌘K cari</div>
     </div>
   </aside>
   <div style="min-width:0">
     <header class="topbar">
       <span class="brand-mark" aria-hidden="true"></span>
       <div class="seg" id="topseg" role="group" aria-label="Divisi"></div>
-      <button class="icon-btn" data-cmd="" type="button" aria-label="Kirim perintah"><span data-i="Send"></span></button>
+      <button class="icon-btn" data-pal type="button" aria-label="Cari atau lompat"><span data-i="Search"></span></button><button class="icon-btn" data-cmd="" type="button" aria-label="Kirim perintah"><span data-i="Send"></span></button>
     </header>
     <main id="main">
       <div class="state"><div class="sk" style="width:220px;height:26px"></div><div class="sk" style="width:340px;max-width:100%;height:14px"></div><div class="sk" style="width:280px;max-width:100%;height:14px"></div></div>
@@ -866,6 +905,7 @@ button.g-lab:hover .t{color:var(--accent-text)}
 <div class="dialog" id="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg-title"></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="tip" id="tip"></div>
+<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Cari atau lompat" hidden><div class="pal-box"><label class="pal-in"><span data-i="Search"></span><input id="pal-q" type="text" placeholder="Cari halaman, task, prospek, atau perintah" autocomplete="off" spellcheck="false" aria-label="Cari"><kbd>Esc</kbd></label><div class="pal-list" id="pal-list" role="listbox"></div><div class="pal-f lbl"><span>↑ ↓ pilih</span><span>Enter buka</span><span>Esc tutup</span></div></div></div>
 
 <script>
 /* latar: grid titik yang menyala mengikuti kabut noise yang mengalir (ala preloader cipher.tv).
@@ -1376,7 +1416,7 @@ function vKanban(){
         return `<button class="kc ${late(t) ? "late" : ""}" data-open="${esc(t.id)}" type="button">
           <span style="display:flex;gap:5px;flex-wrap:wrap">${t.pillar ? `<span class="tg p" style="--c:${pillarVar(t.pillar)}">${esc(t.pillar)}</span>` : `<span class="tg">Setup</span>`}${t.format ? `<span class="tg">${esc(t.format)}</span>` : ""}${late(t) ? `<span class="tg bad">Telat</span>` : ""}${openFb(t).length && !DONE.has(t.stage) ? `<span class="tg you">Revisi</span>` : ""}${pending(t.id).length ? `<span class="tg info">Menunggu Michael</span>` : ""}</span>
           <span class="kc-t"><span class="kid">${esc(t.id)}</span>${esc(t.hook || t.title)}</span>
-          <span class="kc-meta"><span title="Tanggal tayang">${ic("CalendarDays",13)}${t.publish ? fd(t.publish) : "-"}</span>${nDocs ? `<span title="Dokumen">${ic("FileText",13)}${nDocs}</span>` : ""}${(t.feedback || []).length ? `<span title="Revisi">${ic("MessageSquareText",13)}${t.feedback.length}</span>` : ""}${left != null && !DONE.has(t.stage) ? `<span class="${left < 0 ? "over" : ""}" title="Deadline ${fd(t.due)}">${ic("Clock",13)}${left < 0 ? Math.abs(left) + "h telat" : left === 0 ? "hari ini" : left + " hari"}</span>` : ""}</span>
+          <span class="kc-meta"><span title="Tanggal tayang">${ic("CalendarDays",13)}${t.publish ? fd(t.publish) : "-"}</span>${nDocs ? `<span title="Dokumen">${ic("FileText",13)}${nDocs}</span>` : ""}${(t.feedback || []).length ? `<span title="Revisi">${ic("MessageSquareText",13)}${t.feedback.length}</span>` : ""}${left != null && !DONE.has(t.stage) ? `<span class="${left < 0 ? "over" : ""}" title="Deadline ${fd(t.due)}">${ic("Clock",13)}${left < 0 ? "telat " + Math.abs(left) + " hari" : left === 0 ? "hari ini" : left + " hari"}</span>` : ""}</span>
           <span class="kc-f">${ticks(t.stage)}<span class="mono">${i + 1}/${STAGES.length}</span>${av(t.owner)}</span></button>`;
       }).join("") || `<div class="col-empty">Kosong</div>`}</div>`;
   }).join("");
@@ -1494,6 +1534,11 @@ function sLogRows(list){
   if (!list.length) return `<div class="empty">Belum ada kejadian. Setiap sapaan, follow-up, dan balasan tercatat di sini.</div>`;
   return `<div class="feed">${list.map(a => `<div class="fi">${av(a.oleh in AGENTS ? a.oleh : "bagas")}<div style="min-width:0"><div class="msg"><span class="idlink">${esc(a.id)}</span> <span class="tag ${KEJ_TONE[a.kejadian] || ""}">${esc(KEJ[a.kejadian] || a.kejadian)}</span> ${esc(a.catatan || "")}</div><div class="when">${esc(fd(a.tanggal))} · ${esc(a.kampanye || "tanpa kampanye")} · ${esc(String(a.kanal || "").toUpperCase())}</div></div></div>`).join("")}</div>`;
 }
+function sRitme(){
+  const R = [["08.30","08.40","bagas","Cek balasan baru, Wawan menulis draf jawaban"],["08.40","08.45","bagas","Susun follow-up yang jatuh tempo hari ini"],["08.45","08.55","bagas","Isi slot hari ini: Joko, Laras, lalu QC"],["08.55","10.00","bagas","Sync dashboard, ringkasan ke kamu"],["10.00","11.00","mic","Setujui draf, kirim DM dan email, kirim jawaban"],["11.00","24.00","mic","Tandai terkirim supaya follow-up terjadwal"]];
+  const n = new Date(), hm = n.getHours() * 60 + n.getMinutes(), m = s => { const [h, mm] = s.split(".").map(Number); return h * 60 + mm; };
+  return `<div class="ritme">${R.map(([a, b, who, t]) => { const on = hm >= m(a) && hm < m(b), past = hm >= m(b); return `<div class="rt ${on ? "on" : past ? "past" : ""} ${who === "mic" ? "you" : ""}"><span class="mono">${a === "11.00" ? "setelahnya" : a}</span><i></i><span class="rt-t">${av(who)}${esc(t)}</span>${on ? `<span class="tag ${who === "mic" ? "t-you" : "t-info"}">Sekarang</span>` : ""}</div>`; }).join("")}</div>`;
+}
 function kampTag(k){ const s = KST[k.status] || KST[k.saran_status] || ["-", ""]; return `<span class="tag ${s[1]}">${s[0]}</span>`; }
 function vSRingkasan(){
   const t0 = today(), ap = sAppr(), ki = sKirim(), C = cfg(), F = sFun();
@@ -1520,7 +1565,8 @@ function vSRingkasan(){
       <section class="w c5 s-tgt"><div class="w-h"><h2>Target uji</h2><span class="sub">Brand guidelines 2.6</span></div><div class="w-b">${sTarget()}</div></section>
       <section class="w c12"><div class="w-h"><h2>Alur 8 tahap</h2><span class="sub">Angka = prospek yang sedang di tahap itu. Tanda gerbang = Bagas berhenti dan menunggu kamu.</span></div><div class="w-b">${sAlur()}</div></section>
       <section class="w c7 s-kmini"><div class="w-h"><h2>Kampanye</h2><button class="btn sm ghost" data-goto="s-kampanye" type="button">Semua</button></div><div class="w-b" style="padding-top:2px">${kamp.length ? `<div class="tblwrap"><table class="tbl"><thead><tr><th>Kampanye</th><th>Status</th><th>Sapaan</th><th>Lead</th><th>Lead rate</th></tr></thead><tbody>${kamp.map(k => `<tr><td><span class="id">${esc(k.id)}</span>&ensp;${esc(k.nama)}</td><td>${kampTag(k)}</td><td class="mono">${k.sapa}</td><td class="mono">${k.lead}</td><td class="mono">${pct(k.lead, k.sapa)}</td></tr>`).join("")}</tbody></table></div>` : `<div class="empty"><b>Belum ada kampanye</b>Kampanye = satu segmen × satu sudut pesan × satu kanal. Yudi mengusulkannya di /sales-setup.</div>`}</div></section>
-      <section class="w c5 s-log"><div class="w-h"><h2>Terakhir terjadi</h2><button class="btn sm ghost" data-goto="s-aktivitas" type="button">Semua</button></div><div class="w-b" style="padding-top:2px">${sLogRows(((SS && SS.log) || []).slice(0, 6))}</div></section>
+      <div class="c5 stackcol s-log"><section class="w"><div class="w-h"><h2>Ritme harian</h2><span class="sub">/sales-harian, tiap pagi</span></div><div class="w-b" style="padding-top:2px">${sRitme()}</div></section>
+      <section class="w"><div class="w-h"><h2>Terakhir terjadi</h2><button class="btn sm ghost" data-goto="s-aktivitas" type="button">Semua</button></div><div class="w-b" style="padding-top:2px">${sLogRows(((SS && SS.log) || []).slice(0, 6))}</div></section></div>
     </div></section>`;
 }
 function msgBlock(x, key){
@@ -1692,7 +1738,7 @@ function openMore(){
   m.classList.add("on"); syncScrim();
 }
 function closeMore(){ $("#more").classList.remove("on"); syncScrim(); }
-function closeAll(){ openId = null; $("#dialog").classList.remove("on"); $("#more").classList.remove("on"); drawer(); }
+function closeAll(){ closePal(); openId = null; $("#dialog").classList.remove("on"); $("#more").classList.remove("on"); drawer(); }
 
 /* ---------- carousel coverflow ---------- */
 function applyCars(animate){
@@ -1833,7 +1879,7 @@ function go(v){
   if (!VIEWS[v]) return;
   closeMore();
   const s = secOf(v);
-  view = v; lastIn[s.k] = v; openGrp.add(s.k);
+  view = v; lastIn[s.k] = v; if (secOf(lastView || v) !== s) openGrp.clear(); openGrp.add(s.k);
   try { history.replaceState(null, "", "#" + v); } catch (e) {}
   try { localStorage.setItem("wd-view", v); } catch (e) {}
   render(); window.scrollTo(0, 0);
@@ -1863,6 +1909,7 @@ document.addEventListener("click", async e => {
   if (!b) return;
   const d = b.dataset;
   if (b.id === "side-toggle") return setCollapsed(!collapsed);
+  if ("pal" in d) return openPal();
   if (d.grp) { closeMore(); return goGrp(d.grp); }
   if (d.view) return go(d.view);
   if ("more" in d) return $("#more").classList.contains("on") ? closeMore() : openMore();
@@ -1937,6 +1984,43 @@ document.addEventListener("input", e => {
   if (e.target.dataset && e.target.dataset.key) drafts[e.target.dataset.key] = e.target.value;
 });
 document.addEventListener("change", e => { if (e.target.id === "f-stage") { filt.stage = e.target.value; render(); } });
+/* ---------- palet perintah (⌘K) ---------- */
+let palIdx = 0, palRes = [];
+function palItems(){
+  const it = [];
+  SECTIONS.forEach(s => s.items.forEach(([k, l, i]) => it.push({g:"Halaman", icon:i, label:`${s.l} / ${l}`, meta:"", run:() => go(k)})));
+  [...tasks()].sort(sortPub).forEach(t => it.push({g:"Task konten", icon:t.type === "post" ? "LayoutGrid" : "Wrench", id:t.id, label:t.hook || t.title, meta:SL[t.stage] || t.stage, run:() => { if (secOf(view).k !== "design") go("ringkasan"); openId = t.id; drawer(); }}));
+  sRows().forEach(r => it.push({g:"Prospek", icon:r.kanal === "email" ? "Mail" : "MessageCircle", id:r.id, label:r.nama_usaha, meta:SSL[r.status] || r.status, run:() => { sQ = r.id; sFilter = "all"; go("s-pipeline"); }}));
+  it.push({g:"Aksi", icon:"Send", label:"Perintah ke Michael", meta:"Design", run:() => { if (secOf(view).k !== "design") go("ringkasan"); openCmd(""); }});
+  it.push({g:"Aksi", icon:"Send", label:"Perintah ke Bagas", meta:"Sales", run:() => openSalesDlg("cmd", "")});
+  it.push({g:"Aksi", icon:"Reply", label:"Tempel balasan prospek", meta:"Sales", run:() => openSalesDlg("reply", "")});
+  it.push({g:"Aksi", icon:"PanelLeftClose", label:collapsed ? "Lebarkan sidebar" : "Ciutkan sidebar", meta:"Tampilan", run:() => setCollapsed(!collapsed)});
+  return it;
+}
+function palRender(){
+  const q = ($("#pal-q").value || "").toLowerCase().trim().split(/\s+/).filter(Boolean);
+  palRes = palItems().filter(x => { const h = ((x.id || "") + " " + x.label + " " + x.meta + " " + x.g).toLowerCase(); return q.every(w => h.includes(w)); }).slice(0, 60);
+  palIdx = Math.max(0, Math.min(palIdx, palRes.length - 1));
+  let g = "", h = "";
+  palRes.forEach((x, i) => { if (x.g !== g) { g = x.g; h += `<div class="pal-g">${esc(g)}</div>`; }
+    h += `<button class="pal-i" type="button" role="option" data-pi="${i}" aria-selected="${i === palIdx}">${ic(x.icon, 16)}<span class="pl">${x.id ? `<span class="id">${esc(x.id)}</span>` : ""}${esc(x.label)}</span><span class="pm">${esc(x.meta)}</span></button>`; });
+  $("#pal-list").innerHTML = h || `<div class="pal-e">Tidak ada yang cocok. Coba ID seperti P05 atau P-012, atau nama halaman.</div>`;
+  const a = $("#pal-list").querySelector('[aria-selected="true"]'); if (a) a.scrollIntoView({block:"nearest"});
+}
+function openPal(){ closeMore(); $("#pal").hidden = false; $("#pal-q").value = ""; palIdx = 0; palRender(); setTimeout(() => $("#pal-q").focus(), 10); }
+function closePal(){ const p = $("#pal"); if (p && !p.hidden) p.hidden = true; }
+function palRun(i){ const x = palRes[i]; if (!x) return; closePal(); x.run(); }
+document.addEventListener("keydown", e => {
+  const open = !$("#pal").hidden;
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); return open ? closePal() : openPal(); }
+  if (!open && e.key === "/" && !(e.target.matches && e.target.matches("input,textarea,select"))) { e.preventDefault(); return openPal(); }
+  if (!open) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); palIdx = (palIdx + (e.key === "ArrowDown" ? 1 : -1) + palRes.length) % Math.max(1, palRes.length); palRender(); }
+  else if (e.key === "Enter") { e.preventDefault(); palRun(palIdx); }
+}, true);
+document.addEventListener("input", e => { if (e.target.id === "pal-q") { palIdx = 0; palRender(); } });
+$("#pal").addEventListener("click", e => { const b = e.target.closest("[data-pi]"); if (b) return palRun(Number(b.dataset.pi)); if (e.target.id === "pal") closePal(); });
+$("#pal").addEventListener("pointermove", e => { const b = e.target.closest("[data-pi]"); if (b && Number(b.dataset.pi) !== palIdx) { palIdx = Number(b.dataset.pi); $("#pal-list").querySelectorAll("[data-pi]").forEach(x => x.setAttribute("aria-selected", Number(x.dataset.pi) === palIdx)); } });
 /* hover: posisi kursor untuk cincin border + tarikan magnet tombol */
 if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
   const RING = ".btn,.icon-btn,.chip,.arrow,.side-toggle,.idlink,.grp-h,.sub-i,.kc,.ev-i,.al-i,.w,.panel", MAG = ".btn,.icon-btn,.chip,.arrow,.side-toggle";

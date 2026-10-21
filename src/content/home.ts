@@ -39,7 +39,7 @@ export const values = [
 ];
 
 /**
- * The services, as the tabs of the Layanan card (components/home/ServiceTabs.tsx), in the order of the pricing
+ * The services, as the slides of the Layanan card (components/home/ServiceSlides.tsx), in the order of the pricing
  * plans they match (`plan` is the plan's name; its price is read from `plans`, so the two never disagree).
  * Custom shows two illustrations in turn (an online store and a dashboard).
  */

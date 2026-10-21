@@ -13,7 +13,7 @@ import { SESSION_COOKIE, adminHeaders, readSession, type Who } from "@/lib/admin
  *   user.id() / user.can("data.write")                             → the signed-in email / owner or not (team is read-only)
  */
 
-const STUDIO = path.join(process.cwd(), "src", "app", "admin", "studio.html");
+const STUDIO = path.join(process.cwd(), "src", "app", "admin", "classic", "studio.html");
 
 const shim = (me: Who) => {
   const email = JSON.stringify(me.email).replace(/</g, "\\u003c");
@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
   const html = await readFile(STUDIO, "utf8");
   const at = html.lastIndexOf("<script>\n(() => {");
   const page = at < 0 ? html : html.slice(0, at) + shim(me) + html.slice(at);
-  return new Response(page.replace("<title>webdev Content Studio (Copy)</title>", "<title>webdev Studio</title>"), {
+  return new Response(page.replace(/<title>[^<]*<\/title>/, "<title>webdev Studio</title>"), {
     headers: { ...adminHeaders, "Content-Type": "text/html; charset=utf-8" },
   });
 }

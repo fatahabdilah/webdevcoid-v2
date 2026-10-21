@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { waLink } from "@/content/site";
 import { useIntroEntered } from "@/lib/intro";
 import { ANIMATIONS_ENABLED, easeFramer } from "./motion";
-import { LogoMark, LogoWordmark, WhatsApp } from "./icons";
+import { ArrowButton } from "./ArrowButton";
+import { LogoMark, LogoWordmark } from "./icons";
 
 const links = [
   { title: "Layanan", href: "/#services" },
@@ -56,20 +56,10 @@ export function Navbar() {
               </li>
             ))}
           </ul>
-          {/* WhatsApp icon + "Konsultasi Gratis" from 640px, + "Konsultasi" on most phones, and the icon alone
-              below 390px (logo, three links and a text button don't fit in narrower screens) */}
-          <a
-            href={waLink()}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Konsultasi gratis via WhatsApp"
-            className="flex h-12 shrink-0 items-center justify-center gap-1.5 rounded-full border border-white bg-white-02 whitespace-nowrap text-grey-01 transition-colors duration-300 hover:bg-white max-[390px]:w-12 min-[390px]:pr-3.5 min-[390px]:pl-3 sm:gap-2 sm:pr-5 sm:pl-4"
-          >
-            <WhatsApp className="size-5 min-[390px]:size-4 sm:size-[18px]" />
-            <span className="t-body-s font-medium max-[390px]:hidden sm:t-body-m-medium">
-              Konsultasi<span className="hidden sm:inline"> Gratis</span>
-            </span>
-          </a>
+          {/* "Konsultasi Gratis" from 640px, "Konsultasi" on phones, the arrow circle alone below 390px */}
+          <ArrowButton tone="light" size="nav" label="Konsultasi gratis via WhatsApp">
+            Konsultasi<span className="hidden sm:inline"> Gratis</span>
+          </ArrowButton>
         </div>
       </motion.nav>
     </header>

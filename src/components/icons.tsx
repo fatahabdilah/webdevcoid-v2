@@ -2,7 +2,6 @@
 // for use in a website's UI; not for logos, and brand glyphs only for their own brand). All draw in currentColor.
 import type { SVGProps } from "react";
 import {
-  RiChat3Fill,
   RiChat3Line,
   RiCheckLine,
   RiEyeFill,
@@ -63,7 +62,6 @@ export const Instagram = remix(RiInstagramLine);
 export const Mail = remix(RiMailLine);
 export const Badge = remix(RiVerifiedBadgeFill);
 // Process step glyphs
-export const ProcessChat = remix(RiChat3Fill);
 export const ProcessPen = remix(RiPenNibFill);
 export const ProcessEye = remix(RiEyeFill);
 export const ProcessStructure = remix(RiLayoutMasonryFill);

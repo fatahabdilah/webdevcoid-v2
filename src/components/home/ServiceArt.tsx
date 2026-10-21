@@ -21,9 +21,9 @@ import {
 } from "@remixicon/react";
 
 /*
- * Illustrations for the services (ServiceTabs.tsx), in webdev.co.id's style: white UI cards, brand
+ * Illustrations for the services (ServiceSlides.tsx), in webdev.co.id's style: white UI cards, brand
  * blues, Geist, real photos (free Unsplash, no brands). Each tells its service's own story as a short
- * storyboard; only the shown one plays (see ServiceTabs), the rest hold their finished frame, as does
+ * storyboard; only the shown one plays (see ServiceSlides), the rest hold their finished frame, as does
  * every card with reduced motion. Canvases are sized so one canvas unit is ~0.75px on desktop in every card.
  */
 
@@ -187,6 +187,10 @@ function Bar({ x, y, w, h = 8, fill = tint(0.72) }: { x: number; y: number; w: n
 
 /** What every service illustration takes: whether it is the card playing, and a callback when a loop ends. */
 export type StoryProps = { active: boolean; onLoop?: () => void };
+
+/** How long one full run of each illustration's story takes (ms): the sum of its steps (the storyboards below). */
+export const storyLength = (art: "company" | "landing" | "webapp" | "store") =>
+  ({ company: COMPANY_STEPS, landing: LANDING_STEPS, webapp: WEBAPP_STEPS, store: STORE_STEPS })[art].reduce((a, b) => a + b, 0);
 
 /**
  * Steps through a looping storyboard (one duration per step, in ms) while the card is active and on screen,

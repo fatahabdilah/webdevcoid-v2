@@ -12,7 +12,9 @@ import path from "node:path";
  * - JSON files in data/admin/ (local fallback, ignored by git; ADMIN_DATA_DIR moves it).
  */
 
-export const DOCS = ["board/state", "board/sales"] as const;
+/** board/*: the team's boards; agents/config: the agents' .md settings and the runner switch (edited in the Studio);
+ *  runner/status: what the agent runner on the team's computer reports (connections, last run). */
+export const DOCS = ["board/state", "board/sales", "agents/config", "runner/status"] as const;
 export type DocPath = (typeof DOCS)[number];
 export type DocRecord = { data: unknown; at: string };
 export type InboxItem = { id: string } & Record<string, unknown>;

@@ -56,7 +56,8 @@ function StageDesign() {
   return (
     <div className="relative flex size-[198px] items-center justify-center rounded-full border border-white/40 bg-white/20">
       <span className="size-[138px] rounded-full border border-white/80 bg-white/20" />
-      <span className="absolute size-[158px] rounded-full border border-white/70 opacity-35" />
+      {/* the faint middle ring, halfway between the inner (138) and outer (198) ones */}
+      <span className="absolute size-[168px] rounded-full border border-white/70 opacity-35" />
       <span className={`absolute flex size-[68px] items-center justify-center rounded-full text-grey-01 ${glass}`}>
         <ProcessPen className="h-7 w-auto" />
       </span>
@@ -106,17 +107,24 @@ function StageLive() {
 
 const illustrations = [StageConsult, StageDesign, StagePreview, StageLive];
 
+/** On desktop some lines reach into an illustration's box so they meet what's drawn there, not its empty edge
+ *  (keyed by connector): either side of the design circle, through its faint outer ring to the solid inner one
+ *  ((198 − 138) / 2 = 30px); and from the preview notes, whose middle card ("Revisi warna", 152px) ends 40px short
+ *  of the 192px box. */
+const circleReach: Record<number, string> = { 1: "lg:-mr-[30px]", 2: "lg:-ml-[30px]", 3: "lg:-ml-[40px]" };
+
 /** Desktop grid placement: column `--c`, row 1 (illustrations) or 2 (labels). */
 const at = (c: number) => ({ "--c": c }) as CSSProperties;
 const row1 = "lg:[grid-column:var(--c)] lg:[grid-row:1]";
 const row2 = "lg:[grid-column:var(--c)] lg:[grid-row:2]";
 
-/** Between two stages: a dashed line (down on phones, across on desktop; none in the tablet 2 × 2) and, on desktop, a divider between the labels. */
-function Connector({ col }: { col: number }) {
+/** Between two stages: a dashed line that keeps flowing to the next one (down on phones, across on desktop, edge to
+ *  edge of its column; none in the tablet 2 × 2) and, on desktop, a divider between the labels. */
+function Connector({ col, reach = "" }: { col: number; reach?: string }) {
   return (
     <div className="contents">
-      <div className={`flex h-10 items-center justify-center md:hidden lg:flex lg:h-auto lg:px-3 ${row1}`} style={at(col)}>
-        <span className="h-full w-0 border-l-2 border-dashed border-white/60 lg:h-0 lg:w-full lg:border-t-2 lg:border-l-0" />
+      <div className={`flex h-10 items-center justify-center md:hidden lg:flex lg:h-auto ${reach} ${row1}`} style={at(col)}>
+        <span className="flow-dash h-full w-0.5 lg:h-0.5 lg:w-full" />
       </div>
       <div className={`hidden items-center justify-center lg:flex ${row2}`} style={at(col)}>
         <span className="h-[38px] w-px rounded-full bg-white/30" />
@@ -148,7 +156,7 @@ export function Process() {
                   const Illustration = illustrations[i];
                   return (
                     <div key={stage.numeral} className="flex flex-col items-center lg:contents">
-                      {i > 0 && <Connector col={i * 2} />}
+                      {i > 0 && <Connector col={i * 2} reach={circleReach[i] ?? ""} />}
                       <Reveal y={24} delay={0.1 * i} amount={0.4} className={`flex justify-center ${row1}`} style={at(i * 2 + 1)}>
                         <Illustration />
                       </Reveal>

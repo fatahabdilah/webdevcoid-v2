@@ -1,8 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist } from "next/font/google";
-import { Preloader } from "@/components/preloader/Preloader";
-import { SmoothCursor } from "@/components/SmoothCursor";
-import { SmoothScroll } from "@/components/SmoothScroll";
 import { contact, siteName, siteUrl } from "@/content/site";
 import "./globals.css";
 
@@ -62,9 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="id" className={geist.variable}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
-        <Preloader />
-        <SmoothScroll />
-        <SmoothCursor />
+        {/* the site's loader, smooth scroll and cursor live in (site)/layout.tsx, so /admin gets none of them */}
         {children}
       </body>
     </html>

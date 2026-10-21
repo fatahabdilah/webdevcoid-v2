@@ -462,8 +462,9 @@ const R = {
 type Target = { tex: WebGLTexture; fbo: WebGLFramebuffer; w: number; h: number };
 type Program = { p: WebGLProgram; u: Record<string, WebGLUniformLocation | null> };
 
-/** Starts the effect for `btn`, drawing into `cv`; `layer` carries the --h size and hot/press state. */
-function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLElement) {
+/** Starts the effect for `btn`, drawing into `cv`; `layer` carries the --h size and hot/press state. Hover, press
+ *  and focus are read from `host` (the button itself, or the link around it when one link holds several pills). */
+function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLElement, host: HTMLElement = btn) {
   const gl = cv.getContext("webgl2", { alpha: true, antialias: false, premultipliedAlpha: true, powerPreference: "default" });
   if (!gl) return () => {}; // No WebGL 2: the plain dark plate stays as the button.
 
@@ -809,7 +810,7 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
 
   const listeners = new AbortController();
   const { signal } = listeners;
-  btn.addEventListener(
+  host.addEventListener(
     "pointerenter",
     (e) => {
       if (e.pointerType !== "mouse") return;
@@ -823,7 +824,7 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
     },
     { signal },
   );
-  btn.addEventListener(
+  host.addEventListener(
     "pointerleave",
     (e) => {
       if (e.pointerType === "mouse") {
@@ -842,7 +843,7 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
     },
     { passive: true, signal },
   );
-  btn.addEventListener(
+  host.addEventListener(
     "pointerdown",
     (e) => {
       trackPointer(e);
@@ -859,15 +860,15 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
   window.addEventListener("pointerup", release, { signal });
   window.addEventListener("pointercancel", release, { signal });
   // only keyboard focus keeps it lit — a mouse click shouldn't leave the button glowing
-  btn.addEventListener(
+  host.addEventListener(
     "focus",
     () => {
-      on.focus = btn.matches(":focus-visible");
+      on.focus = host.matches(":focus-visible");
       sync();
     },
     { signal },
   );
-  btn.addEventListener(
+  host.addEventListener(
     "blur",
     () => {
       on.focus = false;
@@ -876,7 +877,7 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
     { signal },
   );
   // keyboard activation gets the same treatment, rippling from the centre
-  btn.addEventListener(
+  host.addEventListener(
     "keydown",
     (e) => {
       if ((e.key !== "Enter" && e.key !== " ") || e.repeat) return;
@@ -886,7 +887,7 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
     },
     { signal },
   );
-  btn.addEventListener(
+  host.addEventListener(
     "keyup",
     (e) => {
       if (e.key !== "Enter" && e.key !== " ") return;
@@ -940,24 +941,26 @@ function createLiquidMetal(cv: HTMLCanvasElement, btn: HTMLElement, layer: HTMLE
  * Drop inside a `relative` rounded-full link or button (first child): draws the dark plate and the
  * liquid metal effect behind the label, sized to the parent.
  */
-export function LiquidMetal() {
+export function LiquidMetal({ litByLink = false }: { litByLink?: boolean }) {
   const ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const layer = ref.current;
     const button = layer?.parentElement;
     if (!layer || !button) return;
+    // litByLink: the pill is one part of a larger link (ArrowButton's pill and circle), and lights with all of it
+    const host = (litByLink && button.closest<HTMLElement>("a, button")) || button;
     // A fresh canvas per mount: cleanup loses the WebGL context, and a reused canvas would
     // hand back that dead context (React re-runs effects in dev).
     const canvas = document.createElement("canvas");
     canvas.className = "lm-canvas";
     layer.appendChild(canvas);
-    const destroy = createLiquidMetal(canvas, button, layer);
+    const destroy = createLiquidMetal(canvas, button, layer, host);
     return () => {
       destroy();
       canvas.remove();
     };
-  }, []);
+  }, [litByLink]);
 
   return (
     <span ref={ref} aria-hidden className="lm-layer">

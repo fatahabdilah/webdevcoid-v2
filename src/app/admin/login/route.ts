@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
     httpOnly: true,
     secure: request.nextUrl.protocol === "https:",
     sameSite: "lax",
-    path: "/admin",
+    path: "/",
     maxAge: s.maxAge,
   });
   return res;

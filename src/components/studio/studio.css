@@ -1,0 +1,350 @@
+/* The Studio (/admin), in the look of the team's Content Studio: a dark instrument panel, hairline modules with corner
+   ticks on a dot grid, brand blue for action, amber for "your turn", mint for done, rose for late. Geist for words,
+   Geist Mono for labels, IDs and numbers. Scoped to .studio so nothing reaches the public site. */
+
+.studio {
+  --bg: #050507;
+  --surface: #0f1014;
+  --raised: #15161b;
+  --sunken: #0a0b0e;
+  --hover: #1a1b21;
+  --line: rgb(255 255 255 / 0.08);
+  --line-2: rgb(255 255 255 / 0.16);
+  --ink: #f3f3f5;
+  --ink-2: rgb(236 236 242 / 0.7);
+  --ink-3: rgb(220 220 232 / 0.48);
+  --accent: #236ef3;
+  --accent-2: #0346d6;
+  --accent-text: #8cb0ff;
+  --accent-soft: rgb(35 110 243 / 0.16);
+  --you: #ffb547;
+  --you-soft: rgb(255 181 71 / 0.13);
+  --ok: #76e4b8;
+  --ok-soft: rgb(118 228 184 / 0.12);
+  --bad: #ff8895;
+  --bad-soft: rgb(255 136 149 / 0.12);
+  --pop: 0 30px 80px -20px rgb(0 0 0 / 0.75), 0 2px 8px rgb(0 0 0 / 0.35);
+  --f-sans: var(--font-geist), "Geist", system-ui, sans-serif;
+  --f-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+  min-height: 100svh;
+  background:
+    radial-gradient(60% 40% at 50% -10%, rgb(3 70 214 / 0.18), transparent 70%),
+    radial-gradient(circle, rgb(226 230 242 / 0.07) 1px, transparent 1.3px) 0 0 / 22px 22px,
+    var(--bg);
+  color: var(--ink);
+  font-family: var(--f-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.studio *:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.studio .mono {
+  font-family: var(--f-mono);
+}
+.studio .lbl {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+/* a module: hairline box with corner ticks */
+.studio .panel {
+  position: relative;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 1px solid var(--line);
+}
+.studio .panel.ticks::before,
+.studio .panel.ticks::after {
+  content: "";
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--line-2);
+  pointer-events: none;
+}
+.studio .panel.ticks::before {
+  top: -1px;
+  left: -1px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.studio .panel.ticks::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: 0;
+  border-top: 0;
+}
+.studio .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--line-2);
+  background: var(--raised);
+  color: var(--ink);
+  font: 500 15px var(--f-sans);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+.studio .btn:hover:not(:disabled) {
+  background: var(--hover);
+  border-color: rgb(255 255 255 / 0.28);
+}
+.studio .btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.studio .btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.studio .btn.primary:hover:not(:disabled) {
+  background: #3a7df5;
+  border-color: #3a7df5;
+}
+.studio .btn.ok {
+  background: var(--ok-soft);
+  border-color: color-mix(in srgb, var(--ok) 40%, transparent);
+  color: var(--ok);
+}
+.studio .btn.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ink-2);
+}
+.studio .btn.ghost:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--hover);
+}
+.studio .btn.sm {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+}
+.studio .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  font: 500 12px var(--f-mono);
+  letter-spacing: 0.02em;
+  color: var(--ink-2);
+  white-space: nowrap;
+}
+.studio .tag.you {
+  color: var(--you);
+  background: var(--you-soft);
+  border-color: transparent;
+}
+.studio .tag.ok {
+  color: var(--ok);
+  background: var(--ok-soft);
+  border-color: transparent;
+}
+.studio .tag.bad {
+  color: var(--bad);
+  background: var(--bad-soft);
+  border-color: transparent;
+}
+.studio .tag.info {
+  color: var(--accent-text);
+  background: var(--accent-soft);
+  border-color: transparent;
+}
+.studio .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-2);
+  font: 500 14px var(--f-sans);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.studio .chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: #0b0b0e;
+  border-color: var(--ink);
+}
+.studio .chip .n {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  opacity: 0.7;
+}
+.studio .row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 16px 18px;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.studio .row:first-child {
+  border-top: 0;
+}
+.studio .row:hover {
+  background: var(--hover);
+}
+.studio .field {
+  width: 100%;
+  min-height: 110px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-2);
+  background: var(--sunken);
+  color: var(--ink);
+  font: 15px/1.5 var(--f-sans);
+  resize: vertical;
+}
+.studio .field:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.studio .msgbox {
+  white-space: pre-wrap;
+  padding: 16px 18px;
+  background: var(--sunken);
+  border: 1px solid var(--line);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.studio .doc h1,
+.studio .doc h2,
+.studio .doc h3 {
+  font-weight: 600;
+  margin: 1.2em 0 0.4em;
+  line-height: 1.3;
+}
+.studio .doc h1 {
+  font-size: 19px;
+}
+.studio .doc h2 {
+  font-size: 17px;
+}
+.studio .doc h3 {
+  font-size: 15px;
+  color: var(--ink-2);
+}
+.studio .doc p,
+.studio .doc li {
+  color: var(--ink-2);
+  margin: 0.35em 0;
+}
+.studio .doc ul {
+  padding-left: 1.1em;
+  list-style: disc;
+}
+.studio .doc strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.studio .doc hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 1em 0;
+}
+.studio .scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgb(0 0 0 / 0.55);
+  backdrop-filter: blur(2px);
+}
+.studio .sheet {
+  position: fixed;
+  z-index: 41;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(720px, 100vw);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-left: 1px solid var(--line-2);
+  box-shadow: var(--pop);
+  animation: studio-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+@keyframes studio-in {
+  from {
+    transform: translateX(24px);
+    opacity: 0;
+  }
+}
+.studio .toast {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 10px 10px 18px;
+  background: var(--ink);
+  color: #0b0b0e;
+  box-shadow: var(--pop);
+  font-weight: 500;
+  animation: studio-up 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.studio .toast.bad {
+  background: #ffd5da;
+}
+@keyframes studio-up {
+  from {
+    transform: translate(-50%, 12px);
+    opacity: 0;
+  }
+}
+.studio .skeleton {
+  background: linear-gradient(90deg, var(--raised), var(--hover), var(--raised));
+  background-size: 200% 100%;
+  animation: studio-sk 1.4s linear infinite;
+}
+@keyframes studio-sk {
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (max-width: 1023px) {
+  .studio .sheet {
+    width: 100vw;
+    border-left: 0;
+  }
+  .studio .toast {
+    bottom: calc(84px + env(safe-area-inset-bottom));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .studio *,
+  .studio *::before,
+  .studio *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -40,6 +40,8 @@ const salt = randomBytes(16);
 const hash = `scrypt:${salt.toString("hex")}:${scryptSync(pw, salt, 64).toString("hex")}`;
 
 set(team ? "ADMIN_TEAM_EMAIL" : "ADMIN_EMAIL", email);
+const name = await ask("Nama panggilan (mis. Fatah, Mic; Enter = dari email): ");
+if (name) set(team ? "ADMIN_TEAM_NAME" : "ADMIN_NAME", name);
 set(team ? "ADMIN_TEAM_PASSWORD_HASH" : "ADMIN_PASSWORD_HASH", hash);
 set("ADMIN_SESSION_SECRET", randomBytes(32).toString("hex"), true);
 set("ADMIN_API_TOKEN", randomBytes(32).toString("hex"), true);

@@ -1,6 +1,5 @@
 import { existingSite, included } from "@/content/home";
-import { waLink } from "@/content/site";
-import { Button } from "../Button";
+import { ArrowButton } from "../ArrowButton";
 import { CtaAvatar } from "../CtaAvatar";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
@@ -8,7 +7,7 @@ import { Lines } from "../Lines";
 import { IncludedIcon } from "./IncludedIcon";
 import { ExistingSite } from "./ExistingSite";
 import { CarePreview, RedesignPreview } from "./ServiceArt";
-import { ServiceTabs } from "./ServiceTabs";
+import { ServiceSlides } from "./ServiceSlides";
 
 
 /** Titles of the groups below the bento (left from md, like the cards under them). */
@@ -32,9 +31,7 @@ function CtaCard() {
         </div>
       </Reveal>
       <div>
-        <Button href={waLink()} whatsapp>
-          Konsultasi Gratis
-        </Button>
+        <ArrowButton>Konsultasi Gratis</ArrowButton>
       </div>
     </div>
   );
@@ -80,7 +77,7 @@ export function Services() {
 
         <div className="flex w-full max-w-[400px] flex-col gap-2 md:max-w-none">
           <Reveal y={50} amount={0.15}>
-            <ServiceTabs />
+            <ServiceSlides />
           </Reveal>
 
           {/* Right under the services: the free consultation, and what every plan includes (that comes first below desktop) */}

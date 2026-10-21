@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { markIntroDone, markIntroEntered } from "@/lib/intro";
-import { LOGO_MARK_D } from "@/lib/logoPaths";
+import { LOGO_MARK_D, LOGO_WORDMARK_D } from "@/lib/logoPaths";
 import { ANIMATIONS_ENABLED } from "../motion";
 import "./preloader.css";
 
@@ -10,9 +10,9 @@ import "./preloader.css";
 const PARTS = LOGO_MARK_D.match(/M[^M]+/g) ?? [];
 
 /**
- * First-load loader, about 1.4 s: the webdev mark builds itself on black (its three bars grow up one after
- * another, then the bracket closes), then the camera zooms through it: the mark rushes towards us as the black
- * fades, and the hero zooms out from behind it. It's all CSS (preloader.css), so it plays from the first paint even
+ * First-load loader, about 1.6 s: the webdev lockup builds itself on black (the mark's three bars grow up one after
+ * another, the bracket closes, then "webdev.co.id" comes into focus beside it), then the camera zooms through the
+ * mark: it rushes towards us as the wordmark and the black fade, and the hero zooms out from behind it. It's all CSS (preloader.css), so it plays from the first paint even
  * before React hydrates; this component only follows the veil's animation to tell the rest of the site when
  * the page has opened ("entered": navbar, cursor, smooth scroll, entrance animations) and when it's gone.
  * The previous intro (logo write-on, scripted click, zoom through the logo) is archived in social/archive/intro-v1.
@@ -50,10 +50,12 @@ export function Preloader() {
 
   return (
     <div ref={rootRef} className="intro-root" aria-hidden>
-      <svg className="intro-mark" viewBox="0 0 107 124.852" fill="#fff">
+      {/* the official lockup: the mark at the origin, the wordmark in lockup coordinates beside it */}
+      <svg className="intro-mark" viewBox="0 0 592.951 124.852" fill="#fff">
         {PARTS.map((d, i) => (
           <path key={i} className={i < 3 ? "intro-bar" : "intro-bracket"} style={{ animationDelay: `${0.05 + i * 0.08}s` }} fillRule="evenodd" d={d} />
         ))}
+        <path className="intro-word" d={LOGO_WORDMARK_D} />
       </svg>
     </div>
   );
