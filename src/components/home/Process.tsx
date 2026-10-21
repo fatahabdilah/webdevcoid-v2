@@ -160,8 +160,9 @@ export function Process() {
                       <Reveal y={24} delay={0.1 * i} amount={0.4} className={`flex justify-center ${row1}`} style={at(i * 2 + 1)}>
                         <Illustration />
                       </Reveal>
-                      {/* Numeral and name under the illustration (the labels row on desktop) */}
-                      <div className={`flex flex-col items-center gap-2 pt-6 pb-2 text-center text-white lg:gap-4 lg:pt-[50px] lg:pb-[13px] ${row2}`} style={at(i * 2 + 1)}>
+                      {/* Numeral and name under the illustration: on one line ("I  Konsultasi") until desktop, where they
+                          stack in the labels row */}
+                      <div className={`flex items-baseline justify-center gap-2.5 pt-6 pb-2 text-center text-white lg:flex-col lg:items-center lg:gap-4 lg:pt-[50px] lg:pb-[13px] ${row2}`} style={at(i * 2 + 1)}>
                         <span className="t-body-l text-white">{stage.numeral}</span>
                         <span className="text-[22px] leading-[27px] font-medium tracking-[-0.025em] whitespace-nowrap">{stage.label}</span>
                       </div>
