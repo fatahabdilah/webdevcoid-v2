@@ -1,0 +1,121 @@
+/* "Kenapa kami" card visuals (ValueVisuals.tsx). Each scene runs once per step (4.5s) and is restarted by React for
+   the next one. The cursor moves through two points set per scene: --x1 / --y1 (what it picks), then --x2 / --y2
+   (the button it presses). Transform and opacity only; with reduced motion the scenes stay still. */
+
+.vv-cursor {
+  animation: vv-cursor 4.5s cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+@keyframes vv-cursor {
+  0% {
+    opacity: 0;
+    transform: translate(calc(var(--x1) + 50px), calc(var(--y1) + 60px));
+  }
+  12% {
+    opacity: 1;
+  }
+  28% {
+    transform: translate(var(--x1), var(--y1));
+  }
+  32% {
+    transform: translate(var(--x1), var(--y1)) scale(0.82);
+  }
+  36% {
+    transform: translate(var(--x1), var(--y1));
+  }
+  62% {
+    transform: translate(var(--x2), var(--y2));
+  }
+  66% {
+    transform: translate(var(--x2), var(--y2)) scale(0.82);
+  }
+  70%,
+  90% {
+    opacity: 1;
+    transform: translate(var(--x2), var(--y2));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--x2), var(--y2));
+  }
+}
+/* what the first click turns on (a ring, a chip, a swatch) */
+.vv-on {
+  animation: vv-on 4.5s ease-out both;
+}
+@keyframes vv-on {
+  0%,
+  31% {
+    opacity: 0;
+  }
+  36%,
+  100% {
+    opacity: 1;
+  }
+}
+/* the button the second click presses */
+.vv-press {
+  animation: vv-press 4.5s ease-in-out both;
+}
+@keyframes vv-press {
+  0%,
+  64% {
+    transform: none;
+  }
+  67% {
+    transform: scale(0.92);
+  }
+  71%,
+  100% {
+    transform: none;
+  }
+}
+
+/* 02: the row of page designs drifts left, forever (the row is two identical halves) */
+.vv-marquee {
+  animation: vv-marquee 30s linear infinite;
+}
+@keyframes vv-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* 03: bars fill and a line draws while their panel is up */
+.vv-fill {
+  transform-origin: left center;
+  animation: vv-fill 1.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes vv-fill {
+  from {
+    transform: scaleX(0.08);
+  }
+}
+.vv-draw {
+  stroke-dasharray: 1;
+  animation: vv-draw 2.2s cubic-bezier(0.45, 0, 0.2, 1) both;
+}
+@keyframes vv-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vv-cursor,
+  .vv-marquee,
+  .vv-fill,
+  .vv-draw,
+  .vv-press {
+    animation: none;
+  }
+  .vv-cursor {
+    opacity: 0;
+  }
+  .vv-on {
+    animation: none;
+    opacity: 1;
+  }
+}

@@ -1,17 +1,12 @@
-import { existingSite, included } from "@/content/home";
+import { included } from "@/content/home";
 import { ArrowButton } from "../ArrowButton";
 import { CtaAvatar } from "../CtaAvatar";
 import { Reveal } from "../motion";
 import { SectionHeader } from "../SectionHeader";
 import { Lines } from "../Lines";
 import { IncludedIcon } from "./IncludedIcon";
-import { ExistingSite } from "./ExistingSite";
-import { CarePreview, RedesignPreview } from "./ServiceArt";
-import { ServiceSlides } from "./ServiceSlides";
-
-
-/** Titles of the groups below the bento (left from md, like the cards under them). */
-const groupTitle = "t-title-m md:t-title-l text-center text-grey-01 md:text-left";
+import { ServiceBento } from "./ServiceBento";
+import { cardTitle, cardWords } from "./surfaces";
 
 function CtaCard() {
   return (
@@ -21,8 +16,8 @@ function CtaCard() {
     >
       <Reveal y={50} className="flex flex-col gap-6">
         <CtaAvatar image="/images/avatars/cta-services.png" />
-        <div className="flex flex-col gap-2 md:max-w-[80%] lg:max-w-none">
-          <h3 className="t-title-m text-balance text-white">Bingung mulai dari&nbsp;mana?</h3>
+        <div className={`${cardWords} md:max-w-[80%] lg:max-w-none`}>
+          <h3 className={`${cardTitle} text-white`}>Bingung mulai dari&nbsp;mana?</h3>
           <p className="t-body-m text-white-02">
             Konsultasi gratis dulu.
             <br />
@@ -39,9 +34,9 @@ function CtaCard() {
 
 function IncludedCard() {
   return (
-    <div data-included="" className="flex h-full w-full flex-col items-center gap-6 rounded-3xl border border-grey-07 bg-grey-09 px-4 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between lg:px-8">
-      <div className="flex w-full flex-col gap-1 text-center md:w-auto md:text-left">
-        <h3 className="t-title-m text-grey-01">Sudah termasuk di setiap&nbsp;harga</h3>
+    <div data-included="" className="flex h-full w-full flex-col items-center gap-6 rounded-3xl border border-grey-07 bg-grey-09 px-4 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between">
+      <div className={`${cardWords} w-full text-center md:w-auto md:text-left`}>
+        <h3 className={`${cardTitle} text-grey-01`}>Sudah termasuk di setiap&nbsp;harga</h3>
         <p className="t-body-m text-grey-03">Tanpa biaya tambahan, apa pun pilihan&nbsp;websitemu.</p>
       </div>
       <div className="grid w-full grid-cols-2 gap-2 md:flex">
@@ -76,26 +71,20 @@ export function Services() {
         />
 
         <div className="flex w-full max-w-[400px] flex-col gap-2 md:max-w-none">
-          <Reveal y={50} amount={0.15}>
-            <ServiceSlides />
+          <Reveal y={50} amount={0.1}>
+            <ServiceBento />
           </Reveal>
 
-          {/* Right under the services: the free consultation, and what every plan includes (that comes first below desktop) */}
-          {/* equal rows when stacked (from md); side by side, one 400px row, the same height as the services card above */}
-          <div className="grid gap-2 md:auto-rows-fr lg:h-[400px] lg:grid-cols-[2fr_3fr]">
+          {/* Under the services, on the same three columns: the free consultation, and what every plan includes across
+              the other two (that comes first below desktop; equal rows when stacked from md) */}
+          <div className="grid gap-2 md:auto-rows-fr lg:h-[400px] lg:grid-cols-3">
             <Reveal y={50} delay={0.1} amount={0.2} className="order-2 lg:order-1">
               <CtaCard />
             </Reveal>
-            <Reveal y={50} delay={0.15} amount={0.2} className="order-1 lg:order-2">
+            <Reveal y={50} delay={0.15} amount={0.2} className="order-1 lg:order-2 lg:col-span-2">
               <IncludedCard />
             </Reveal>
           </div>
-
-          {/* For businesses that already have a website */}
-          <Reveal y={50} amount={0.2} className="flex flex-col gap-5 pt-14 md:pt-20 lg:pt-24">
-            <h3 className={groupTitle}>{existingSite.title}</h3>
-            <ExistingSite previews={[<RedesignPreview key="redesign" />, <CarePreview key="care" />]} />
-          </Reveal>
         </div>
       </div>
     </section>

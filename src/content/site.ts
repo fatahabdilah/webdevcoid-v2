@@ -9,7 +9,7 @@ export const contact = {
   whatsappDisplay: "0822 5809 6886",
   instagram: "webdev.co.id",
   instagramUrl: "https://instagram.com/webdev.co.id",
-  email: "webdevcoid.official@gmail.com",
+  email: "halo@webdev.co.id",
 };
 
 /** WhatsApp chat link with a prefilled message. */

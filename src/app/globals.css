@@ -532,24 +532,6 @@ html.lenis body {
   }
 }
 
-/* ---------- Layanan slides (ServiceSlides.tsx) ----------
-   The active number ring fills while its slide plays (the duration is the story length, set inline). */
-.service-ring {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  animation: service-ring linear forwards;
-}
-@keyframes service-ring {
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .service-ring {
-    display: none;
-  }
-}
-
 /* ---------- Process connectors (Process.tsx) ----------
    A dashed line that keeps flowing towards the next stage: across on desktop, down on phones. */
 .flow-dash {
@@ -584,63 +566,3 @@ html.lenis body {
   }
 }
 
-/* ---------- Service bento demos (ServiceArt.tsx) ----------
-   The demo cursor's click: a quick press and a ripple from its tip. */
-.art-press {
-  animation: art-press 0.45s ease-out;
-  transform-origin: center;
-}
-/* The site cursor presses to 70% and springs back */
-@keyframes art-press {
-  35% {
-    transform: scale(0.7);
-  }
-}
-.art-ripple {
-  animation: art-ripple 0.7s ease-out forwards;
-}
-@keyframes art-ripple {
-  from {
-    transform: translate(-50%, -50%) scale(0.2);
-    opacity: 0.55;
-  }
-  to {
-    transform: translate(-50%, -50%) scale(1.7);
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .art-press,
-  .art-ripple {
-    animation: none;
-  }
-}
-/* A button pressed in a cursor-less demo: a squeeze and a ring */
-.art-tap {
-  animation: art-tap 0.45s ease-out;
-}
-@keyframes art-tap {
-  35% {
-    transform: scale(0.93);
-  }
-}
-.art-ring {
-  animation: art-ring 0.7s ease-out forwards;
-  opacity: 0;
-}
-@keyframes art-ring {
-  from {
-    transform: scale(0.3);
-    opacity: 1;
-  }
-  to {
-    transform: scale(1.5);
-    opacity: 0;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .art-tap,
-  .art-ring {
-    animation: none;
-  }
-}

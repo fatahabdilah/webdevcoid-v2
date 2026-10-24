@@ -39,70 +39,24 @@ export const values = [
 ];
 
 /**
- * The services, as the slides of the Layanan card (components/home/ServiceSlides.tsx), in the order of the pricing
- * plans they match (`plan` is the plan's name; its price is read from `plans`, so the two never disagree).
- * Custom shows two illustrations in turn (an online store and a dashboard).
+ * The services, as the Layanan bento (components/home/ServiceBento.tsx), on the owner's grid "1 1 2 / 3 4 4 / 5 6 6"
+ * (5 and 6 are the consultation and "Sudah termasuk" cards in Services.tsx): `wide` cards take two of the three
+ * columns. Every card reads label, big title, one line. Each has its visual in ServiceBento.tsx.
  */
-export type ServiceArtName = "company" | "landing" | "store" | "webapp";
-export type Service = {
-  key: string;
-  title: string;
-  text: string;
-  /** The three points beside the illustration. */
-  points: string[];
-  plan: string;
-  /** Live illustrations (components/home/ServiceArt.tsx); more than one take turns, each with its chip label. */
-  arts: { art: ServiceArtName; label: string }[];
-};
+export type Service = { key: "custom" | "landing" | "company" | "existing"; label: string; title: string; text: string; wide?: boolean };
 
 export const services: Service[] = [
+  { key: "custom", label: "Toko online & sistem", title: "Custom", text: "Toko online, dashboard, atau sistem yang dibuat sesuai kebutuhan bisnismu.", wide: true },
+  { key: "landing", label: "Untuk promo & iklan", title: "Landing Page", text: "Satu halaman promo yang fokus mengubah pengunjung jadi pembeli." },
+  { key: "company", label: "Profil usaha", title: "Company Profile", text: "Tampil kredibel dan mudah ditemukan saat calon pelanggan mencari di Google." },
   {
-    key: "landing",
-    title: "Landing Page",
-    text: "Satu halaman promo yang fokus mengubah pengunjung jadi pembeli.",
-    points: ["1 halaman desain custom", "Form terhubung WhatsApp", "Domain, hosting, dan SSL tahun pertama"],
-    plan: "Landing Page",
-    arts: [{ art: "landing", label: "Halaman promo" }],
-  },
-  {
-    key: "company",
-    title: "Company Profile",
-    text: "Tampil kredibel dan mudah ditemukan saat calon pelanggan mencari di Google.",
-    points: ["Sampai 6 halaman custom", "SEO, mudah dicari di Google", "Form WhatsApp + email"],
-    plan: "Company Profile",
-    arts: [{ art: "company", label: "Ditemukan di Google" }],
-  },
-  {
-    key: "custom",
-    title: "Custom",
-    text: "Toko online, dashboard, atau sistem yang dibuat sesuai kebutuhan bisnismu.",
-    points: ["Halaman & fitur sesuai kebutuhan", "Admin panel / CMS", "Integrasi pembayaran"],
-    plan: "Custom",
-    arts: [
-      { art: "store", label: "Toko online" },
-      { art: "webapp", label: "Dashboard" },
-    ],
+    key: "existing",
+    label: "Redesign · Maintenance · Migrasi",
+    title: "Redesign, maintenance & migrasi",
+    text: "Sudah punya website? Kami perbarui tampilannya, pindahkan hostingnya tanpa ribet, lalu rawat tiap bulan.",
+    wide: true,
   },
 ];
-
-/** "Butuhnya bukan website baru?": for businesses that already have a site. Each card opens WhatsApp. */
-export const existingSite = {
-  title: "Butuhnya bukan website baru?",
-  items: [
-    {
-      icon: "pencil",
-      title: "Sudah punya website?",
-      text: "Kami bantu perbarui tampilan atau perbaiki yang bermasalah.",
-      message: "Halo webdev.co.id, saya sudah punya website dan mau perbarui tampilan atau perbaiki yang bermasalah.",
-    },
-    {
-      icon: "shield",
-      title: "Perlu dirawat rutin?",
-      text: "Pembaruan konten, backup, dan pemantauan tiap bulan.",
-      message: "Halo webdev.co.id, saya mau tanya soal perawatan website tiap bulan.",
-    },
-  ],
-} as const;
 
 /** "Sudah termasuk di setiap harga" tiles. */
 export const included = [

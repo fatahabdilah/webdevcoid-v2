@@ -18,6 +18,9 @@ const icons = { chat: ProcessChatLine, pen: ProcessPenLine, eye: ProcessEyeLine,
 const glass =
   "border-[0.5px] border-white bg-white/50 shadow-[0_0.8px_1.6px_rgba(0,0,0,0.08),inset_0_-20px_66px_rgba(255,255,255,0.7)] backdrop-blur-md";
 
+/** Hover motion for the stage illustrations: a long ease-out, transform only, none with reduced motion. */
+const ease = "transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none";
+
 /** Phones and tablets: the whole card is blue (white labels sit under every stage there). */
 const cardBgStacked =
   "bg-[linear-gradient(180deg,color-mix(in_srgb,var(--color-holo-75)_50%,white)_0%,var(--color-holo-75)_12%,var(--color-holo-50)_55%,var(--color-holo-25)_100%)]";
@@ -33,11 +36,11 @@ function StageConsult() {
     { Icon: Check, title: "Jenis website", sub: "Dipilih" },
   ];
   return (
-    <div className={`relative h-[227px] w-[216px] overflow-hidden rounded-[14px] ${glass}`}>
+    <div className={`group relative h-[227px] w-[216px] overflow-hidden rounded-[14px] ${glass} ${ease} hover:-translate-y-1.5`}>
       <div className="flex flex-col gap-[23px] px-[27px] pt-[31px]">
-        {rows.map(({ Icon, title, sub }) => (
-          <div key={title} className="flex h-[39px] items-center gap-[7px]">
-            <span className="flex size-8 shrink-0 items-center justify-center text-grey-01">
+        {rows.map(({ Icon, title, sub }, i) => (
+          <div key={title} className={`flex h-[39px] items-center gap-[7px] ${ease} group-hover:translate-x-1.5`} style={{ transitionDelay: `${i * 60}ms` }}>
+            <span className={`flex size-8 shrink-0 items-center justify-center text-grey-01 ${ease} group-hover:scale-110`}>
               <Icon className="size-6" />
             </span>
             <span className="flex flex-col px-[2.6px] whitespace-nowrap">
@@ -54,12 +57,13 @@ function StageConsult() {
 /** II · design: rings of light round a frosted chip with the pen. */
 function StageDesign() {
   return (
-    <div className="relative flex size-[198px] items-center justify-center rounded-full border border-white/40 bg-white/20">
-      <span className="size-[138px] rounded-full border border-white/80 bg-white/20" />
-      {/* the faint middle ring, halfway between the inner (138) and outer (198) ones */}
-      <span className="absolute size-[168px] rounded-full border border-white/70 opacity-35" />
-      <span className={`absolute flex size-[68px] items-center justify-center rounded-full text-grey-01 ${glass}`}>
-        <ProcessPen className="h-7 w-auto" />
+    <div className="group relative flex size-[198px] items-center justify-center rounded-full">
+      <span className={`absolute inset-0 rounded-full border border-white/40 bg-white/20 ${ease} group-hover:scale-[1.06]`} />
+      <span className={`size-[138px] rounded-full border border-white/80 bg-white/20 ${ease} group-hover:scale-[0.94]`} />
+      {/* the faint middle ring, halfway between the inner (138) and outer (198) ones; it brightens on hover */}
+      <span className={`absolute size-[168px] rounded-full border border-white/70 opacity-35 transition-opacity duration-500 group-hover:opacity-90 ${ease} group-hover:scale-[1.04]`} />
+      <span className={`absolute flex size-[68px] items-center justify-center rounded-full text-grey-01 ${glass} ${ease} group-hover:scale-110`}>
+        <ProcessPen className={`h-7 w-auto ${ease} group-hover:-translate-y-0.5 group-hover:-rotate-[14deg]`} />
       </span>
     </div>
   );
@@ -68,17 +72,18 @@ function StageDesign() {
 /** III · preview: three notes stacked at slight angles. */
 function StagePreview() {
   const notes = [
-    { Icon: ProcessEye, text: "Preview beranda", w: 170, x: 4, y: 0, r: -6.9 },
-    { Icon: ProcessPen, text: "Revisi warna", w: 152, x: 0, y: 76, r: 5.3 },
-    { Icon: Check, text: "Disetujui", w: 150, x: 22, y: 150, r: -4 },
+    { Icon: ProcessEye, text: "Preview beranda", w: 170, x: 4, y: 0, r: -6.9, h: "-8px, -10px", hr: -11 },
+    { Icon: ProcessPen, text: "Revisi warna", w: 152, x: 0, y: 76, r: 5.3, h: "10px, 0px", hr: 8 },
+    { Icon: Check, text: "Disetujui", w: 150, x: 22, y: 150, r: -4, h: "-4px, 10px", hr: -7 },
   ];
   return (
-    <div className="relative h-[227px] w-[192px]">
-      {notes.map(({ Icon, text, w, x, y, r }) => (
+    <div className="group relative h-[227px] w-[192px]">
+      {/* the notes fan apart on hover, each to its own spot and a little more askew */}
+      {notes.map(({ Icon, text, w, x, y, r, h, hr }) => (
         <div
           key={text}
-          className={`absolute flex h-[73px] items-center gap-[7px] rounded-[13.5px] px-6 ${glass}`}
-          style={{ width: w, left: x, top: y, transform: `rotate(${r}deg)` }}
+          className={`absolute flex h-[73px] items-center gap-[7px] rounded-[13.5px] px-6 ${glass} ${ease} [transform:rotate(var(--r))] group-hover:[transform:translate(var(--h))_rotate(var(--hr))]`}
+          style={{ width: w, left: x, top: y, "--r": `${r}deg`, "--h": h, "--hr": `${hr}deg` } as CSSProperties}
         >
           <span className="flex size-8 shrink-0 items-center justify-center text-grey-01">
             <Icon className="size-[22px]" />
@@ -93,12 +98,18 @@ function StagePreview() {
 /** IV · launch: the site is online. */
 function StageLive() {
   return (
-    <div className={`relative flex h-[111px] w-[256px] items-center gap-[15px] overflow-hidden rounded-[15px] bg-white/30 pl-5 ${glass}`}>
-      <span className="flex size-[59px] shrink-0 items-center justify-center rounded-full bg-grey-01/10 text-grey-01">
-        <ProcessRocket className="h-[30px] w-auto" />
+    <div className={`group relative flex h-[111px] w-[256px] items-center gap-[15px] overflow-hidden rounded-[15px] bg-white/30 pl-5 ${glass} ${ease} hover:-translate-y-1.5`}>
+      <span className="flex size-[59px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-grey-01/10 text-grey-01">
+        <ProcessRocket className={`h-[30px] w-auto ${ease} group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:scale-110`} />
       </span>
       <span className="flex flex-col">
-        <span className="text-[26px] leading-[31px] font-semibold tracking-[-0.02em] text-grey-01/80">Online</span>
+        <span className="flex items-center gap-2 text-[26px] leading-[31px] font-semibold tracking-[-0.02em] text-grey-01/80">
+          Online
+          {/* a live dot that lights up on hover */}
+          <span className="relative size-2 rounded-full bg-[#1f9d4c] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <span className="absolute inset-0 rounded-full bg-[#1f9d4c] opacity-60 group-hover:animate-ping motion-reduce:group-hover:animate-none" />
+          </span>
+        </span>
         <span className="text-[14.8px] leading-[22px] font-medium tracking-[-0.01em] text-grey-01/80">namabisnismu.com</span>
       </span>
     </div>

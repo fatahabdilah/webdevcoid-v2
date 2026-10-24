@@ -1,0 +1,31 @@
+/* Layanan bento (ServiceBento.tsx). Transform and opacity only; still with reduced motion. */
+
+/* Custom: each playing card sits at its own angle (--a) and rises on its own on hover */
+.sb-card {
+  transform: rotate(var(--a));
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sb-card:hover {
+  transform: translateY(-18px) rotate(var(--a));
+}
+
+/* Landing Page: the client page scrolls down forever (two copies, slid by one), and stops while hovered */
+.sb-scroll {
+  animation: sb-scroll 70s linear infinite;
+}
+.sb-scroll:hover {
+  animation-play-state: paused;
+}
+@keyframes sb-scroll {
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sb-card,
+  .sb-scroll {
+    animation: none;
+    transition: none;
+  }
+}

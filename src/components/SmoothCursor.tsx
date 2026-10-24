@@ -19,9 +19,12 @@ const cursorCss = `*, *::before, *::after { cursor: none !important; }
  */
 export function SmoothCursor() {
   const [enabled, setEnabled] = useState(false);
-  const x = useSpring(-100, { stiffness: 400, damping: 45, mass: 1 });
-  const y = useSpring(-100, { stiffness: 400, damping: 45, mass: 1 });
-  const rotate = useSpring(0, { stiffness: 300, damping: 60 });
+  // Follows the mouse with a little glide (critically damped, ~30 ms time constant). 400 / 45 / 1 felt heavy;
+  // 1200 / 55 / 0.6 was a touch too quick for the owner.
+  const x = useSpring(-100, { stiffness: 800, damping: 47, mass: 0.7 });
+  const y = useSpring(-100, { stiffness: 800, damping: 47, mass: 0.7 });
+  // Turns promptly but without wobble (critically damped); was 300 / 60, which dragged behind the direction
+  const rotate = useSpring(0, { stiffness: 500, damping: 45 });
   const scale = useSpring(1, { stiffness: 500, damping: 35 });
   /** 0 = arrow, 1 = circle; the outline is re-drawn from it every frame */
   const morph = useSpring(0, { stiffness: 260, damping: 32 }); // critically damped: no overshoot past either shape
@@ -38,6 +41,9 @@ export function SmoothCursor() {
   const last = useRef({ x: 0, y: 0, t: 0 });
   const away = useRef(false);
   const angle = useRef({ previous: 0, accumulated: 0 });
+  /** The direction of travel, smoothed over the last few events so a jittery hand doesn't wobble the arrow; only
+   *  steps of 3px or more count, measured from where the direction was last updated (x, y) */
+  const heading = useRef({ vx: 0, vy: 0, x: 0, y: 0 });
   const pressed = useRef(false);
 
   // Decide whether this device gets the custom cursor
@@ -51,7 +57,6 @@ export function SmoothCursor() {
 
   useEffect(() => {
     if (!enabled) return;
-    let frame = 0;
     let settle: ReturnType<typeof setTimeout> | undefined;
 
     const move = (px: number, py: number) => {
@@ -72,15 +77,28 @@ export function SmoothCursor() {
       x.set(px);
       y.set(py);
 
-      if (Math.hypot(vx, vy) > 0.1) {
+      // smooth the direction (an exponential average of the velocity), counting only real moves, not a trembling hand
+      const h = heading.current;
+      const stepped = Math.hypot(px - h.x, py - h.y) >= 3;
+      if (stepped) {
+        h.vx = h.vx * 0.6 + vx * 0.4;
+        h.vy = h.vy * 0.6 + vy * 0.4;
+        h.x = px;
+        h.y = py;
+      }
+
+      if (stepped && Math.hypot(h.vx, h.vy) > 0.25) {
         // Point the arrow along the motion; accumulate so it never spins the long way round
-        const current = (Math.atan2(vy, vx) * 180) / Math.PI + 90;
+        const current = (Math.atan2(h.vy, h.vx) * 180) / Math.PI + 90;
         let diff = current - angle.current.previous;
         if (diff > 180) diff -= 360;
         if (diff < -180) diff += 360;
-        angle.current.accumulated += diff;
-        angle.current.previous = current;
-        rotate.set(angle.current.accumulated);
+        // small changes (a slightly curved line) aren't worth turning for
+        if (Math.abs(diff) > 4) {
+          angle.current.accumulated += diff;
+          angle.current.previous = current;
+          rotate.set(angle.current.accumulated);
+        }
 
         // Slight squish while moving (unless held down)
         if (!pressed.current) {
@@ -91,12 +109,10 @@ export function SmoothCursor() {
       }
     };
 
+    // Straight to the spring on every event (the spring itself renders once per frame): waiting for the next frame
+    // here only added a frame of lag
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse" || frame) return;
-      frame = requestAnimationFrame(() => {
-        frame = 0;
-        move(e.clientX, e.clientY);
-      });
+      if (e.pointerType === "mouse") move(e.clientX, e.clientY);
     };
     // Arrow over plain content, circle over clickable things, system I-beam over text fields
     const onOver = (e: PointerEvent) => {
@@ -133,7 +149,6 @@ export function SmoothCursor() {
       window.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointerup", onUp);
       document.documentElement.removeEventListener("mouseleave", onLeave);
-      cancelAnimationFrame(frame);
       clearTimeout(settle);
     };
   }, [enabled, x, y, rotate, scale, morph, visible, inside]);
