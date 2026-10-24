@@ -1,10 +1,11 @@
 "use client";
 
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
-import { RiAddLine, RiCheckboxCircleLine, RiCloseLine, RiHistoryLine, RiLayoutGridLine, RiLogoutBoxRLine, RiSettings3Line, RiUserSearchLine } from "@remixicon/react";
+import { RiAddLine, RiBankCardLine, RiCheckboxCircleLine, RiCloseLine, RiHistoryLine, RiLayoutGridLine, RiLogoutBoxRLine, RiSettings3Line, RiUserSearchLine } from "@remixicon/react";
 import { ago, fmtLongToday, todos, type Me, type Msg, type Prospect, type Task } from "./model";
 import { AskSheet, FindSheet, MsgSheet, PostSheet, ProspectSheet } from "./sheets";
 import { useStudio } from "./useStudio";
+import { PaymentsView } from "./payments";
 import { Settings } from "./settings";
 import { Content, History, Prospects, Today, type Open } from "./views";
 import "./studio.css";
@@ -21,7 +22,8 @@ const VIEWS = [
   { k: "konten", label: "Konten", icon: RiLayoutGridLine },
   { k: "prospek", label: "Prospek", icon: RiUserSearchLine },
   { k: "riwayat", label: "Riwayat", icon: RiHistoryLine },
-  { k: "pengaturan", label: "Pengaturan", icon: RiSettings3Line },
+  { k: "bayar", label: "Pembayaran", short: "Bayar", icon: RiBankCardLine },
+  { k: "pengaturan", label: "Pengaturan", short: "Atur", icon: RiSettings3Line },
 ] as const;
 type View = (typeof VIEWS)[number]["k"];
 
@@ -71,7 +73,7 @@ function Welcome({ name, onClose }: { name: string; onClose: () => void }) {
 }
 
 export function StudioApp({ me }: { me: Me }) {
-  const { board, sales, agents, runner, inbox, history: decisions, send, undo, toast, setToast, now, saveDoc } = useStudio(me);
+  const { board, sales, agents, runner, payments, inbox, history: decisions, send, undo, toast, setToast, now, saveDoc } = useStudio(me);
   const [sheet, setSheet] = useState<{ t: "post"; task: Task } | { t: "msg"; msg: Msg; mode: "approve" | "send" } | { t: "prospect"; p: Prospect } | { t: "ask" } | { t: "find" } | null>(null);
   // the view follows the address (#konten), so back/forward and bookmarks work
   const hash = useSyncExternalStore(onHash, () => location.hash.slice(1), () => "");
@@ -117,12 +119,13 @@ export function StudioApp({ me }: { me: Me }) {
   const loading = board.state === "loading" && sales.state === "loading";
   const missing = board.state === "missing" && sales.state === "missing";
 
-  const title = { tugas: "Tugasku", konten: "Konten Instagram", prospek: "Prospek", riwayat: "Riwayat", pengaturan: "Pengaturan" }[view];
+  const title = { tugas: "Tugasku", konten: "Konten Instagram", prospek: "Prospek", riwayat: "Riwayat", bayar: "Pembayaran", pengaturan: "Pengaturan" }[view];
   const lede = {
     tugas: count ? `${count === 1 ? "Ada 1 hal" : `Ada ${count} hal`} yang menunggu keputusanmu.` : "Tidak ada yang menunggumu. Tim sedang bekerja.",
     konten: "Semua post dan pekerjaan tim konten, dari yang sedang dibuat sampai yang sudah tayang.",
     prospek: "Daftar usaha yang cocok jadi klien, dari Agent Riset. Buka Instagram-nya, DM sendiri, lalu tandai di sini.",
     riwayat: "Semua yang dikerjakan tim dan keputusan yang sudah dikirim.",
+    bayar: "Pembayaran lewat DOKU dari webdev.co.id/testing. Statusnya diperbarui otomatis saat DOKU mengabari.",
     pengaturan: "Atur agent tim: perannya, aturannya, dan koneksi ke Claude, Gemini, dan Figma.",
   }[view];
 
@@ -212,6 +215,8 @@ export function StudioApp({ me }: { me: Me }) {
                 <div key={i} className="skeleton h-[72px] w-full" />
               ))}
             </div>
+          ) : view === "bayar" ? (
+            <PaymentsView data={payments.data} />
           ) : view === "pengaturan" ? (
             <Settings agents={agents.data} runner={runner.data} me={me} now={now} save={saveDoc} toast={(text, bad) => setToast({ text, tone: bad ? "bad" : undefined })} />
           ) : missing ? (
@@ -231,16 +236,19 @@ export function StudioApp({ me }: { me: Me }) {
         </main>
       </div>
 
-      {/* bottom tabs (phones) */}
-      <nav aria-label="Menu Studio" className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-[var(--line-2)] bg-[color-mix(in_srgb,var(--surface)_92%,transparent)] pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden">
-        {VIEWS.map(({ k, label, icon: Icon }) => (
-          <button key={k} type="button" onClick={() => go(k)} aria-current={view === k ? "page" : undefined} className={`relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] ${view === k ? "text-[var(--ink)]" : "text-[var(--ink-3)]"}`}>
-            {view === k && <span className="absolute top-0 h-0.5 w-10 bg-[var(--accent)]" />}
-            <Icon size={21} />
-            {label}
-            {k === "tugas" && count > 0 && <span className="mono absolute top-2 right-[calc(50%-22px)] flex h-4 min-w-4 items-center justify-center bg-[var(--you)] px-1 text-[10px] text-[#1a1000]">{count}</span>}
-          </button>
-        ))}
+      {/* bottom tabs (phones): six fit only with the short labels */}
+      <nav aria-label="Menu Studio" className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-6 border-t border-[var(--line-2)] bg-[color-mix(in_srgb,var(--surface)_92%,transparent)] pb-[env(safe-area-inset-bottom)] backdrop-blur-md lg:hidden">
+        {VIEWS.map((v) => {
+          const { k, label, icon: Icon } = v;
+          return (
+            <button key={k} type="button" onClick={() => go(k)} aria-current={view === k ? "page" : undefined} className={`relative flex h-16 flex-col items-center justify-center gap-1 text-[11px] ${view === k ? "text-[var(--ink)]" : "text-[var(--ink-3)]"}`}>
+              {view === k && <span className="absolute top-0 h-0.5 w-10 bg-[var(--accent)]" />}
+              <Icon size={21} />
+              {"short" in v ? v.short : label}
+              {k === "tugas" && count > 0 && <span className="mono absolute top-2 right-[calc(50%-22px)] flex h-4 min-w-4 items-center justify-center bg-[var(--you)] px-1 text-[10px] text-[#1a1000]">{count}</span>}
+            </button>
+          );
+        })}
       </nav>
 
       {sheet?.t === "post" && liveTask && <PostSheet task={liveTask} board={board.data} inbox={inbox} me={me} send={send} onClose={close} />}

@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { AgentsConfig, Board, InboxItem, Me, RunnerStatus, Sales } from "./model";
+import type { Payments } from "./payments";
 
 /*
- * The Studio's live data: board/state, board/sales and the inbox from /admin/api, re-read every 5 seconds (and when
+ * The Studio's live data: board/state, board/sales, the agents' settings, the DOKU payments and the inbox from /admin/api, re-read every 5 seconds (and when
  * the tab comes back). Decisions go to the inbox in the old page's exact shape ({type, status:"new", at, by, ...}),
  * after a 5-second window in which they can be undone; until the team picks one up it shows as "sent".
  */
@@ -33,6 +34,7 @@ export function useStudio(me: Me) {
   const [sales, setSales] = useState<Load<Sales>>({ data: null, at: null, state: "loading" });
   const [agents, setAgents] = useState<Load<AgentsConfig>>({ data: null, at: null, state: "loading" });
   const [runner, setRunner] = useState<Load<RunnerStatus>>({ data: null, at: null, state: "loading" });
+  const [payments, setPayments] = useState<Load<Payments>>({ data: null, at: null, state: "loading" });
   const [inbox, setInbox] = useState<InboxItem[]>([]);
   const [queued, setQueued] = useState<Queued[]>([]);
   const [toast, setToast] = useState<{ text: string; undo?: string; tone?: "bad" } | null>(null);
@@ -60,6 +62,7 @@ export function useStudio(me: Me) {
       doc<Sales>("board/sales", setSales),
       doc<AgentsConfig>("agents/config", setAgents),
       doc<RunnerStatus>("runner/status", setRunner),
+      doc<Payments>("payments/orders", setPayments),
       api("inbox?limit=200")
         .then((d) => setInbox(d.items))
         .catch(() => {}),
@@ -129,5 +132,5 @@ export function useStudio(me: Me) {
     [refresh],
   );
 
-  return { board, sales, agents, runner, inbox: all, history: inbox, send, undo, toast, setToast, refresh, now, saveDoc };
+  return { board, sales, agents, runner, payments, inbox: all, history: inbox, send, undo, toast, setToast, refresh, now, saveDoc };
 }

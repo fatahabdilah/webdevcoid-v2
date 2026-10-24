@@ -13,8 +13,9 @@ import path from "node:path";
  */
 
 /** board/*: the team's boards; agents/config: the agents' .md settings and the runner switch (edited in the Studio);
- *  runner/status: what the agent runner on the team's computer reports (connections, last run). */
-export const DOCS = ["board/state", "board/sales", "agents/config", "runner/status"] as const;
+ *  runner/status: what the agent runner on the team's computer reports (connections, last run);
+ *  payments/orders: orders paid through DOKU (written by the payment routes, read in the Studio). */
+export const DOCS = ["board/state", "board/sales", "agents/config", "runner/status", "payments/orders"] as const;
 export type DocPath = (typeof DOCS)[number];
 export type DocRecord = { data: unknown; at: string };
 export type InboxItem = { id: string } & Record<string, unknown>;
