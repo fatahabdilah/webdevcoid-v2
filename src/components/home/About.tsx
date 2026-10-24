@@ -98,7 +98,7 @@ function IntroVideo() {
         }}
         className="group relative block aspect-[1.5] w-full overflow-hidden rounded-3xl transition-shadow duration-500 ease-framer hover:shadow-[0_0_40px_0_#fff]"
       >
-        <Image src="/images/about.png" alt="Tim sedang berdiskusi di depan layar presentasi" fill sizes="600px" className="object-cover" />
+        <Image src="/images/about.png" alt="Tim sedang berdiskusi di depan layar presentasi" fill sizes="(min-width: 768px) 600px, 92vw" className="object-cover" />
         <span className="absolute inset-0 flex items-center justify-center rounded-[inherit] bg-black/20 shadow-[inset_0_0_40px_0_#fff] transition-shadow duration-500 group-hover:shadow-[inset_0_0_80px_0_#fff]">
           {/* Play button (the studio video goes here), drifting toward the pointer */}
           <motion.span

@@ -203,6 +203,13 @@ Principle (the owner's plan): **agents prepare, people decide and send.** Never 
 
 Everything that animates continuously must pause off screen.
 
+Checked again on 2026-10-24 (Lighthouse 12, production build, local, three mobile runs and one desktop): mobile 91–94 (LCP ~3.1 s, TBT 50–90 ms, CLS 0, 397 KiB), desktop 97 (LCP 0.7 s); accessibility, best practices and SEO 100. What that round did:
+- **Every picture through next/image, lazily, with honest `sizes`:** the monitor screen in Layanan (`existing-after.jpg`) was a raw eager `<img>`, 100 KiB loaded with the hero; About asked for 1080px on phones.
+- **Sources no bigger than shown at 2×:** the arifsyauqi.com page capture 792 → 528px wide (1.1 MB → 500 KB), the Company Profile tablet 1322 → 920px.
+- **AVIF first and a 31-day image cache** (`next.config.ts` `images`), so Vercel serves smaller files and re-optimises rarely.
+- **Endless CSS loops pause off screen:** `PauseOffscreen.tsx` (one observer for `.sb-scroll`, `.vv-marquee`) sets `data-off`, which pauses them.
+- The LCP is the hero's line under the heading, held by the first-load loader by design (render delay ~2.7 s); that is the cost of the intro, not of the page.
+
 Optimised on 2026-10-16 (Lighthouse, production build, local): mobile performance 64 → about 88 (median of five runs; TBT 750 → ~220 ms, LCP 4.4 → ~3.1 s, DOM 2,040 → 1,366 elements, CLS 0), desktop 99 (LCP 0.7 s); accessibility, best practices and SEO 100. What did it, so keep it that way:
 - **Decorative SVG illustrations mount near the screen, not at load:** (historical: the old service SVG storyboards; the Layanan visuals are now light HTML, so nothing there needs deferring). They were about half the page's DOM, and their layout and hydration dominated the load.
 - **Scroll reveals don't listen to the intro:** `Reveal`/`Words` subscribe to the intro state only when `onMount` (`useIntroEnteredIf`), so they don't all re-render when the loader opens.

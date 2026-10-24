@@ -1,5 +1,6 @@
 import { SiteFooter } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { PauseOffscreen } from "@/components/PauseOffscreen";
 import { Preloader } from "@/components/preloader/Preloader";
 import { SmoothCursor } from "@/components/SmoothCursor";
 import { ScrollThumb } from "@/components/ScrollThumb";
@@ -13,6 +14,7 @@ export default function SiteLayout({ children }: LayoutProps<"/">) {
       <SmoothScroll />
       <SmoothCursor />
       <ScrollThumb />
+      <PauseOffscreen />
       <Navbar />
       {/* Above the footer, whose background reaches up behind the FAQ */}
       <main className="relative z-[1] flex flex-col overflow-clip">{children}</main>

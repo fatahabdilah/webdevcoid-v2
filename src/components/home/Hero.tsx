@@ -1,4 +1,5 @@
-import { Button } from "../Button";
+import Link from "next/link";
+import { ArrowButton } from "../ArrowButton";
 import { Reveal, ShrinkOnScroll, Words, easeFramer } from "../motion";
 import { AsciiBackground } from "../AsciiBackground";
 import { ParticleText } from "../ParticleText";
@@ -62,12 +63,18 @@ export function Hero() {
                   />
                 </div>
               </div>
-              {/* One button: consultation already sits in the navbar on this screen. The arrow says it moves
-                down the page (the navbar's WhatsApp icon says that one opens a chat). */}
-              <Reveal onMount y={20} delay={0.6}>
-                <Button href="/#pricing" arrow>
+              {/* Two buttons, paired like conicorn.webflow.io's hero (the owner, 2026-10-24): the consultation chat first, as
+                the dark liquid metal pill, and the prices as a frosted glass pill, the same 53px tall. On hover the
+                consultation's WhatsApp circle springs out of its right end (its footprint stays put), so the glass pill
+                slides 37px aside with the same spring (peer-hover) instead of being covered. Stacked on phones. */}
+              <Reveal onMount y={20} delay={0.6} className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <ArrowButton className="peer">Konsultasi Gratis</ArrowButton>
+                <Link
+                  href="/#pricing"
+                  className="t-button flex h-[53px] items-center rounded-full border border-white/20 bg-white/10 px-[26px] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md transition-[background-color,border-color,translate] duration-[450ms] ease-[cubic-bezier(0.34,1.36,0.64,1)] hover:border-white/35 hover:bg-white/18 sm:peer-hover:translate-x-[37px] sm:peer-focus-visible:translate-x-[37px]"
+                >
                   Lihat Harga
-                </Button>
+                </Link>
               </Reveal>
             </div>
           </div>

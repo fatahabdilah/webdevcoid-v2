@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 
 /*
@@ -37,8 +38,7 @@ function Page() {
   return (
     <div className="flex size-full flex-col bg-white">
       <Bar dark />
-      {/* eslint-disable-next-line @next/next/no-img-element -- a 330px picture inside a matrix3d layer */}
-      <img src="/images/services/existing-after.jpg" alt="" className="block w-full" />
+      <Image src="/images/services/existing-after.jpg" alt="" width={1056} height={621} sizes="330px" className="block w-full" />
     </div>
   );
 }

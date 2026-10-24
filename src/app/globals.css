@@ -122,6 +122,11 @@ h6 {
   }
 }
 
+/* Endless CSS loops stop while off screen (PauseOffscreen sets data-off) */
+[data-off] {
+  animation-play-state: paused !important;
+}
+
 /* Lenis smooth scroll */
 html.lenis,
 html.lenis body {

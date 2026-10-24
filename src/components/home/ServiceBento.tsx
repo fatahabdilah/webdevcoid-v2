@@ -224,7 +224,7 @@ const wordsFade =
  * melts into the blue, fading into white at the foot (a tall, dense fade, the owner asked for more) under the words, which sit at the bottom left here. The scroll is two stacked copies sliding by one.
  */
 function LandingCard() {
-  const page = <Image src="/images/portfolio/arifsyauqi-page.jpg" alt="" width={792} height={10978} sizes="264px" className="block w-full" />;
+  const page = <Image src="/images/portfolio/arifsyauqi-page.jpg" alt="" width={528} height={7318} sizes="264px" className="block w-full" />;
   return (
     <article
       className={`${card} h-[400px] justify-end shadow-[inset_0_0_1px_0_rgba(255,255,255,0.3),inset_0_-2px_1px_0_rgba(0,0,0,0.12)]!`}
@@ -260,8 +260,8 @@ function CompanyCard() {
       <Image
         src="/images/services/company-tablet.png"
         alt=""
-        width={1322}
-        height={1098}
+        width={920}
+        height={764}
         sizes="459px"
         className="pointer-events-none absolute top-[-36px] left-1/2 w-[459px] max-w-none -translate-x-1/2"
       />
