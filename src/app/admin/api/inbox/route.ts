@@ -23,7 +23,7 @@ async function readObject(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  const auth = requireRole(request);
+  const auth = await requireRole(request);
   if (auth.error) return auth.error;
   const limit = Math.min(500, Math.max(1, Number(request.nextUrl.searchParams.get("limit")) || 200));
   try {
@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const auth = requireRole(request, "owner");
+  const auth = await requireRole(request, "owner");
   if (auth.error) return auth.error;
   const item = await readObject(request);
   if (!item) return fail(400, "bad_request", "Isi tidak valid.");
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-  const auth = requireRole(request, "owner");
+  const auth = await requireRole(request, "owner");
   if (auth.error) return auth.error;
   const id = request.nextUrl.searchParams.get("id") || "";
   const patch = await readObject(request);

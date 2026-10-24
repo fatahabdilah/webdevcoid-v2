@@ -90,7 +90,7 @@ const shim = (me: Who) => {
 };
 
 export async function GET(request: NextRequest) {
-  const me = readSession(request.cookies.get(SESSION_COOKIE)?.value);
+  const me = await readSession(request.cookies.get(SESSION_COOKIE)?.value);
   if (!me) return NextResponse.redirect(new URL("/admin/login", request.url), 303);
 
   const html = await readFile(STUDIO, "utf8");

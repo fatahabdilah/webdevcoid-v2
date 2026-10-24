@@ -8,7 +8,7 @@ import { StoreError } from "@/lib/admin/store";
  * stores a Studio image (slide previews), then reference it from a task as "/_blob/<name>". Owner or API token.
  */
 export async function PUT(request: NextRequest, ctx: RouteContext<"/admin/api/blob/[name]">) {
-  const auth = requireRole(request, "owner");
+  const auth = await requireRole(request, "owner");
   if (auth.error) return auth.error;
   const { name } = await ctx.params;
   if (!isBlobName(name)) return fail(400, "bad_request", "Nama gambar tidak valid.");

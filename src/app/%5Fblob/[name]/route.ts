@@ -8,7 +8,7 @@ import { getBlob, isBlobName } from "@/lib/admin/blobs";
  * account (session cookie, path /) or the API token; anyone else gets a plain 404.
  */
 export async function GET(request: NextRequest, ctx: RouteContext<"/_blob/[name]">) {
-  const signedIn = readSession(request.cookies.get(SESSION_COOKIE)?.value) || whoIs(request);
+  const signedIn = await readSession(request.cookies.get(SESSION_COOKIE)?.value) || (await whoIs(request));
   if (!signedIn) return new Response("Not found", { status: 404, headers: adminHeaders });
   const { name } = await ctx.params;
   if (!isBlobName(name)) return new Response("Not found", { status: 404, headers: adminHeaders });

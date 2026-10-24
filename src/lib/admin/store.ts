@@ -103,12 +103,18 @@ async function readJson<T>(name: string, fallback: T): Promise<T> {
     return fallback;
   }
 }
-// Writes go to a temp file first, then replace the old one, so a crash never leaves half a file.
+// Writes go to a temp file first, then replace the old one, so a crash never leaves half a file. On serverless hosting
+// (Vercel) the project folder is read-only: that is a store that isn't set up (Supabase is needed there), not a crash.
 async function writeJson(name: string, value: unknown) {
-  await mkdir(DIR, { recursive: true });
-  const tmp = `${file(name)}.${process.pid}.tmp`;
-  await writeFile(tmp, JSON.stringify(value), "utf8");
-  await rename(tmp, file(name));
+  try {
+    await mkdir(DIR, { recursive: true });
+    const tmp = `${file(name)}.${process.pid}.tmp`;
+    await writeFile(tmp, JSON.stringify(value), "utf8");
+    await rename(tmp, file(name));
+  } catch (e) {
+    console.error("[store] cannot write", name, e);
+    throw new StoreError("Penyimpanan tidak bisa ditulis. Di hosting, atur SUPABASE_URL dan SUPABASE_SECRET_KEY.");
+  }
 }
 
 const files = {
@@ -139,6 +145,15 @@ const files = {
     return all[i];
   },
 };
+
+/* ---------------------------------------------------------------- accounts */
+
+/** A Studio account kept in the database (table admin_users). Only with Supabase; the JSON fallback has none. */
+export type DbUser = { email: string; password_hash: string; role: "owner" | "team"; name: string | null };
+export async function listUsers(): Promise<DbUser[]> {
+  if (!usingSupabase()) return [];
+  return (await sb("admin_users?select=email,password_hash,role,name")).json();
+}
 
 /* ---------------------------------------------------------------- the store */
 

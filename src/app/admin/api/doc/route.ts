@@ -13,7 +13,7 @@ const MAX = 2_000_000; // bytes per document
 const storeFail = (e: unknown) => (e instanceof StoreError ? fail(503, e.code, "Database belum siap atau tidak bisa dihubungi.") : fail(500, "unavailable", "Terjadi kesalahan."));
 
 export async function GET(request: NextRequest) {
-  const auth = requireRole(request);
+  const auth = await requireRole(request);
   if (auth.error) return auth.error;
   const p = request.nextUrl.searchParams.get("path") || "";
   if (!isDoc(p)) return fail(400, "bad_request", "Dokumen tidak dikenal.");
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const auth = requireRole(request, "owner");
+  const auth = await requireRole(request, "owner");
   if (auth.error) return auth.error;
   const p = request.nextUrl.searchParams.get("path") || "";
   if (!isDoc(p)) return fail(400, "bad_request", "Dokumen tidak dikenal.");

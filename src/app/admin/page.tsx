@@ -6,7 +6,7 @@ import { StudioApp } from "@/components/studio/StudioApp";
 
 /** /admin: the Studio for a signed-in account; anyone else goes to the login page. */
 async function Gate() {
-  const me = readSession((await cookies()).get(SESSION_COOKIE)?.value);
+  const me = await readSession((await cookies()).get(SESSION_COOKIE)?.value);
   if (!me) redirect("/admin/login");
   return <StudioApp me={me} />;
 }

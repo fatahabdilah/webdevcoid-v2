@@ -68,6 +68,17 @@ export async function getOrder(invoice: string): Promise<Order | null> {
 
 export const addOrder = (o: Order) => update((doc) => void doc.orders.unshift(o));
 
+/** Changes fields of an order (the checkout page once DOKU made it, or a failure note). */
+export const patchOrder = (invoice: string, patch: Partial<Order>, event: string, note?: string) =>
+  update((doc) => {
+    const o = doc.orders.find((x) => x.invoice === invoice);
+    if (!o) return null;
+    const now = new Date().toISOString();
+    Object.assign(o, patch, { updated_at: now });
+    o.log.push({ at: now, event, ...(note ? { note } : {}) });
+    return o;
+  });
+
 /**
  * Applies a status from DOKU (a notification or a status check). A paid order stays paid: a late or repeated
  * message never turns it back. Returns the order, or null if the invoice is unknown.

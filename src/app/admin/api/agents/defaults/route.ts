@@ -11,7 +11,7 @@ import { requireRole, send } from "@/lib/admin/auth";
 const DIR = path.join(process.cwd(), "agents", "defaults");
 
 export async function GET(request: NextRequest) {
-  const auth = requireRole(request);
+  const auth = await requireRole(request);
   if (auth.error) return auth.error;
   const files = (await readdir(DIR).catch(() => [] as string[])).filter((f) => f.endsWith(".md")).sort();
   const agents = await Promise.all(files.map(async (f) => ({ key: f.replace(/\.md$/, ""), md: await readFile(path.join(DIR, f), "utf8") })));

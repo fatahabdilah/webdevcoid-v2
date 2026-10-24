@@ -119,14 +119,14 @@ const html = (body: string, status = 200) =>
   new Response(body, { status, headers: { ...adminHeaders, "Content-Type": "text/html; charset=utf-8" } });
 
 export async function GET(request: NextRequest) {
-  if (readSession(request.cookies.get(SESSION_COOKIE)?.value)) return NextResponse.redirect(new URL("/admin", request.url), 303);
-  const e = request.nextUrl.searchParams.get("e") || (adminConfigured() ? "" : "3");
+  if (await readSession(request.cookies.get(SESSION_COOKIE)?.value)) return NextResponse.redirect(new URL("/admin", request.url), 303);
+  const e = request.nextUrl.searchParams.get("e") || ((await adminConfigured()) ? "" : "3");
   return html(page(ERRORS[e], e !== "out"));
 }
 
 export async function POST(request: NextRequest) {
   const back = (e: string) => NextResponse.redirect(new URL(`/admin/login?e=${e}`, request.url), 303);
-  if (!adminConfigured()) return back("3");
+  if (!(await adminConfigured())) return back("3");
   if (!sameOrigin(request)) return back("1");
   const client = ip(request);
   if (throttled(client)) return back("2");

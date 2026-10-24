@@ -2,13 +2,14 @@ import { NextResponse, type NextRequest } from "next/server";
 import { sameOrigin } from "@/lib/admin/auth";
 import { StoreError } from "@/lib/admin/store";
 import { DokuError, createCheckout, dokuConfigured, dokuEnv } from "@/lib/payments/doku";
-import { addOrder, newInvoice } from "@/lib/payments/orders";
+import { addOrder, newInvoice, patchOrder } from "@/lib/payments/orders";
 import { TEST_PRODUCT } from "@/lib/payments/products";
 
 /*
- * POST /api/payments/doku: starts a payment for the /testing page's one product. Takes {name, email, phone?}, creates
- * the order (pending) in the admin store, opens a DOKU checkout page for it and returns {invoice, url}. The price is
- * fixed on the server (`TEST_PRODUCT`), never taken from the browser.
+ * POST /api/payments/doku: starts a payment for the /testing page's one product. Takes {name, email, phone?}, saves
+ * the order (pending) in the admin store FIRST, so no DOKU checkout ever exists without its record, then opens the
+ * DOKU checkout page and returns {invoice, url}. The price is fixed on the server (`TEST_PRODUCT`), never taken from
+ * the browser.
  */
 
 const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers: { "Cache-Control": "no-store", "X-Robots-Tag": "noindex" } });
@@ -44,6 +45,23 @@ export async function POST(request: NextRequest) {
   const notifyUrl = origin.startsWith("https://") && !/localhost|127\.0\.0\.1/.test(origin) ? `${origin}/api/payments/doku/notify` : undefined;
 
   try {
+    await addOrder({
+      invoice,
+      item: TEST_PRODUCT.name,
+      amount: TEST_PRODUCT.price,
+      customer: { name, email, ...(phone ? { phone } : {}) },
+      status: "pending",
+      created_at: now,
+      updated_at: now,
+      env: dokuEnv(),
+      log: [{ at: now, event: "dibuat", note: notifyUrl ? `notifikasi ke ${notifyUrl}` : "notifikasi ke URL di DOKU Back Office" }],
+    });
+  } catch (e) {
+    if (e instanceof StoreError) return fail(503, "unavailable", "Database belum siap, pembayaran belum bisa dibuat.");
+    throw e;
+  }
+
+  try {
     const checkout = await createCheckout({
       invoice,
       amount: TEST_PRODUCT.price,
@@ -53,26 +71,13 @@ export async function POST(request: NextRequest) {
       notifyUrl,
       dueMinutes: 60,
     });
-    await addOrder({
-      invoice,
-      item: TEST_PRODUCT.name,
-      amount: TEST_PRODUCT.price,
-      customer: { name, email, ...(phone ? { phone } : {}) },
-      status: "pending",
-      checkout_url: checkout.url,
-      expires: checkout.expiredDate,
-      created_at: now,
-      updated_at: now,
-      env: dokuEnv(),
-      log: [{ at: now, event: "dibuat", note: notifyUrl ? `notifikasi ke ${notifyUrl}` : "notifikasi ke URL di DOKU Back Office" }],
-    });
+    // the page is open at DOKU either way; a failed note here only loses the link in the Studio
+    await patchOrder(invoice, { checkout_url: checkout.url, expires: checkout.expiredDate }, "halaman DOKU dibuat").catch(() => {});
     return json({ invoice, url: checkout.url });
   } catch (e) {
-    if (e instanceof DokuError) {
-      console.error("[doku] checkout", e.message);
-      return fail(502, "unavailable", "DOKU menolak atau tidak bisa dihubungi. Coba lagi sebentar lagi.");
-    }
-    if (e instanceof StoreError) return fail(503, "unavailable", "Database belum siap.");
-    throw e;
+    if (!(e instanceof DokuError)) throw e;
+    console.error("[doku] checkout", e.message);
+    await patchOrder(invoice, { status: "failed" }, "DOKU menolak", e.message.slice(0, 200)).catch(() => {});
+    return fail(502, "unavailable", "DOKU menolak atau tidak bisa dihubungi. Coba lagi sebentar lagi.");
   }
 }
