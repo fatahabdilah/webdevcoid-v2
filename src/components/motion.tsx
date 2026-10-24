@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, useLayoutEffect, useRef, type CSSProperties, type ElementType } from "react";
-import { motion, type HTMLMotionProps, type Transition, type Variants } from "motion/react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ElementType } from "react";
+import { motion, useMotionValueEvent, useScroll, type HTMLMotionProps, type Transition, type Variants } from "motion/react";
 import { useIntroEnteredIf } from "@/lib/intro";
 import { noOrphan } from "@/lib/text";
 
@@ -178,5 +178,46 @@ export function Words({
         ))}
       </motion.span>
     </Tag>
+  );
+}
+
+/**
+ * A first screen that snaps into an inset rounded card on the first nudge down (wheel, swipe or key), and back at the top
+ * (like hostinger.com's hero, the owner's pick, 2026-10-24): the sides and the foot pull in (12px on phones, 24px from md)
+ * and the bottom corners round to 32px (the top stays square, under the navbar), in one 0.5s ease rather than tied to the scroll. Clipped, so the content keeps its size.
+ * Stays full with reduced motion or animations off (the clip lives in CSS, data-inset only marks the state).
+ */
+export function ShrinkOnScroll({ className = "", children }: { className?: string; children: React.ReactNode }) {
+  const { scrollY } = useScroll();
+  const [inset, setInset] = useState(false);
+  useMotionValueEvent(scrollY, "change", (y) => setInset(y > 0));
+  // the smooth scroll moves the page a beat after the wheel turns, so react to the gesture itself: the first nudge
+  // down (wheel, swipe or key) snaps it in at once
+  useEffect(() => {
+    const down = () => setInset(true);
+    const onWheel = (e: WheelEvent) => e.deltaY > 0 && down();
+    let touchY = 0;
+    const onTouchStart = (e: TouchEvent) => (touchY = e.touches[0].clientY);
+    const onTouchMove = (e: TouchEvent) => e.touches[0].clientY < touchY - 2 && down();
+    const onKey = (e: KeyboardEvent) => ["ArrowDown", "PageDown", " ", "End"].includes(e.key) && down();
+    window.addEventListener("wheel", onWheel, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("wheel", onWheel);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, []);
+  const on = inset && ANIMATIONS_ENABLED;
+  return (
+    <div
+      data-inset={on || undefined}
+      className={`[clip-path:inset(0_round_0)] transition-[clip-path] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] data-inset:[clip-path:inset(0_12px_12px_round_0_0_32px_32px)] md:data-inset:[clip-path:inset(0_24px_24px_round_0_0_32px_32px)] motion-reduce:data-inset:[clip-path:none] ${className}`}
+    >
+      {children}
+    </div>
   );
 }

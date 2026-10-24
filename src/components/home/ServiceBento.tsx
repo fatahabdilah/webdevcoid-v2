@@ -213,10 +213,15 @@ function CustomCard() {
 
 /* 2 · Landing Page */
 
+/** The fade behind the words at the foot of the Landing Page and Company Profile cards, one for both: a little
+ *  tilted (higher on the right), solid only under the words; --fade is the card's own colour there. */
+const wordsFade =
+  "pointer-events-none absolute inset-x-0 bottom-0 h-[240px] bg-[linear-gradient(188deg,transparent_18%,color-mix(in_srgb,var(--fade)_68%,transparent)_38%,color-mix(in_srgb,var(--fade)_92%,transparent)_50%,var(--fade)_62%)]";
+
 /*
  * After the owner's Figma (Brand Hub "Article" 1462:6014, 2026-10-24): a real landing page we built (arifsyauqi.com,
  * captured whole) as a 264px-wide page scrolling on its own forever down a white-to-blue card, faded in at the top so it
- * melts into the blue, fading into white at the foot under the words, which sit at the bottom left here. The scroll is two stacked copies sliding by one.
+ * melts into the blue, fading into white at the foot (a tall, dense fade, the owner asked for more) under the words, which sit at the bottom left here. The scroll is two stacked copies sliding by one.
  */
 function LandingCard() {
   const page = <Image src="/images/portfolio/arifsyauqi-page.jpg" alt="" width={792} height={10978} sizes="264px" className="block w-full" />;
@@ -235,11 +240,7 @@ function LandingCard() {
           </div>
         </div>
       </div>
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[221px] bg-[linear-gradient(186deg,rgba(255,255,255,0)_33%,#fff_67%)]" />
-      <div aria-hidden className="pointer-events-none absolute top-[160px] left-[40%] h-[358px] w-[377px] opacity-70">
-        <Glow className="inset-0 opacity-30 blur-[40px]" color="var(--color-holo-75)" />
-        <Glow className="top-[72px] left-[94px] h-[215px] w-[226px] opacity-20 blur-[24px]" color="var(--color-holo-50)" />
-      </div>
+      <div aria-hidden className={`${wordsFade} [--fade:#fff]`} />
       <Words s={byKey.landing} />
     </article>
   );
@@ -264,7 +265,7 @@ function CompanyCard() {
         sizes="459px"
         className="pointer-events-none absolute top-[-36px] left-1/2 w-[459px] max-w-none -translate-x-1/2"
       />
-      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-[210px] bg-[linear-gradient(180deg,rgba(252,252,252,0)_0%,rgba(252,252,252,0.7)_25%,rgba(252,252,252,0.9)_38%,var(--color-grey-09)_50%)]" />
+      <div aria-hidden className={`${wordsFade} [--fade:var(--color-grey-09)]`} />
       <Words s={byKey.company} />
     </article>
   );

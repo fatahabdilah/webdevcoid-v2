@@ -34,7 +34,7 @@ function CtaCard() {
 
 function IncludedCard() {
   return (
-    <div data-included="" className="flex h-full w-full flex-col items-center gap-6 rounded-3xl border border-grey-07 bg-grey-09 px-4 py-10 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:gap-10 md:p-10 lg:justify-between">
+    <div data-included="" className="flex h-full w-full flex-col items-center gap-6 rounded-3xl border border-grey-07 bg-grey-09 px-4 pt-10 pb-4 shadow-[inset_0_0_1px_0_#fff,inset_0_-2px_1px_0_rgba(0,0,0,0.12)] md:items-start md:p-10 lg:justify-between">
       <div className={`${cardWords} w-full text-center md:w-auto md:text-left`}>
         <h3 className={`${cardTitle} text-grey-01`}>Sudah termasuk di setiap&nbsp;harga</h3>
         <p className="t-body-m text-grey-03">Tanpa biaya tambahan, apa pun pilihan&nbsp;websitemu.</p>

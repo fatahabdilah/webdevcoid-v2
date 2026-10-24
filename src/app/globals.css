@@ -100,6 +100,28 @@ h6 {
   text-wrap: balance;
 }
 
+/* On site pages the browser scrollbar is hidden (it drew a heavy bar over the black hero and footer); ScrollThumb
+   shows a slim indicator while scrolling instead. It also sets html.no-scrollbar, for browsers that cannot pair :has with
+   the scrollbar pseudo-element. Only with a mouse or trackpad: touch screens keep their own thin indicator, which CSS
+   cannot hide. Pages without it (the admin Studio) keep the normal scrollbar. */
+@media (hover: hover) and (pointer: fine) {
+  html:has([data-scroll-thumb]),
+  html:has([data-scroll-thumb]) body,
+  html.no-scrollbar,
+  html.no-scrollbar body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  html:has([data-scroll-thumb])::-webkit-scrollbar,
+  html:has([data-scroll-thumb]) body::-webkit-scrollbar,
+  html.no-scrollbar::-webkit-scrollbar,
+  html.no-scrollbar body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+}
+
 /* Lenis smooth scroll */
 html.lenis,
 html.lenis body {
